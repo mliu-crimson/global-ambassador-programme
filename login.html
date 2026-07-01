@@ -81,7 +81,7 @@
     </button>
 
     <div class="hint">
-      Don't have access yet? <a href="https://form.typeform.com/to/Mgpstxtp" target="_blank">Apply to become an ambassador</a>
+      Don't have access yet? <a href="https://form.typeform.com/to/Mgpstxtp" target="_blank">Apply to become an Ambassador</a>
     </div>
   </div>
 </main>
@@ -179,7 +179,7 @@
     if (!csvText) {
       setLoading(false);
       showError(
-        'Could not connect to the ambassador list. ' +
+        'Could not connect to the Ambassador list. ' +
         'Please make sure the spreadsheet is shared as "Anyone with the link can view", then try again. ' +
         'If the problem persists, contact global.ambassadors@crimsoneducation.org.'
       );
@@ -189,7 +189,7 @@
     const rows = parseCSV(csvText);
     if (rows.length < 2) {
       setLoading(false);
-      showError('The ambassador list appears to be empty. Please contact global.ambassadors@crimsoneducation.org.');
+      showError('The Ambassador list appears to be empty. Please contact global.ambassadors@crimsoneducation.org.');
       return;
     }
 
@@ -215,7 +215,7 @@
       window.location.href = 'hub.html';
     } else {
       showError(
-        "We couldn't find that email address in our ambassador list. " +
+        "We couldn't find that email address in our Ambassador list. " +
         "Please check your spelling, or contact global.ambassadors@crimsoneducation.org if you believe this is an error."
       );
     }

@@ -24,7 +24,7 @@
   .brand{font-family:'Fraunces',serif;font-weight:700;font-size:1.1rem;letter-spacing:0.02em;color:var(--navy);text-decoration:none;}
   .brand span{color:var(--crimson);}
   .nav-links{display:flex;gap:4px;flex-wrap:wrap;}
-  .nav-links a{font-size:0.78rem;font-weight:600;color:#6b6258;text-decoration:none;padding:6px 12px;border-radius:2px;text-transform:uppercase;letter-spacing:0.05em;transition:all .15s;}
+  .nav-links a{font-size:0.68rem;font-weight:600;color:#6b6258;text-decoration:none;padding:5px 8px;border-radius:2px;text-transform:uppercase;letter-spacing:0.04em;transition:all .15s;}
   .nav-links a:hover{color:var(--navy);background:rgba(20,33,61,0.06);text-decoration:none;}
   .btn-logout{font-size:0.78rem;font-weight:600;color:#6b6258;text-decoration:none;padding:7px 14px;border:1px solid var(--line);border-radius:2px;text-transform:uppercase;letter-spacing:0.04em;transition:all .2s;}
   .btn-logout:hover{color:var(--crimson);border-color:var(--crimson);text-decoration:none;}
@@ -78,11 +78,11 @@
   .resource-cta:hover{opacity:0.85;text-decoration:none;}
 
   .team-intro{font-size:0.95rem;color:#3a352f;margin-bottom:36px;max-width:760px;line-height:1.7;}
-  .team-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
-  .team-card{background:var(--parchment);border:1px solid var(--line);border-radius:2px;padding:24px 22px;}
-  .team-card .initials{width:48px;height:48px;border-radius:50%;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:600;font-size:1.1rem;margin-bottom:14px;}
-  .team-card h3{font-size:0.95rem;margin-bottom:4px;}
-  .team-card .role{font-size:0.82rem;color:var(--crimson);font-weight:600;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:12px;}
+  .team-grid{display:flex;flex-direction:column;border-top:1px solid var(--line);}
+  .team-card{display:grid;grid-template-columns:48px 160px 1fr 1fr;align-items:center;gap:20px;padding:20px 0;border-bottom:1px solid var(--line);}
+  .team-card .initials{width:48px;height:48px;border-radius:50%;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:600;font-size:1rem;flex-shrink:0;}
+  .team-card h3{font-size:0.95rem;margin-bottom:2px;}
+  .team-card .role{font-size:0.78rem;color:var(--crimson);font-weight:600;text-transform:uppercase;letter-spacing:0.05em;}
   .team-card .contact{font-size:0.82rem;color:#6b6258;line-height:1.7;}
   .team-card .contact a{color:var(--crimson);}
 
@@ -119,7 +119,7 @@
   footer{padding:24px;text-align:center;font-size:0.8rem;color:#8a8175;border-top:1px solid var(--line);}
 
   @media(max-width:760px){
-    .card-grid,.team-grid,.events-grid{grid-template-columns:1fr;}
+    .card-grid,.events-grid{grid-template-columns:1fr;}.team-card{grid-template-columns:48px 1fr!important;}
     .nav-links{display:none;}
   }
 </style>
@@ -149,10 +149,9 @@
 <div class="welcome-strip">
   <div class="welcome-inner">
     <span class="eyebrow" id="welcome-eyebrow">Dear Student Ambassador,</span>
-    <h2>Welcome to the Global Ambassador Programme!</h2>
-    <p>We are delighted to welcome you to our unique and diverse community of global ambassadors.</p>
-    <p>Please join our WhatsApp Community! This is our main way to keep in contact with everyone and to receive updates. You'll have opportunities to engage with fellow ambassadors and access valuable resources.</p>
-    <p>We hope this experience will be fulfilling for you—a chance to make new friends worldwide, grow as a student, and motivate your peers and community.</p>
+    <h2>You're in. Now let's get to work.</h2>
+    <p>Welcome to the Global Ambassador Programme — a community of ambitious students helping peers around the world discover elite competitions. Everything you need is right here.</p>
+    <p>Join our WhatsApp community to stay connected, get updates, and engage with fellow Ambassadors in real time.</p>
     <a class="whatsapp-btn" href="https://chat.whatsapp.com/Df7XzTFVO1y6zLaH4thNY4" target="_blank" rel="noopener">💬 Join our WhatsApp Community</a>
   </div>
 </div>
@@ -162,7 +161,7 @@
   <div class="wrap">
     <div class="section-head">
       <span class="tag">Quick access</span>
-      <h2>Your ambassador toolkit.</h2>
+      <h2>Everything you need, in one place.</h2>
     </div>
     <div class="card-grid" style="grid-template-columns:1fr 1fr;">
       <div class="card">
@@ -186,9 +185,9 @@
   <div class="wrap">
     <div class="section-head">
       <span class="tag">Starter Kit</span>
-      <h2>🔖 Starter Kit</h2>
+      <h2>New here? Start with this.</h2>
     </div>
-    <p style="color:#3a352f;margin-bottom:28px;font-size:0.95rem;">If you're new, please read this section carefully, as it clarifies all aspects of the program. Additionally, please refer to the FAQ section at the end.</p>
+    <p style="color:#3a352f;margin-bottom:28px;font-size:0.95rem;">New to the programme? Read this first — it covers everything you need to know. Refer back to the FAQ at the bottom for anything else.</p>
     <div class="accordion">
       <div class="acc-item">
         <button class="acc-trigger" aria-expanded="false" onclick="toggleAcc(this)">
@@ -256,11 +255,10 @@
   <div class="wrap">
     <div class="section-head">
       <span class="tag">Current Competition</span>
-      <h2>🏆 Current Competition: LGIC</h2>
+      <h2>What you're promoting right now.</h2>
     </div>
     <div class="comp-block">
-      <p>The Global Ambassadors Program is now actively promoting the LSE Generate Global Innovation Challenge 2026.</p>
-      <p>Formally known as Pitch For the Future (PFF), LGIC is new, it's exciting, and has a new collaborator — <a href="https://lse.ac.uk/generate" target="_blank" rel="noopener">LSE Generate</a>!</p>
+      <p><strong>LSE Generate Global Innovation Challenge 2026</strong> — formerly known as Pitch for the Future (PFF), now with a powerful new collaborator: <a href="https://lse.ac.uk/generate" target="_blank" rel="noopener">LSE Generate</a>.</p>
       <p><strong>What is the LGIC?</strong></p>
       <div class="link-row"><strong>Website:</strong> <a href="https://www.globinnovation.org/" target="_blank" rel="noopener">https://www.globinnovation.org/</a> — save it, pin it, print it — you'll need it!</div>
       <div class="link-row"><strong>Registration link:</strong> <a href="https://www.globinnovation.org/registernow" target="_blank" rel="noopener">https://www.globinnovation.org/registernow</a></div>
@@ -279,9 +277,9 @@
   <div class="wrap">
     <div class="section-head">
       <span class="tag">Meet The Team</span>
-      <h2>👥 Meet The Team</h2>
+      <h2>The people behind the programme.</h2>
     </div>
-    <p class="team-intro">For any questions, assistance, or further information regarding the Global Ambassador Program, please don't hesitate to contact our team. You can contact us directly at <a href="mailto:global.ambassadors@crimsoneducation.org">global.ambassadors@crimsoneducation.org</a>, and we will be happy to assist you. We look forward to hearing from you and supporting your involvement in the program.</p>
+    <p class="team-intro">Questions? The team is here. Reach us directly at <a href="mailto:global.ambassadors@crimsoneducation.org">global.ambassadors@crimsoneducation.org</a>.</p>
     <div class="team-grid">
       <div class="team-card">
         <div class="initials">ML</div>
@@ -329,7 +327,7 @@
   <div class="wrap">
     <div class="section-head">
       <span class="tag">Events and Key Dates</span>
-      <h2>🎉 Events and Key Dates</h2>
+      <h2>What's on.</h2>
     </div>
 
     <!-- Summer 2026 Challenge -->
@@ -366,13 +364,13 @@
       <div style="background:var(--parchment);border:1px solid var(--line);border-radius:2px;padding:28px 26px;">
         <div style="font-size:1.4rem;margin-bottom:12px;">📚</div>
         <h3 style="font-size:1rem;margin-bottom:8px;">Submit a book recommendation</h3>
-        <p style="font-size:0.88rem;color:#3a352f;margin-bottom:16px;">Got a book you think every ambassador should read? Share it with the community.</p>
+        <p style="font-size:0.88rem;color:#3a352f;margin-bottom:16px;">Got a book you think every Ambassador should read? Share it with the community.</p>
         <a href="https://form.typeform.com/to/XfvGktnP" target="_blank" rel="noopener" style="font-size:0.82rem;font-weight:600;color:var(--crimson);text-transform:uppercase;letter-spacing:0.06em;">Submit here →</a>
       </div>
       <div style="background:var(--parchment);border:1px solid var(--line);border-radius:2px;padding:28px 26px;">
         <div style="font-size:1.4rem;margin-bottom:12px;">💬</div>
-        <h3 style="font-size:1rem;margin-bottom:8px;">Share your ambassador experience</h3>
-        <p style="font-size:0.88rem;color:#3a352f;margin-bottom:16px;">We'd love to hear how your ambassador journey has been going — submit a testimonial for the programme.</p>
+        <h3 style="font-size:1rem;margin-bottom:8px;">Share your Ambassador experience</h3>
+        <p style="font-size:0.88rem;color:#3a352f;margin-bottom:16px;">We'd love to hear how your Ambassador journey has been going — your testimonial may be shared with potential and incoming Ambassadors too.</p>
         <a href="https://form.typeform.com/to/DxS4un8A" target="_blank" rel="noopener" style="font-size:0.82rem;font-weight:600;color:var(--crimson);text-transform:uppercase;letter-spacing:0.06em;">Submit here →</a>
       </div>
     </div>
@@ -385,17 +383,17 @@
   <div class="wrap">
     <div class="section-head">
       <span class="tag">FAQ</span>
-      <h2>❓ FAQ</h2>
+      <h2>Common questions, answered.</h2>
     </div>
 
     <div class="faq-group">
       <div class="faq-group-title">Frequently Asked Questions For the Global Student Ambassador Program</div>
       <div class="faq-item">
         <button class="faq-trigger" aria-expanded="false" onclick="toggleFaq(this)">
-          <span>"Can I also participate in the competition even though I am an ambassador?"</span>
+          <span>"Can I also participate in the competition even though I am an Ambassador?"</span>
           <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
         </button>
-        <div class="faq-body">Yes, you can—in fact, we encourage you to! Many past ambassadors have participated in and won the competitions, and have gone on to attend Ivy League schools. You may use your ambassador code to receive any applicable discounts.</div>
+        <div class="faq-body">Yes, you can—in fact, we encourage you to! Many past Ambassadors have participated in and won the competitions, and have gone on to attend Ivy League schools. You may use your Ambassador code to receive any applicable discounts.</div>
       </div>
       <div class="faq-item">
         <button class="faq-trigger" aria-expanded="false" onclick="toggleFaq(this)">
@@ -434,14 +432,14 @@
           <span>"How do I know if my sign-ups are accurate?"</span>
           <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
         </button>
-        <div class="faq-body">The sign-ups on the ambassadors' sheet are taken from the official registration database of the competitions, so it's precisely the number of people who completed their registration using your code. If you believe there is an issue, please email <a href="mailto:global.ambassadors@crimsoneducation.org">global.ambassadors@crimsoneducation.org</a>.</div>
+        <div class="faq-body">The sign-ups on the Ambassadors' sheet are taken from the official registration database of the competitions, so it's precisely the number of people who completed their registration using your code. If you believe there is an issue, please email <a href="mailto:global.ambassadors@crimsoneducation.org">global.ambassadors@crimsoneducation.org</a>.</div>
       </div>
       <div class="faq-item">
         <button class="faq-trigger" aria-expanded="false" onclick="toggleFaq(this)">
           <span>"When will I receive my rewards?"</span>
           <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
         </button>
-        <div class="faq-body">Prizes are awarded after each competition. Every ambassador will get a Google Form to fill out their reward preference as soon as the competition concludes.</div>
+        <div class="faq-body">Prizes are awarded after each competition. Every Ambassador will get a Google Form to fill out their reward preference as soon as the competition concludes.</div>
       </div>
     </div>
 
@@ -466,14 +464,14 @@
           <span>"What if my country, community, or school is less interested in these competitions? How can I get more sign-ups?"</span>
           <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
         </button>
-        <div class="faq-body">Many of our past ambassadors faced this challenge and chose to reach out to schools outside their region. For example, one of our Brazilian ambassadors emailed the English departments at top US schools for the <a href="https://www.essaycomp.org/" target="_blank" rel="noopener">Harvard Crimson Global Essay Competition</a> and received over 40 sign-ups. Another from Poland reached out to a top school in India and locked in less that 100 sign-ups at once!</div>
+        <div class="faq-body">Many of our past Ambassadors faced this challenge and chose to reach out to schools outside their region. For example, one of our Brazilian Ambassadors emailed the English departments at top US schools for the <a href="https://www.essaycomp.org/" target="_blank" rel="noopener">Harvard Crimson Global Essay Competition</a> and received over 40 sign-ups. Another from Poland reached out to a top school in India and locked in less that 100 sign-ups at once!</div>
       </div>
       <div class="faq-item">
         <button class="faq-trigger" aria-expanded="false" onclick="toggleFaq(this)">
-          <span>"I am swamped with exams or other commitments, and I have tried my best, but I still have zero sign-ups. Can I continue as an ambassador?"</span>
+          <span>"I am swamped with exams or other commitments, and I have tried my best, but I still have zero sign-ups. Can I continue as an Ambassador?"</span>
           <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
         </button>
-        <div class="faq-body">Yes, you can! We understand that sometimes you have critical personal commitments, which is fine. You can continue as a registered (but inactive) ambassador; however, you won't be able to redeem prizes without sign-ups. If you're struggling to get more sign-ups, consider reaching out to our community for advice.</div>
+        <div class="faq-body">Yes, you can! We understand that sometimes you have critical personal commitments, which is fine. You can continue as a registered (but inactive) Ambassador; however, you won't be able to redeem prizes without sign-ups. If you're struggling to get more sign-ups, consider reaching out to our community for advice.</div>
       </div>
       <div class="faq-item">
         <button class="faq-trigger" aria-expanded="false" onclick="toggleFaq(this)">
@@ -488,8 +486,8 @@
 </section>
 
 <div class="contact-strip">
-  <h2>Got a question?</h2>
-  <p>The team is here to help — reach out any time.</p>
+  <h2>Something not covered here?</h2>
+  <p>Drop us a line — we'll get back to you.</p>
   <a href="mailto:global.ambassadors@crimsoneducation.org">global.ambassadors@crimsoneducation.org</a>
 </div>
 
@@ -503,14 +501,14 @@
 
 <script>
   // Personalise with name + code from sessionStorage
-  const ambassadorName = sessionStorage.getItem('amb_name');
-  const ambassadorCode = sessionStorage.getItem('amb_code');
+  const AmbassadorName = sessionStorage.getItem('amb_name');
+  const AmbassadorCode = sessionStorage.getItem('amb_code');
 
-  if (ambassadorName) {
-    const codeStr = ambassadorCode ? ` (${ambassadorCode})` : '';
+  if (AmbassadorName) {
+    const codeStr = AmbassadorCode ? ` (${AmbassadorCode})` : '';
     document.getElementById('hero-greeting').innerHTML =
-      `Welcome back, <span style="font-size:1.3em;">${ambassadorName}</span>!${codeStr}`;
-    document.getElementById('welcome-eyebrow').textContent = `Dear ${ambassadorName},`;
+      `Welcome back, <span style="font-size:1.3em;">${AmbassadorName}</span>!${codeStr}`;
+    document.getElementById('welcome-eyebrow').textContent = `Dear ${AmbassadorName},`;
   } else {
     // Not logged in — redirect to login
     window.location.href = 'login.html';
