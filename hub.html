@@ -511,7 +511,8 @@
 
   if (ambassadorName) {
     const codeStr = ambassadorCode ? ` (${ambassadorCode})` : '';
-    document.getElementById('hero-greeting').textContent = `Welcome back, ${ambassadorName}${codeStr}`;
+    document.getElementById('hero-greeting').innerHTML =
+      `Welcome back, <span style="text-decoration:underline;font-size:1.15em;">${ambassadorName}</span>!${codeStr}`;
     document.getElementById('welcome-eyebrow').textContent = `Dear ${ambassadorName},`;
   } else {
     // Not logged in — redirect to login
