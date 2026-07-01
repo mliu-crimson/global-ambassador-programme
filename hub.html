@@ -78,11 +78,11 @@
   .resource-cta:hover{opacity:0.85;text-decoration:none;}
 
   .team-intro{font-size:0.95rem;color:#3a352f;margin-bottom:36px;max-width:760px;line-height:1.7;}
-  .team-grid{display:flex;flex-direction:column;border-top:1px solid var(--line);}
-  .team-card{display:grid;grid-template-columns:48px 160px 1fr 1fr;align-items:center;gap:20px;padding:20px 0;border-bottom:1px solid var(--line);}
-  .team-card .initials{width:48px;height:48px;border-radius:50%;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:600;font-size:1rem;flex-shrink:0;}
-  .team-card h3{font-size:0.95rem;margin-bottom:2px;}
-  .team-card .role{font-size:0.78rem;color:var(--crimson);font-weight:600;text-transform:uppercase;letter-spacing:0.05em;}
+  .team-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+  .team-card{background:var(--parchment);border:1px solid var(--line);border-radius:2px;padding:24px 22px;}
+  .team-card .initials{width:48px;height:48px;border-radius:50%;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:600;font-size:1.1rem;margin-bottom:14px;}
+  .team-card h3{font-size:0.95rem;margin-bottom:4px;}
+  .team-card .role{font-size:0.82rem;color:var(--crimson);font-weight:600;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:12px;}
   .team-card .contact{font-size:0.82rem;color:#6b6258;line-height:1.7;}
   .team-card .contact a{color:var(--crimson);}
 
@@ -119,7 +119,7 @@
   footer{padding:24px;text-align:center;font-size:0.8rem;color:#8a8175;border-top:1px solid var(--line);}
 
   @media(max-width:760px){
-    .card-grid,.events-grid{grid-template-columns:1fr;}.team-card{grid-template-columns:48px 1fr!important;}
+    .card-grid,.team-grid,.events-grid{grid-template-columns:1fr;}
     .nav-links{display:none;}
   }
 </style>
@@ -148,7 +148,7 @@
 
 <div class="welcome-strip">
   <div class="welcome-inner">
-    <span class="eyebrow" id="welcome-eyebrow">Dear Student Ambassador,</span>
+    
     <h2>You're in. Now let's get to work.</h2>
     <p>Welcome to the Global Ambassador Programme — a community of ambitious students helping peers around the world discover elite competitions. Everything you need is right here.</p>
     <p>Join our WhatsApp community to stay connected, get updates, and engage with fellow Ambassadors in real time.</p>
@@ -507,8 +507,8 @@
   if (AmbassadorName) {
     const codeStr = AmbassadorCode ? ` (${AmbassadorCode})` : '';
     document.getElementById('hero-greeting').innerHTML =
-      `Welcome back, <span style="font-size:1.3em;">${AmbassadorName}</span>!${codeStr}`;
-    document.getElementById('welcome-eyebrow').textContent = `Dear ${AmbassadorName},`;
+      `Welcome back, ${AmbassadorName}!${codeStr}`;
+    
   } else {
     // Not logged in — redirect to login
     window.location.href = 'login.html';
