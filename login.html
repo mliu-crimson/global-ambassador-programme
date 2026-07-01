@@ -12,7 +12,7 @@
   }
   *{box-sizing:border-box;margin:0;padding:0;}
   body{background:var(--parchment);color:var(--ink);font-family:'Inter',sans-serif;min-height:100vh;display:flex;flex-direction:column;-webkit-font-smoothing:antialiased;}
-  h1,h2,h3{font-family:'Fraunces',serif;font-weight:600;color:var(--navy);}
+  h1{font-family:'Fraunces',serif;font-weight:600;color:var(--navy);}
 
   header{position:sticky;top:0;z-index:50;background:rgba(246,241,231,0.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);}
   .nav{display:flex;align-items:center;justify-content:space-between;padding:18px 28px;max-width:1080px;margin:0 auto;}
@@ -25,21 +25,25 @@
   .login-card{background:#fff;border:1px solid var(--line);border-radius:2px;padding:52px 48px;width:100%;max-width:440px;box-shadow:0 2px 24px rgba(28,26,23,0.07);}
   .login-card .eyebrow{font-size:0.72rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--crimson);font-weight:600;margin-bottom:14px;display:block;}
   .login-card h1{font-size:1.8rem;margin-bottom:8px;line-height:1.1;}
-  .login-card p.sub{font-size:0.92rem;color:#6b6258;margin-bottom:36px;}
+  .login-card p.sub{font-size:0.92rem;color:#6b6258;margin-bottom:36px;line-height:1.6;}
 
   .field{margin-bottom:20px;}
   .field label{display:block;font-size:0.8rem;font-weight:600;text-transform:uppercase;letter-spacing:0.07em;color:var(--ink);margin-bottom:8px;}
   .field input{width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:2px;font-family:'Inter',sans-serif;font-size:0.95rem;color:var(--ink);background:var(--parchment);outline:none;transition:border-color .2s;}
   .field input:focus{border-color:var(--navy);}
 
-  .msg{display:none;font-size:0.85rem;padding:11px 14px;border-radius:2px;margin-bottom:20px;}
+  .msg{display:none;font-size:0.85rem;padding:12px 14px;border-radius:2px;margin-bottom:20px;line-height:1.5;}
   .msg.error{background:#fdf0f0;border:1px solid rgba(163,22,33,0.25);color:var(--crimson);}
-  .msg.loading{background:#f0f4ff;border:1px solid rgba(20,33,61,0.2);color:var(--navy);}
+  .msg.info{background:#f0f4ff;border:1px solid rgba(20,33,61,0.2);color:var(--navy);}
   .msg.show{display:block;}
 
-  .btn-login{width:100%;padding:14px;background:var(--crimson);color:#fff;border:none;border-radius:2px;font-family:'Inter',sans-serif;font-size:0.9rem;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;cursor:pointer;transition:background .2s;}
-  .btn-login:hover{background:var(--crimson-deep);}
-  .btn-login:disabled{background:#ccc;cursor:not-allowed;}
+  .btn-login{width:100%;padding:14px;background:var(--crimson);color:#fff;border:none;border-radius:2px;font-family:'Inter',sans-serif;font-size:0.9rem;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;cursor:pointer;transition:background .2s;display:flex;align-items:center;justify-content:center;gap:8px;}
+  .btn-login:hover:not(:disabled){background:var(--crimson-deep);}
+  .btn-login:disabled{background:#bbb;cursor:not-allowed;}
+
+  .spinner{width:16px;height:16px;border:2px solid rgba(255,255,255,0.4);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;display:none;}
+  .btn-login.loading .spinner{display:block;}
+  @keyframes spin{to{transform:rotate(360deg);}}
 
   .hint{margin-top:24px;font-size:0.83rem;color:#8a8175;text-align:center;border-top:1px solid var(--line);padding-top:20px;}
   .hint a{color:var(--crimson);text-decoration:none;}
@@ -61,17 +65,20 @@
   <div class="login-card">
     <span class="eyebrow">Ambassador Portal</span>
     <h1>Welcome back.</h1>
-    <p class="sub">Log in with your registered email address to access the Ambassador Hub.</p>
+    <p class="sub">Enter the email address you registered with to access the Ambassador Hub.</p>
 
-    <div class="msg error" id="errorMsg">We couldn't find that email address. Please check and try again, or contact global.ambassadors@crimsoneducation.org.</div>
-    <div class="msg loading" id="loadingMsg">Checking your details…</div>
+    <div class="msg error" id="errorMsg"></div>
+    <div class="msg info" id="infoMsg"></div>
 
     <div class="field">
       <label for="email">Email address</label>
       <input type="email" id="email" placeholder="you@example.com" autocomplete="email">
     </div>
 
-    <button class="btn-login" id="loginBtn" onclick="handleLogin()">Log in</button>
+    <button class="btn-login" id="loginBtn" onclick="handleLogin()">
+      <span class="spinner" id="spinner"></span>
+      <span id="btnText">Log in</span>
+    </button>
 
     <div class="hint">
       Don't have access yet? <a href="https://form.typeform.com/to/Mgpstxtp" target="_blank">Apply to become an ambassador</a>
@@ -82,92 +89,135 @@
 <footer>© 2026 The Global Ambassador Programme</footer>
 
 <script>
-  // Google Sheet CSV export URL
-  // IMPORTANT: The sheet must be shared as "Anyone with the link can view"
-  // Sheet: https://docs.google.com/spreadsheets/d/1UFk5kFXwUearV5-MR5rbcei3chBieT2GNd7wUjw5LfA
-  const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/1UFk5kFXwUearV5-MR5rbcei3chBieT2GNd7wUjw5LfA/export?format=csv&gid=0';
+  const SHEET_ID = '1UFk5kFXwUearV5-MR5rbcei3chBieT2GNd7wUjw5LfA';
 
-  // Parse CSV text into array of row arrays
+  // Two URL formats to try — gviz tends to handle CORS better
+  const URLS = [
+    `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=0`,
+    `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=0`
+  ];
+
+  function setLoading(on) {
+    const btn = document.getElementById('loginBtn');
+    const spinner = document.getElementById('spinner');
+    const btnText = document.getElementById('btnText');
+    btn.disabled = on;
+    btn.classList.toggle('loading', on);
+    spinner.style.display = on ? 'block' : 'none';
+    btnText.textContent = on ? 'Checking…' : 'Log in';
+  }
+
+  function showError(msg) {
+    const el = document.getElementById('errorMsg');
+    el.textContent = msg;
+    el.classList.add('show');
+    document.getElementById('infoMsg').classList.remove('show');
+  }
+
+  function showInfo(msg) {
+    const el = document.getElementById('infoMsg');
+    el.textContent = msg;
+    el.classList.add('show');
+    document.getElementById('errorMsg').classList.remove('show');
+  }
+
+  function clearMessages() {
+    document.getElementById('errorMsg').classList.remove('show');
+    document.getElementById('infoMsg').classList.remove('show');
+  }
+
   function parseCSV(text) {
+    // Remove BOM if present
+    text = text.replace(/^\uFEFF/, '');
     const rows = [];
-    const lines = text.split('\n');
+    const lines = text.split(/\r?\n/);
     for (const line of lines) {
       if (!line.trim()) continue;
       const cols = [];
-      let current = '';
-      let inQuotes = false;
+      let cur = '', inQ = false;
       for (let i = 0; i < line.length; i++) {
-        const ch = line[i];
-        if (ch === '"') { inQuotes = !inQuotes; }
-        else if (ch === ',' && !inQuotes) { cols.push(current.trim()); current = ''; }
-        else { current += ch; }
+        const c = line[i];
+        if (c === '"') { inQ = !inQ; }
+        else if (c === ',' && !inQ) { cols.push(cur.trim().replace(/^"|"$/g, '')); cur = ''; }
+        else { cur += c; }
       }
-      cols.push(current.trim());
+      cols.push(cur.trim().replace(/^"|"$/g, ''));
       rows.push(cols);
     }
     return rows;
   }
 
+  async function fetchSheet() {
+    for (const url of URLS) {
+      try {
+        const res = await fetch(url, { redirect: 'follow' });
+        if (res.ok) {
+          const text = await res.text();
+          if (text.includes(',') || text.includes('\n')) return text;
+        }
+      } catch (e) {
+        // Try next URL
+      }
+    }
+    return null;
+  }
+
   async function handleLogin() {
     const emailInput = document.getElementById('email').value.trim().toLowerCase();
-    const errorMsg = document.getElementById('errorMsg');
-    const loadingMsg = document.getElementById('loadingMsg');
-    const btn = document.getElementById('loginBtn');
-
-    errorMsg.classList.remove('show');
+    clearMessages();
 
     if (!emailInput) {
-      errorMsg.textContent = 'Please enter your email address.';
-      errorMsg.classList.add('show');
+      showError('Please enter your email address.');
       return;
     }
 
-    btn.disabled = true;
-    loadingMsg.classList.add('show');
+    setLoading(true);
+    showInfo('Checking your details…');
 
-    try {
-      const response = await fetch(SHEET_CSV_URL);
-      if (!response.ok) throw new Error('Could not reach the sheet.');
-      const csvText = await response.text();
-      const rows = parseCSV(csvText);
+    const csvText = await fetchSheet();
 
-      if (rows.length < 2) throw new Error('Sheet appears empty.');
+    if (!csvText) {
+      setLoading(false);
+      showError(
+        'Could not connect to the ambassador list. ' +
+        'Please make sure the spreadsheet is shared as "Anyone with the link can view", then try again. ' +
+        'If the problem persists, contact global.ambassadors@crimsoneducation.org.'
+      );
+      return;
+    }
 
-      // Detect column indices from header row
-      const headers = rows[0].map(h => h.toLowerCase().trim());
-      
-      // Look for email, name, and ambassador code columns
-      // Adjust these if your column names differ
-      const emailCol = headers.findIndex(h => h.includes('email'));
-      const nameCol  = headers.findIndex(h => h.includes('name') || h.includes('first'));
-      const codeCol  = headers.findIndex(h => h.includes('code') || h.includes('ambassador code'));
+    const rows = parseCSV(csvText);
+    if (rows.length < 2) {
+      setLoading(false);
+      showError('The ambassador list appears to be empty. Please contact global.ambassadors@crimsoneducation.org.');
+      return;
+    }
 
-      if (emailCol === -1) throw new Error('Could not find email column in sheet.');
+    // Column order: Ambassador Code, Full Name, First Name, Last Name, Email
+    const codeCol  = 0;
+    const nameCol  = 2; // First Name
+    const emailCol = 4;
 
-      // Search for matching email
-      const match = rows.slice(1).find(row => {
-        const cellEmail = (row[emailCol] || '').trim().toLowerCase();
-        return cellEmail === emailInput;
-      });
+    // Search for matching email
+    const match = rows.slice(1).find(row => {
+      const cell = (row[emailCol] || '').trim().toLowerCase();
+      return cell === emailInput;
+    });
 
-      loadingMsg.classList.remove('show');
+    setLoading(false);
+    clearMessages();
 
-      if (match) {
-        const name = nameCol !== -1 ? (match[nameCol] || '').trim() : '';
-        const code = codeCol !== -1 ? (match[codeCol] || '').trim() : '';
-        sessionStorage.setItem('amb_name', name || 'Ambassador');
-        sessionStorage.setItem('amb_code', code);
-        window.location.href = 'hub.html';
-      } else {
-        errorMsg.textContent = "We couldn't find that email address. Please check and try again, or contact global.ambassadors@crimsoneducation.org.";
-        errorMsg.classList.add('show');
-        btn.disabled = false;
-      }
-    } catch (err) {
-      loadingMsg.classList.remove('show');
-      errorMsg.textContent = 'Unable to connect to the ambassador list. Please try again or contact global.ambassadors@crimsoneducation.org.';
-      errorMsg.classList.add('show');
-      btn.disabled = false;
+    if (match) {
+      const name = nameCol !== -1 ? (match[nameCol] || '').trim() : '';
+      const code = codeCol !== -1 ? (match[codeCol] || '').trim() : '';
+      sessionStorage.setItem('amb_name', name || 'Ambassador');
+      sessionStorage.setItem('amb_code', code);
+      window.location.href = 'hub.html';
+    } else {
+      showError(
+        "We couldn't find that email address in our ambassador list. " +
+        "Please check your spelling, or contact global.ambassadors@crimsoneducation.org if you believe this is an error."
+      );
     }
   }
 
