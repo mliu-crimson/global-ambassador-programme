@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ambassador Hub | Global Ambassador Programme</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap');
+  :root{
+    --ink:#1c1a17; --parchment:#f6f1e7; --crimson:#a31621; --crimson-deep:#7a0f17;
+    --gold:#c9a449; --navy:#14213d; --line:rgba(28,26,23,0.14);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--parchment);color:var(--ink);font-family:'Inter',sans-serif;-webkit-font-smoothing:antialiased;}
+  h1,h2,h3,h4{font-family:'Fraunces',serif;font-weight:600;color:var(--navy);}
+  a{color:var(--crimson);text-decoration:none;}
+  a:hover{text-decoration:underline;}
+  p{line-height:1.7;}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 28px;}
+
+  header{position:sticky;top:0;z-index:50;background:rgba(246,241,231,0.95);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);}
+  .nav{display:flex;align-items:center;justify-content:space-between;padding:16px 28px;max-width:1080px;margin:0 auto;gap:16px;flex-wrap:wrap;}
+  .brand{font-family:'Fraunces',serif;font-weight:700;font-size:1.1rem;letter-spacing:0.02em;color:var(--navy);text-decoration:none;}
+  .brand span{color:var(--crimson);}
+  .nav-links{display:flex;gap:4px;flex-wrap:wrap;}
+  .nav-links a{font-size:0.78rem;font-weight:600;color:#6b6258;text-decoration:none;padding:6px 12px;border-radius:2px;text-transform:uppercase;letter-spacing:0.05em;transition:all .15s;}
+  .nav-links a:hover{color:var(--navy);background:rgba(20,33,61,0.06);text-decoration:none;}
+  .btn-logout{font-size:0.78rem;font-weight:600;color:#6b6258;text-decoration:none;padding:7px 14px;border:1px solid var(--line);border-radius:2px;text-transform:uppercase;letter-spacing:0.04em;transition:all .2s;}
+  .btn-logout:hover{color:var(--crimson);border-color:var(--crimson);text-decoration:none;}
+
+  .hub-hero{background:var(--navy);padding:64px 28px 52px;text-align:center;border-bottom:3px solid var(--crimson);}
+  .hub-hero .tagline{font-family:'Fraunces',serif;font-size:clamp(1.6rem,4vw,3rem);font-weight:600;color:#fff;letter-spacing:0.02em;margin-bottom:12px;}
+  .hub-hero .tagline span{color:var(--gold);}
+  .hub-hero p{color:#c7cbda;font-size:0.95rem;}
+
+  .welcome-strip{background:#efe7d6;border-bottom:1px solid var(--line);padding:52px 28px;}
+  .welcome-inner{max-width:720px;margin:0 auto;}
+  .welcome-inner .eyebrow{font-size:0.72rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--crimson);font-weight:600;margin-bottom:12px;display:block;}
+  .welcome-inner h2{font-size:clamp(1.5rem,2.5vw,2rem);margin-bottom:18px;}
+  .welcome-inner p{color:#3a352f;margin-bottom:14px;font-size:0.97rem;}
+  .welcome-inner p:last-child{margin-bottom:0;}
+  .whatsapp-btn{display:inline-flex;align-items:center;gap:8px;margin-top:18px;background:#25D366;color:#fff;padding:11px 22px;border-radius:2px;font-weight:600;font-size:0.88rem;text-decoration:none;letter-spacing:0.03em;transition:opacity .2s;}
+  .whatsapp-btn:hover{opacity:0.88;text-decoration:none;}
+
+  section{padding:64px 0;}
+  .section-head{margin-bottom:36px;}
+  .section-head .tag{font-size:0.72rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--crimson);font-weight:600;margin-bottom:10px;display:block;}
+  .section-head h2{font-size:clamp(1.5rem,2.6vw,2rem);}
+  .alt{background:#efe7d6;border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
+
+  .card-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;}
+  .card{background:var(--parchment);border:1px solid var(--line);border-radius:2px;padding:28px 24px;}
+  .card .icon{font-size:1.6rem;margin-bottom:14px;display:block;}
+  .card h3{font-size:1rem;margin-bottom:8px;}
+  .card p{font-size:0.88rem;color:#3a352f;margin-bottom:16px;}
+  .card a{font-size:0.82rem;font-weight:600;color:var(--crimson);text-decoration:none;text-transform:uppercase;letter-spacing:0.06em;}
+  .card a:hover{text-decoration:underline;}
+
+  .accordion{border-top:1px solid var(--line);}
+  .acc-item{border-bottom:1px solid var(--line);}
+  .acc-trigger{width:100%;background:none;border:none;padding:20px 0;display:flex;justify-content:space-between;align-items:center;cursor:pointer;text-align:left;gap:12px;}
+  .acc-trigger h3{font-size:1rem;color:var(--navy);font-family:'Fraunces',serif;font-weight:600;}
+  .acc-trigger .chevron{flex-shrink:0;width:20px;height:20px;color:#6b6258;transition:transform .2s;}
+  .acc-trigger[aria-expanded="true"] .chevron{transform:rotate(180deg);}
+  .acc-body{display:none;padding:0 0 22px 0;font-size:0.93rem;color:#3a352f;line-height:1.7;}
+  .acc-body.open{display:block;}
+  .acc-body p{margin-bottom:10px;}
+  .acc-body p:last-child{margin-bottom:0;}
+  .acc-body a{color:var(--crimson);}
+
+  .comp-block{background:var(--parchment);border:1px solid var(--line);border-radius:2px;padding:36px 32px;margin-bottom:28px;}
+  .comp-block h3{font-size:1.2rem;margin-bottom:14px;}
+  .comp-block p{font-size:0.93rem;color:#3a352f;margin-bottom:12px;}
+  .comp-block .link-row{display:flex;align-items:baseline;gap:10px;margin-bottom:10px;font-size:0.92rem;color:#3a352f;}
+  .comp-block .link-row strong{color:var(--navy);min-width:130px;flex-shrink:0;}
+  .resource-cta{display:inline-flex;align-items:center;gap:8px;margin-top:18px;background:var(--navy);color:#fff;padding:12px 22px;border-radius:2px;font-weight:600;font-size:0.88rem;text-decoration:none;letter-spacing:0.03em;transition:opacity .2s;}
+  .resource-cta:hover{opacity:0.85;text-decoration:none;}
+
+  .team-intro{font-size:0.95rem;color:#3a352f;margin-bottom:36px;max-width:760px;line-height:1.7;}
+  .team-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+  .team-card{background:var(--parchment);border:1px solid var(--line);border-radius:2px;padding:24px 22px;}
+  .team-card .initials{width:48px;height:48px;border-radius:50%;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:600;font-size:1.1rem;margin-bottom:14px;}
+  .team-card h3{font-size:0.95rem;margin-bottom:4px;}
+  .team-card .role{font-size:0.82rem;color:var(--crimson);font-weight:600;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:12px;}
+  .team-card .contact{font-size:0.82rem;color:#6b6258;line-height:1.7;}
+  .team-card .contact a{color:var(--crimson);}
+
+  .events-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+  .event-card{background:var(--parchment);border:1px solid var(--line);border-radius:2px;overflow:hidden;}
+  .event-card .event-color{height:6px;}
+  .event-card .event-body{padding:22px 20px;}
+  .event-card h3{font-size:0.95rem;margin-bottom:6px;}
+  .event-card .date{font-size:0.82rem;color:#6b6258;margin-bottom:10px;}
+  .event-tags{display:flex;gap:6px;flex-wrap:wrap;}
+  .tag-pill{font-size:0.72rem;padding:3px 9px;border-radius:20px;font-weight:600;letter-spacing:0.04em;}
+  .tag-pill.college{background:#e8f0fe;color:#1a56b0;}
+  .tag-pill.deadline{background:#fde8e8;color:var(--crimson);}
+  .tag-pill.rec{background:#e8f5e9;color:#1b7a2f;}
+  .tag-pill.ptft{background:#fff3e0;color:#b45309;}
+
+  .faq-group{margin-bottom:36px;}
+  .faq-group-title{font-size:0.78rem;text-transform:uppercase;letter-spacing:0.1em;color:#6b6258;font-weight:700;margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid var(--line);}
+  .faq-item{border:1px solid var(--line);border-radius:2px;margin-bottom:10px;background:var(--parchment);}
+  .faq-trigger{width:100%;background:none;border:none;padding:18px 20px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;text-align:left;gap:12px;}
+  .faq-trigger span{font-size:0.92rem;font-weight:600;color:var(--navy);font-style:italic;}
+  .faq-trigger .chevron{flex-shrink:0;width:18px;height:18px;color:#6b6258;transition:transform .2s;}
+  .faq-trigger[aria-expanded="true"] .chevron{transform:rotate(180deg);}
+  .faq-body{display:none;padding:0 20px 18px;font-size:0.9rem;color:#3a352f;line-height:1.7;border-top:1px solid var(--line);}
+  .faq-body.open{display:block;}
+  .faq-body a{color:var(--crimson);}
+
+  .contact-strip{background:var(--crimson);color:#fff;padding:52px 28px;text-align:center;}
+  .contact-strip h2{color:#fff;margin-bottom:10px;}
+  .contact-strip p{color:#f3d9d6;margin-bottom:6px;font-size:0.95rem;}
+  .contact-strip a{color:#fff;font-weight:700;border-bottom:1px solid rgba(255,255,255,0.4);}
+  .contact-strip a:hover{text-decoration:none;border-bottom-color:#fff;}
+
+  footer{padding:24px;text-align:center;font-size:0.8rem;color:#8a8175;border-top:1px solid var(--line);}
+
+  @media(max-width:760px){
+    .card-grid,.team-grid,.events-grid{grid-template-columns:1fr;}
+    .nav-links{display:none;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="nav">
+    <a class="brand" href="index.html">Global Ambassador <span>Programme</span></a>
+    <nav class="nav-links">
+      <a href="#toolkit">Toolkit</a>
+      <a href="#starter-kit">Starter Kit</a>
+      <a href="#competition">Competition</a>
+      <a href="#team">Team</a>
+      <a href="#events">Events</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+    <a class="btn-logout" href="index.html">Log out</a>
+  </div>
+</header>
+
+<div class="hub-hero">
+  <div class="tagline">Education <span>|</span> Leadership <span>|</span> Change</div>
+  <p>Global Ambassador Hub</p>
+</div>
+
+<div class="welcome-strip">
+  <div class="welcome-inner">
+    <span class="eyebrow">Dear Student Ambassador,</span>
+    <h2>Welcome to the Global Ambassador Programme!</h2>
+    <p>We are delighted to welcome you to our unique and diverse community of global ambassadors.</p>
+    <p>Please join our WhatsApp Community! This is our main way to keep in contact with everyone and to receive updates. You'll have opportunities to engage with fellow ambassadors and access valuable resources.</p>
+    <p>We hope this experience will be fulfilling for you—a chance to make new friends worldwide, grow as a student, and motivate your peers and community.</p>
+    <a class="whatsapp-btn" href="mailto:global.ambassadors@crimsoneducation.org">💬 Join our WhatsApp Community</a>
+  </div>
+</div>
+
+<!-- Toolkit -->
+<section id="toolkit">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="tag">Quick access</span>
+      <h2>Your ambassador toolkit.</h2>
+    </div>
+    <div class="card-grid" style="grid-template-columns:1fr 1fr;">
+      <div class="card">
+        <span class="icon">🔗</span>
+        <h3>Find your code</h3>
+        <p>Share your unique Ambassador code to give your peers an exclusive discount and for us to track each and every one of your sign-ups.</p>
+        <a href="https://docs.google.com/spreadsheets/d/1YkW2ta-zEpA4SXccOVuRzrkCt_puZPWu-8aAFu1iumA/edit?gid=427802371#gid=427802371" target="_blank" rel="noopener">Find your code →</a>
+      </div>
+      <div class="card">
+        <span class="icon">🏆</span>
+        <h3>Track your sign-ups</h3>
+        <p>Check the competition track to see your sign-up count and credit balance. Reach 20 to unlock your voucher or mentoring session.</p>
+        <a href="https://docs.google.com/spreadsheets/d/1YkW2ta-zEpA4SXccOVuRzrkCt_puZPWu-8aAFu1iumA/edit?gid=427802371#gid=427802371" target="_blank" rel="noopener">View spreadsheet →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Starter Kit -->
+<section class="alt" id="starter-kit">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="tag">Starter Kit</span>
+      <h2>🔖 Starter Kit</h2>
+    </div>
+    <p style="color:#3a352f;margin-bottom:28px;font-size:0.95rem;">If you're new, please read this section carefully, as it clarifies all aspects of the program. Additionally, please refer to the FAQ section at the end.</p>
+    <div class="accordion">
+      <div class="acc-item">
+        <button class="acc-trigger" aria-expanded="false" onclick="toggleAcc(this)">
+          <h3>🧠 What does it mean to be an Ambassador?</h3>
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="acc-body">
+          <p>As a Global Student Ambassador, you help promote elite student competitions — including the Harvard Crimson Global Essay Competition, Harvard Crimson Case Competition, and the LSE Generate Global Innovation Challenge — to your school, your friends, and your wider community.</p>
+          <p>You set aside 1–2 hours a week to share and promote our competitions with your peers. Every sign-up made with your personal code builds credit toward credit vouchers and mentoring.</p>
+        </div>
+      </div>
+      <div class="acc-item">
+        <button class="acc-trigger" aria-expanded="false" onclick="toggleAcc(this)">
+          <h3>🏆 What is the compensation for the sign-ups?</h3>
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="acc-body">
+          <p>You earn $5 USD in credit for every registration you bring in. Once you've built up $100 (20 registrations), you can cash it out as a credit voucher — or exchange it for an hour of 1:1 mentoring on university applications, essays, extracurriculars, and interview prep.</p>
+          <p>Sign-ups carry over from one competition to the next. There are also weekly bonus credits and round-end prizes for the top ambassadors.</p>
+        </div>
+      </div>
+      <div class="acc-item">
+        <button class="acc-trigger" aria-expanded="false" onclick="toggleAcc(this)">
+          <h3>🧑 How can I announce this role on LinkedIn?</h3>
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="acc-body">
+          <p>You can add "Global Student Ambassador – Crimson Education / LSE Generate Global Innovation Challenge" as a position on LinkedIn under Volunteer Experience or Experience. Include your start date and describe it as promoting elite international student competitions to peers globally, developing leadership and outreach skills.</p>
+        </div>
+      </div>
+      <div class="acc-item">
+        <button class="acc-trigger" aria-expanded="false" onclick="toggleAcc(this)">
+          <h3>📋 What is the Privacy Policy?</h3>
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="acc-body">
+          <p>For privacy-related questions, please reach out to <a href="mailto:global.ambassadors@crimsoneducation.org">global.ambassadors@crimsoneducation.org</a>.</p>
+        </div>
+      </div>
+      <div class="acc-item">
+        <button class="acc-trigger" aria-expanded="false" onclick="toggleAcc(this)">
+          <h3>🏳 What is the Global Ambassador Community Policy?</h3>
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="acc-body">
+          <p>All ambassadors are expected to represent the programme with respect and professionalism. Please be kind and supportive in the WhatsApp community, refrain from sharing misleading information about the competitions, and avoid spamming peers. If you have concerns, contact a community intern or email the team.</p>
+        </div>
+      </div>
+      <div class="acc-item">
+        <button class="acc-trigger" aria-expanded="false" onclick="toggleAcc(this)">
+          <h3>🤗 How do I join the Global Ambassador Community WhatsApp?</h3>
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="acc-body">
+          <p>The WhatsApp Community link is shared with all confirmed ambassadors via email after your application is accepted. If you haven't received it, email <a href="mailto:global.ambassadors@crimsoneducation.org">global.ambassadors@crimsoneducation.org</a> and the team will send it to you.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Current Competition -->
+<section id="competition">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="tag">Current Competition</span>
+      <h2>🏆 Current Competition: LGIC</h2>
+    </div>
+    <div class="comp-block">
+      <p>The Global Ambassadors Program is now actively promoting the LSE Generate Global Innovation Challenge 2026.</p>
+      <p>Formally known as Pitch For the Future (PFF), LGIC is new, it's exciting, and has a new collaborator — <a href="https://lse.ac.uk/generate" target="_blank" rel="noopener">LSE Generate</a>!</p>
+      <p><strong>What is the LGIC?</strong></p>
+      <div class="link-row"><strong>Website:</strong> <a href="https://www.globinnovation.org/" target="_blank" rel="noopener">https://www.globinnovation.org/</a> — save it, pin it, print it — you'll need it!</div>
+      <div class="link-row"><strong>Registration link:</strong> <a href="https://www.globinnovation.org/registernow" target="_blank" rel="noopener">https://www.globinnovation.org/registernow</a></div>
+      <p style="margin-top:16px;">Formerly known as Pitch for the Future, the LSE Generate Global Innovation Challenge invites high school students worldwide to develop solutions to real-world problems through the lens of the UN Sustainable Development Goals.</p>
+      <p>Hosted online in partnership with LSE Generate and Crimson Education, the competition builds creativity, problem-solving, and entrepreneurial confidence – connecting students with a global network of like-minded peers.</p>
+      <div style="margin-top:16px;">
+        <p>Link to resources, including flyer, cold emails, and social media posts: <a href="https://docs.google.com/document/d/10zHAg-BgtejmSHhw2fEsJvU9D5Y3JxAFFUEEiJgUXW8/edit?tab=t.0" target="_blank" rel="noopener">Open resource document →</a></p>
+      </div>
+      <p style="margin-top:12px;color:#6b6258;font-size:0.88rem;">Please visit the spreadsheet in your toolkit above to review your weekly sign-up! Please click on the "Google Drive" icon to gain full access to the spreadsheet.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Meet The Team -->
+<section class="alt" id="team">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="tag">Meet The Team</span>
+      <h2>👥 Meet The Team</h2>
+    </div>
+    <p class="team-intro">For any questions, assistance, or further information regarding the Global Ambassador Program, please don't hesitate to contact our team. You can contact us directly at <a href="mailto:global.ambassadors@crimsoneducation.org">global.ambassadors@crimsoneducation.org</a>, and we will be happy to assist you. We look forward to hearing from you and supporting your involvement in the program.</p>
+    <div class="team-grid">
+      <div class="team-card">
+        <div class="initials">ML</div>
+        <h3>Melanie Liu</h3>
+        <div class="role">Global Programme Manager</div>
+        <div class="contact">
+          <a href="mailto:m.liu@crimsoneducation.org">m.liu@crimsoneducation.org</a><br>
+          +30 697 235 6734
+        </div>
+      </div>
+      <div class="team-card">
+        <div class="initials">HN</div>
+        <h3>Helene Nguyen</h3>
+        <div class="role">Admin and Operations Support</div>
+        <div class="contact">
+          <a href="mailto:global.ambassadors@crimsoneducation.org">global.ambassadors@crimsoneducation.org</a>
+        </div>
+      </div>
+      <div class="team-card">
+        <div class="initials">CA</div>
+        <h3>Camila Angulo</h3>
+        <div class="role">Senior Community Intern</div>
+        <div class="contact">
+          <a href="mailto:global.ambassadors@crimsoneducation.org">global.ambassadors@crimsoneducation.org</a>
+        </div>
+      </div>
+      <div class="team-card">
+        <div class="initials">LO</div>
+        <h3>Laura Oliveira De Carvalho</h3>
+        <div class="role">Senior Outreach Intern</div>
+        <div class="contact">
+          <a href="mailto:global.ambassadors@crimsoneducation.org">global.ambassadors@crimsoneducation.org</a>
+        </div>
+      </div>
+      <div class="team-card">
+        <div class="initials">JT</div>
+        <h3>Julia Taboada</h3>
+        <div class="role">Community Intern</div>
+        <div class="contact">
+          <a href="mailto:global.ambassadors@crimsoneducation.org">global.ambassadors@crimsoneducation.org</a>
+        </div>
+      </div>
+      <div class="team-card">
+        <div class="initials">LV</div>
+        <h3>Luisell Valencia</h3>
+        <div class="role">Global Programme Intern</div>
+        <div class="contact">
+          +51 965 958 187<br>
+          <a href="mailto:global.ambassadors@crimsoneducation.org">global.ambassadors@crimsoneducation.org</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Events and Key Dates -->
+<section id="events">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="tag">Events and Key Dates</span>
+      <h2>🎉 Events and Key Dates</h2>
+    </div>
+    <div class="events-grid">
+      <div class="event-card">
+        <div class="event-color" style="background:#c9a449;"></div>
+        <div class="event-body">
+          <h3>Cece's Workshop — EX PFTF Winner</h3>
+          <div class="date">July 15, 2025</div>
+          <div class="event-tags">
+            <span class="tag-pill ptft">PTFT</span>
+            <span class="tag-pill college">College Admissions</span>
+            <span class="tag-pill rec">Recording Available</span>
+          </div>
+        </div>
+      </div>
+      <div class="event-card">
+        <div class="event-color" style="background:#c9a449;"></div>
+        <div class="event-body">
+          <h3>US Application Essays 101</h3>
+          <div class="date">August 31, 2025</div>
+          <div class="event-tags">
+            <span class="tag-pill college">College Admissions</span>
+            <span class="tag-pill rec">Recording Available</span>
+          </div>
+        </div>
+      </div>
+      <div class="event-card">
+        <div class="event-color" style="background:var(--crimson);"></div>
+        <div class="event-body">
+          <h3>[HCGEC] Early Bird Registration closes</h3>
+          <div class="date">December 15, 2025</div>
+          <div class="event-tags"><span class="tag-pill deadline">Deadline</span></div>
+        </div>
+      </div>
+      <div class="event-card">
+        <div class="event-color" style="background:var(--crimson);"></div>
+        <div class="event-body">
+          <h3>[HCGEC] Regular Registration opens</h3>
+          <div class="date">December 16, 2025</div>
+          <div class="event-tags"><span class="tag-pill deadline">Deadline</span></div>
+        </div>
+      </div>
+      <div class="event-card">
+        <div class="event-color" style="background:var(--crimson);"></div>
+        <div class="event-body">
+          <h3>[HCGEC] Regular Registration closes</h3>
+          <div class="date">February 10, 2026</div>
+          <div class="event-tags"><span class="tag-pill deadline">Deadline</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="alt" id="faq">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="tag">FAQ</span>
+      <h2>❓ FAQ</h2>
+    </div>
+
+    <div class="faq-group">
+      <div class="faq-group-title">Frequently Asked Questions For the Global Student Ambassador Program</div>
+      <div class="faq-item">
+        <button class="faq-trigger" aria-expanded="false" onclick="toggleFaq(this)">
+          <span>"Can I also participate in the competition even though I am an ambassador?"</span>
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-body">Yes, you can—in fact, we encourage you to! Many past ambassadors have participated in and won the competitions, and have gone on to attend Ivy League schools. You may use your ambassador code to receive any applicable discounts.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-trigger" aria-expanded="false" onclick="toggleFaq(this)">
+          <span>"Who should I reach out to for questions related to the Ambassadors' Community?"</span>
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-body">If you have any questions about the community dynamics or guidelines, feel free to reach out in the group chat or send a message to any of the <strong>Community Interns</strong> or <a href="mailto:global.ambassadors@crimsoneducation.org">global.ambassadors@crimsoneducation.org</a>.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-trigger" aria-expanded="false" onclick="toggleFaq(this)">
+          <span>"Will I receive an Ambassador Certificate? Where can I use it?"</span>
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-body">Yes, an official Ambassador Certificate is awarded to participants per competition, who actively contributed to the program <em>and</em> successfully generated at least three sign-ups. This certificate serves as formal recognition of your involvement, commitment, and impact within the program. You can include this certificate in your CV, LinkedIn profile, university and internship applications, and when requesting letters of recommendation. Certificates are sent after the registration deadlines pass.</div>
+      </div>
+    </div>
+
+    <div class="faq-group">
+      <div class="faq-group-title">Global Sign-Up FAQs</div>
+      <div class="faq-item">
+        <button class="faq-trigger" aria-expanded="false" onclick="toggleFaq(this)">
+          <span>"How can I know what my Ambassador Code is? Where do I find it?"</span>
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-body"><a href="https://docs.google.com/spreadsheets/d/1YkW2ta-zEpA4SXccOVuRzrkCt_puZPWu-8aAFu1iumA/edit?gid=427802371#gid=427802371" target="_blank" rel="noopener">Click here to open the spreadsheet</a>. Please type your name into the drop down box.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-trigger" aria-expanded="false" onclick="toggleFaq(this)">
+          <span>"How many sign-ups do I have? Can I PM you to check?"</span>
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-body">We share this information in the spreadsheet on a weekly basis. Sign-up data is linked to personal information in the database; therefore, for privacy reasons, we must manually review the database on a weekly basis. Please refrain from sending private messages—wait for the weekly numbers to be released.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-trigger" aria-expanded="false" onclick="toggleFaq(this)">
+          <span>"How do I know if my sign-ups are accurate?"</span>
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-body">The sign-ups on the ambassadors' sheet are taken from the official registration database of the competitions, so it's precisely the number of people who completed their registration using your code. If you believe there is an issue, please email <a href="mailto:global.ambassadors@crimsoneducation.org">global.ambassadors@crimsoneducation.org</a>.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-trigger" aria-expanded="false" onclick="toggleFaq(this)">
+          <span>"When will I receive my rewards?"</span>
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-body">Prizes are awarded after each competition. Every ambassador will get a Google Form to fill out their reward preference as soon as the competition concludes.</div>
+      </div>
+    </div>
+
+    <div class="faq-group">
+      <div class="faq-group-title">Marketing and Outreach FAQs</div>
+      <div class="faq-item">
+        <button class="faq-trigger" aria-expanded="false" onclick="toggleFaq(this)">
+          <span>"Where can I find posters and graphic materials to promote the competitions?"</span>
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-body">These are shared at every competition in the Competition Launch document. You may also find them in the Competition WhatsApp chats.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-trigger" aria-expanded="false" onclick="toggleFaq(this)">
+          <span>"Who should I reach out to for questions related to Outreach?"</span>
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-body">Melanie Liu (Programme Manager) and Helene Nguyen (Admin and Ops).</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-trigger" aria-expanded="false" onclick="toggleFaq(this)">
+          <span>"What if my country, community, or school is less interested in these competitions? How can I get more sign-ups?"</span>
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-body">Many of our past ambassadors faced this challenge and chose to reach out to schools outside their region. For example, one of our Brazilian ambassadors emailed the English departments at top US schools for the <a href="https://www.essaycomp.org/" target="_blank" rel="noopener">Harvard Crimson Global Essay Competition</a> and received over 40 sign-ups. Another from Poland reached out to a top school in India and locked in less that 100 sign-ups at once!</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-trigger" aria-expanded="false" onclick="toggleFaq(this)">
+          <span>"I am swamped with exams or other commitments, and I have tried my best, but I still have zero sign-ups. Can I continue as an ambassador?"</span>
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-body">Yes, you can! We understand that sometimes you have critical personal commitments, which is fine. You can continue as a registered (but inactive) ambassador; however, you won't be able to redeem prizes without sign-ups. If you're struggling to get more sign-ups, consider reaching out to our community for advice.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-trigger" aria-expanded="false" onclick="toggleFaq(this)">
+          <span>"How can I describe this activity in future opportunities?"</span>
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-body">You can describe yourself as a Global Student Ambassador for an international student competitions programme, responsible for outreach and community building across your region. Highlight leadership, communication, cross-cultural engagement, and any sign-up results you achieved. It reads very well on university applications, personal statements, and LinkedIn.</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="contact-strip">
+  <h2>Got a question?</h2>
+  <p>The team is here to help — reach out any time.</p>
+  <a href="mailto:global.ambassadors@crimsoneducation.org">global.ambassadors@crimsoneducation.org</a>
+</div>
+
+<footer>© 2026 The Global Ambassador Programme</footer>
+
+<script>
+  function toggleAcc(btn) {
+    const body = btn.nextElementSibling;
+    const open = btn.getAttribute('aria-expanded') === 'true';
+    btn.setAttribute('aria-expanded', !open);
+    body.classList.toggle('open', !open);
+  }
+  function toggleFaq(btn) {
+    const body = btn.nextElementSibling;
+    const open = btn.getAttribute('aria-expanded') === 'true';
+    btn.setAttribute('aria-expanded', !open);
+    body.classList.toggle('open', !open);
+  }
+</script>
+</body>
+</html>

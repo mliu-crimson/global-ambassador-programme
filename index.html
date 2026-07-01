@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Global Ambassador Programme | LGIC</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap');
+
+  :root{
+    --ink: #1c1a17;
+    --parchment: #f6f1e7;
+    --crimson: #a31621;
+    --crimson-deep: #7a0f17;
+    --gold: #c9a449;
+    --navy: #14213d;
+    --line: rgba(28,26,23,0.14);
+  }
+
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--parchment);
+    color:var(--ink);
+    font-family:'Inter', sans-serif;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,h4{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    letter-spacing:-0.01em;
+    color:var(--navy);
+  }
+  a{color:inherit;}
+  .wrap{max-width:1080px; margin:0 auto; padding:0 28px;}
+
+  /* ---------- Header ---------- */
+  header{
+    position:sticky; top:0; z-index:50;
+    background:rgba(246,241,231,0.92);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:18px 28px; max-width:1080px; margin:0 auto;
+  }
+  .brand{
+    font-family:'Fraunces', serif; font-weight:700; font-size:1.15rem;
+    letter-spacing:0.02em; color:var(--navy);
+  }
+  .brand span{color:var(--crimson);}
+  .nav a.cta{
+    background:var(--crimson); color:#fff; padding:10px 22px;
+    border-radius:2px; font-size:0.85rem; font-weight:600;
+    text-decoration:none; letter-spacing:0.03em; text-transform:uppercase;
+    transition:background .2s ease;
+  }
+  .nav a.cta:hover{background:var(--crimson-deep);}
+
+  /* ---------- Hero ---------- */
+  .hero{
+    padding:96px 28px 80px;
+    position:relative;
+    overflow:hidden;
+    border-bottom:1px solid var(--line);
+  }
+  .hero::before{
+    content:"";
+    position:absolute; top:-120px; right:-120px;
+    width:420px; height:420px; border-radius:50%;
+    background:radial-gradient(circle at 30% 30%, rgba(163,22,33,0.10), transparent 70%);
+  }
+  .eyebrow{
+    display:inline-flex; align-items:center; gap:8px;
+    font-size:0.75rem; letter-spacing:0.14em; text-transform:uppercase;
+    color:var(--crimson); font-weight:600; margin-bottom:22px;
+  }
+  .eyebrow::before{content:""; width:28px; height:1px; background:var(--crimson);}
+  .hero h1{
+    font-size:clamp(2.4rem, 5.4vw, 4.2rem);
+    line-height:1.04;
+    max-width:780px;
+    margin-bottom:26px;
+  }
+  .hero h1 em{font-style:italic; color:var(--crimson);}
+  .hero p.lede{
+    max-width:560px; font-size:1.12rem; color:#3a352f; margin-bottom:36px;
+  }
+  .hero-actions{display:flex; gap:18px; align-items:center; flex-wrap:wrap;}
+  .btn-primary{
+    background:var(--ink); color:#fff; padding:15px 34px;
+    text-decoration:none; font-weight:600; font-size:0.92rem;
+    letter-spacing:0.03em; text-transform:uppercase; border-radius:2px;
+    border:1px solid var(--ink); transition:all .2s ease;
+  }
+  .btn-primary:hover{background:transparent; color:var(--ink);}
+  .stat-row{
+    display:flex; gap:48px; margin-top:64px; flex-wrap:wrap;
+    border-top:1px solid var(--line); padding-top:32px; max-width:780px;
+  }
+  .stat .num{
+    font-family:'Fraunces', serif; font-size:2.1rem; font-weight:600; color:var(--navy);
+  }
+  .stat .label{font-size:0.8rem; color:#6b6258; text-transform:uppercase; letter-spacing:0.06em;}
+
+  /* ---------- Section shared ---------- */
+  section{padding:84px 0;}
+  .section-head{max-width:640px; margin-bottom:54px;}
+  .section-head .tag{
+    font-size:0.75rem; letter-spacing:0.14em; text-transform:uppercase;
+    color:var(--crimson); font-weight:600; margin-bottom:14px; display:block;
+  }
+  .section-head h2{font-size:clamp(1.8rem,3.2vw,2.5rem); line-height:1.1;}
+  .alt{background:#efe7d6; border-top:1px solid var(--line); border-bottom:1px solid var(--line);}
+
+  /* ---------- What is the program ---------- */
+  .role-grid{
+    display:grid; grid-template-columns:1fr 1fr; gap:48px; align-items:start;
+  }
+  .role-grid p{color:#3a352f; margin-bottom:18px;}
+  .role-card{
+    background:var(--navy); color:#f1ede2; padding:36px 32px; border-radius:2px;
+  }
+  .role-card h3{color:#fff; font-size:1.1rem; margin-bottom:14px;}
+  .role-card p{color:#cfd2dd; font-size:0.95rem;}
+
+  /* ---------- Benefits ledger ---------- */
+  .ledger{border-top:1px solid var(--line);}
+  .ledger-item{
+    display:grid; grid-template-columns:90px 1fr; gap:28px;
+    padding:34px 0; border-bottom:1px solid var(--line);
+  }
+  .ledger-item .mark{
+    font-family:'Fraunces', serif; font-size:2.2rem; color:var(--gold);
+    font-weight:600;
+  }
+  .ledger-item h3{font-size:1.2rem; margin-bottom:8px;}
+  .ledger-item p{color:#3a352f; font-size:0.97rem; max-width:600px;}
+  .ledger-item .sub{
+    margin-top:10px; font-size:0.88rem; color:#6b6258; font-style:italic;
+  }
+
+  /* ---------- Prize table ---------- */
+  .prize-box{
+    background:var(--crimson); color:#fff; padding:48px 44px; border-radius:2px;
+    display:grid; grid-template-columns:1.1fr 1fr; gap:40px; align-items:center;
+  }
+  .prize-box h3{color:#fff; font-size:1.4rem; margin-bottom:14px;}
+  .prize-box p{color:#f3d9d6; font-size:0.95rem; margin-bottom:8px;}
+  .prize-list{list-style:none;}
+  .prize-list li{
+    display:flex; justify-content:space-between;
+    padding:11px 0; border-bottom:1px solid rgba(255,255,255,0.22);
+    font-size:0.95rem;
+  }
+  .prize-list li:last-child{border-bottom:none;}
+  .prize-list .place{color:#f3d9d6;}
+  .prize-list .amt{font-family:'Fraunces', serif; font-weight:600; font-size:1.05rem;}
+  .bonus-note{
+    margin-top:28px; font-size:0.85rem; color:#f3d9d6; border-top:1px solid rgba(255,255,255,0.22);
+    padding-top:18px;
+  }
+
+  /* ---------- Why join ---------- */
+  .why-grid{
+    display:grid; grid-template-columns:repeat(3,1fr); gap:32px;
+  }
+  .why-card{
+    border:1px solid var(--line); padding:32px 28px; border-radius:2px; background:var(--parchment);
+  }
+  .why-card .num{
+    font-family:'Fraunces', serif; color:var(--gold); font-size:1rem; margin-bottom:18px; display:block;
+  }
+  .why-card h3{font-size:1.05rem; margin-bottom:10px;}
+  .why-card p{font-size:0.92rem; color:#3a352f;}
+
+  /* ---------- CTA banner ---------- */
+  /* ---------- Testimonials ---------- */
+  .testimonials{background:#efe7d6; border-top:1px solid var(--line); border-bottom:1px solid var(--line);}
+  .testimonial-grid{
+    column-count:2; column-gap:28px;
+  }
+  .t-card{
+    break-inside:avoid; margin-bottom:28px; background:var(--parchment);
+    border:1px solid var(--line); border-radius:2px; padding:30px 28px;
+  }
+  .t-card .quote-mark{
+    font-family:'Fraunces', serif; font-size:2.4rem; color:var(--gold); line-height:1;
+    display:block; margin-bottom:10px;
+  }
+  .t-card p{font-size:0.94rem; color:#3a352f; margin-bottom:18px;}
+  .t-card .attribution{
+    font-size:0.85rem; font-weight:600; color:var(--navy);
+    border-top:1px solid var(--line); padding-top:14px;
+  }
+  .t-card .attribution span{color:var(--crimson); font-weight:500;}
+
+  .cta-banner{
+    background:var(--navy); color:#fff; text-align:center; padding:90px 28px;
+  }
+  .cta-banner h2{color:#fff; font-size:clamp(1.9rem,4vw,2.7rem); max-width:680px; margin:0 auto 22px;}
+  .cta-banner p{color:#c7cbda; max-width:520px; margin:0 auto 36px;}
+  .cta-banner .btn-primary{background:var(--crimson); border-color:var(--crimson); color:#fff;}
+  .cta-banner .btn-primary:hover{background:transparent; color:#fff;}
+
+  /* ---------- Footer ---------- */
+  footer{padding:56px 28px 36px; border-top:1px solid var(--line);}
+  .footer-grid{
+    display:flex; justify-content:space-between; flex-wrap:wrap; gap:32px; margin-bottom:40px;
+  }
+  .footer-grid .brand{margin-bottom:10px;}
+  .footer-grid p{color:#6b6258; font-size:0.9rem; max-width:340px;}
+  .footer-links{display:flex; gap:48px; flex-wrap:wrap;}
+  .footer-links h4{font-size:0.78rem; text-transform:uppercase; letter-spacing:0.08em; color:#6b6258; margin-bottom:14px; font-family:'Inter',sans-serif; font-weight:600;}
+  .footer-links a{display:block; text-decoration:none; color:var(--ink); font-size:0.92rem; margin-bottom:9px;}
+  .footer-links a:hover{color:var(--crimson);}
+  .footer-bottom{
+    border-top:1px solid var(--line); padding-top:24px; display:flex; justify-content:space-between;
+    flex-wrap:wrap; gap:12px; font-size:0.82rem; color:#8a8175;
+  }
+
+  @media (max-width:760px){
+    .role-grid, .prize-box, .why-grid{grid-template-columns:1fr;}
+    .testimonial-grid{column-count:1;}
+    .stat-row{gap:32px;}
+    .ledger-item{grid-template-columns:1fr;}
+    .ledger-item .mark{margin-bottom:6px;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="nav">
+    <div class="brand">Global Ambassador <span>Programme</span></div>
+    <div style="display:flex; gap:12px; align-items:center;">
+      <a href="login.html" style="font-size:0.85rem; font-weight:600; color:var(--navy); text-decoration:none; padding:10px 18px; border:1px solid var(--line); border-radius:2px; letter-spacing:0.03em; text-transform:uppercase; transition:background .2s;">Ambassador Login</a>
+      <a class="cta" href="https://form.typeform.com/to/Mgpstxtp" target="_blank" rel="noopener">Apply Now</a>
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <span class="eyebrow">Global Ambassador Programme</span>
+    <h1>Promote what matters. <em>Get rewarded</em> for building community.</h1>
+    <p class="lede">Join a global community of 2,000+ student ambassadors helping fellow students discover elite international competitions — and earn cash, mentorship, and leadership credit while you do it.</p>
+    <div class="hero-actions">
+      <a class="btn-primary" href="https://form.typeform.com/to/Mgpstxtp" target="_blank" rel="noopener">Apply Now</a>
+    </div>
+    <div class="stat-row">
+      <div class="stat"><div class="num">2,000+</div><div class="label">Active ambassadors</div></div>
+      <div class="stat"><div class="num">$5</div><div class="label">Credit per sign-up</div></div>
+      <div class="stat"><div class="num">$75</div><div class="label">Weekly prizes</div></div>
+      <div class="stat"><div class="num">1–2 hrs</div><div class="label">A week, that's it</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="alt">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="tag">What is the programme</span>
+      <h2>You help students find opportunities they'd never have heard of otherwise.</h2>
+    </div>
+    <div class="role-grid">
+      <div>
+        <p>As a Global Student Ambassador, you help promote elite student events and competitions — including <a href="https://www.essaycomp.org/" target="_blank" rel="noopener" style="color:var(--crimson); text-decoration:underline;">Harvard Crimson Global Essay Competition</a>, <a href="https://www.casecomp.org/" target="_blank" rel="noopener" style="color:var(--crimson); text-decoration:underline;">Harvard Crimson Case Competition</a> and the <a href="https://www.globinnovation.org/" target="_blank" rel="noopener" style="color:var(--crimson); text-decoration:underline;">LSE Generate Global Innovation Challenge</a> — to your school, your friends, and your wider community.</p>
+        <p>It's informal, flexible, and built around the time you already have. No quotas, no scripts — just genuine recommendations backed by materials we provide.</p>
+      </div>
+      <div class="role-card">
+        <h3>Your role, in practice</h3>
+        <p>Set aside 1–2 hours a week to discuss, share, and promote our competitions with your peers. We give you the materials and strategy — every sign-up made with your personal code builds credit toward consulting advice and vouchers.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="benefits">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="tag">What you get</span>
+      <h2>The more sign-ups you bring in, the more you benefit.</h2>
+    </div>
+    <div class="ledger">
+      <div class="ledger-item">
+        <div class="mark">01</div>
+        <div>
+          <h3>Crimson credit & credit vouchers</h3>
+          <p>Earn $5 USD in credit for every registration you bring in. Once you've built up $100 (20 registrations), cash it out as a credit voucher — or exchange it for an hour of 1:1 mentoring on university applications, essays, extracurriculars, and interview prep.</p>
+          <div class="sub">Sign-ups carry over from one competition to the next, so nothing you earn is wasted.</div>
+        </div>
+      </div>
+      <div class="ledger-item">
+        <div class="mark">02</div>
+        <div>
+          <h3>Webinars and workshops</h3>
+          <p>Free access to webinars covering US/UK admissions, essay writing, and debate and public speaking skills. Got a topic you want covered? Suggest it and we'll look into arranging it.</p>
+        </div>
+      </div>
+      <div class="ledger-item">
+        <div class="mark">03</div>
+        <div>
+          <h3>Internship opportunities</h3>
+          <p>Top ambassadors get the chance to intern directly with our competitions and projects — including Yale Model United Nations in Dubai, Singapore, and Latin America.</p>
+        </div>
+      </div>
+      <div class="ledger-item">
+        <div class="mark">04</div>
+        <div>
+          <h3>Ambassador certificate</h3>
+          <p>Bring in at least 3 sign-ups for a competition and receive an official ambassador certificate — a credible addition to your college and scholarship applications.</p>
+        </div>
+      </div>
+      <div class="ledger-item">
+        <div class="mark">05</div>
+        <div>
+          <h3>A global network</h3>
+          <p>Get access to an online community of like-minded, highly accomplished peers from around the world.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="alt">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="tag">Extra bonuses</span>
+      <h2>Bonus credit, every round.</h2>
+    </div>
+    <div class="prize-box">
+      <div>
+        <h3>Weekly bonuses</h3>
+        <p>$50 for the ambassador with the most registrations that week.</p>
+        <p>$25 for the most improved ambassador.</p>
+        <div class="bonus-note">At the end of every recruitment round, we tally every registration and reward the top 10 ambassadors.</div>
+      </div>
+      <ul class="prize-list">
+        <li><span class="place">1st place</span><span class="amt">$150</span></li>
+        <li><span class="place">2nd – 3rd place</span><span class="amt">$100</span></li>
+        <li><span class="place">4th – 5th place</span><span class="amt">$50</span></li>
+        <li><span class="place">6th – 10th place</span><span class="amt">$25</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="section-head">
+      <span class="tag">Why join</span>
+      <h2>Reasons ambassadors stick around.</h2>
+    </div>
+    <div class="why-grid">
+      <div class="why-card">
+        <span class="num">—</span>
+        <h3>Boost your profile</h3>
+        <p>Build a track record of leadership and outreach while helping peers discover life-changing opportunities.</p>
+      </div>
+      <div class="why-card">
+        <span class="num">—</span>
+        <h3>Real experience</h3>
+        <p>Gain hands-on experience in leadership, outreach, and event promotion you can speak to in interviews and applications.</p>
+      </div>
+      <div class="why-card">
+        <span class="num">—</span>
+        <h3>A community, not a job</h3>
+        <p>Join a dynamic, like-minded community of students who are actually making a difference, not just padding a resume.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="testimonials">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="tag">In their words</span>
+      <h2>What ambassadors say about the experience.</h2>
+    </div>
+    <div class="testimonial-grid">
+      <div class="t-card">
+        <span class="quote-mark">&ldquo;</span>
+        <p>Being an Ambassador has been an incredible experience because it's been such a privilege to bring awareness of such unique and prestigious competitions to students from all over the world, especially here in Australia, where there aren't many global competitions or events!</p>
+        <div class="attribution">Aadhya K. <span>· Australia</span></div>
+      </div>
+      <div class="t-card">
+        <span class="quote-mark">&ldquo;</span>
+        <p>The experience has been insightful not just for me but also for students to whom I've promoted the competition as well. When I was in high school, I wanted the opportunities that Crimson Education offers to students, which weren't provided in my school at that time, but when I became an ambassador, knowing that I could help students in my school and globally by sharing these opportunities made me very content. This is what my high-school self would've wanted, and now I want to do it for other high schoolers out there too.</p>
+        <div class="attribution">Hafsa I. <span>· Pakistan</span></div>
+      </div>
+      <div class="t-card">
+        <span class="quote-mark">&ldquo;</span>
+        <p>Becoming an ambassador is one of the best decisions I have made in my high school years, as not only have I gained the ability to maintain responsibility but also to engage with like-minded people from all over the world. It's unlocked so many new opportunities for me outside of school and is amazing to have on a personal statement.</p>
+        <div class="attribution">Manyata S. <span>· UK</span></div>
+      </div>
+      <div class="t-card">
+        <span class="quote-mark">&ldquo;</span>
+        <p>Being an Ambassador has been one of the most rewarding experiences of my journey so far. It gave me the opportunity to connect with passionate and talented students from different backgrounds while developing my leadership, communication, and teamwork skills. What I enjoyed most was being able to represent something I genuinely believe in and encourage others to become part of the community.</p>
+        <div class="attribution">Soubhagyaa <span>· India</span></div>
+      </div>
+      <div class="t-card">
+        <span class="quote-mark">&ldquo;</span>
+        <p>Two months in, the conversations I've had with high school students have really inspired me. Seeing their faces light up when they realize they can actually compete — not just on a national stage but on a global one — has been so rewarding. These are competitions they'd been craving but thought they were out of reach.</p>
+        <div class="attribution">Neville M. <span>· Kenya</span></div>
+      </div>
+      <div class="t-card">
+        <span class="quote-mark">&ldquo;</span>
+        <p>Being an Ambassador has been a rewarding experience where I developed communication, leadership, and teamwork skills. I enjoyed representing the community, meeting new people, and taking part in meaningful activities. Overall, it helped me grow in confidence and step outside my comfort zone.</p>
+        <div class="attribution">Tasneem M. K. <span>· Bangladesh</span></div>
+      </div>
+      <div class="t-card">
+        <span class="quote-mark">&ldquo;</span>
+        <p>About 8-9 months ago, I was researching essay competitions and discovered the Global Ambassador program. My English wasn't very strong, but I thought, "I have nothing to lose," and decided to register. Once I was officially part of the team, I began promoting our competition, and I earned my ambassador certificate and credits. It significantly improved my self-confidence — I introduced the competition to every single one of my classmates, and I also made new friendships along the way.</p>
+        <div class="attribution">Şeyma A. <span>· Turkey</span></div>
+      </div>
+      <div class="t-card">
+        <span class="quote-mark">&ldquo;</span>
+        <p>Being an ambassador for LGIC has been a transformative experience that profoundly elevated my writing skills. The program pushed me out of my comfort zone, requiring me to articulate complex ideas clearly and persuasively across various platforms. Representing LGIC taught me to be more concise, confident, and impactful in every piece of writing I produce.</p>
+        <div class="attribution">Yasmin R. <span>· The Bahamas</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="cta-banner">
+  <h2>Ready to start earning while you help others?</h2>
+  <p>Applications take 10 minutes. Got questions first? Drop a line at global.ambassadors@crimsoneducation.org.</p>
+  <a class="btn-primary" href="https://form.typeform.com/to/Mgpstxtp" target="_blank" rel="noopener">Apply Now</a>
+</div>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-links">
+        <div>
+          <h4>Contact</h4>
+          <a href="mailto:global.ambassadors@crimsoneducation.org">global.ambassadors@crimsoneducation.org</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 The Global Ambassador Programme</span>
+
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
