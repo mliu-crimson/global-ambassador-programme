@@ -170,20 +170,41 @@
       <span class="tag">Quick access</span>
       <h2>Everything you need, in one place.</h2>
     </div>
-    <div class="card-grid" style="grid-template-columns:1fr 1fr;">
-      <div class="card">
-        <span class="icon">🔗</span>
-        <h3>Find your code</h3>
-        <p>Share your unique Ambassador code to give your peers an exclusive discount and for us to track each and every one of your sign-ups.</p>
-        <a href="https://docs.google.com/spreadsheets/d/1PKgznu8-wTU8VcCY7yZDgV0bsehzqiIVhBZWOz0Z9b8/edit?gid=427802371#gid=427802371" target="_blank" rel="noopener">Find your code →</a>
+
+    <!-- Live stats dashboard -->
+    <div style="background:var(--navy);border-radius:2px;padding:36px 36px 32px;margin-bottom:0;" id="stats-box">
+      <div style="font-size:0.72rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold);font-weight:600;margin-bottom:20px;">Your progress</div>
+      <div id="stats-loading" style="color:#c7cbda;font-size:0.92rem;">Loading your stats…</div>
+      <div id="stats-content" style="display:none;">
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-bottom:28px;">
+          <div>
+            <div id="stat-signups" style="font-family:'Fraunces',serif;font-size:2.6rem;font-weight:600;color:#fff;line-height:1;">—</div>
+            <div style="font-size:0.78rem;text-transform:uppercase;letter-spacing:0.08em;color:#c7cbda;margin-top:4px;">Sign-ups</div>
+          </div>
+          <div>
+            <div id="stat-credits" style="font-family:'Fraunces',serif;font-size:2.6rem;font-weight:600;color:var(--gold);line-height:1;">—</div>
+            <div style="font-size:0.78rem;text-transform:uppercase;letter-spacing:0.08em;color:#c7cbda;margin-top:4px;">Credits earned</div>
+          </div>
+          <div>
+            <div id="stat-remaining" style="font-family:'Fraunces',serif;font-size:2.6rem;font-weight:600;color:#fff;line-height:1;">—</div>
+            <div style="font-size:0.78rem;text-transform:uppercase;letter-spacing:0.08em;color:#c7cbda;margin-top:4px;">Sign-ups to voucher</div>
+          </div>
+        </div>
+        <!-- Progress bar -->
+        <div style="margin-bottom:14px;">
+          <div style="display:flex;justify-content:space-between;font-size:0.78rem;color:#c7cbda;margin-bottom:8px;">
+            <span>Progress to $100 voucher</span>
+            <span id="stat-progress-label">0 / 20</span>
+          </div>
+          <div style="background:rgba(255,255,255,0.12);border-radius:20px;height:8px;overflow:hidden;">
+            <div id="stat-bar" style="height:100%;background:var(--gold);border-radius:20px;width:0%;transition:width 1s ease;"></div>
+          </div>
+        </div>
+        <div id="stat-message" style="font-size:0.85rem;color:#c7cbda;font-style:italic;"></div>
       </div>
-      <div class="card">
-        <span class="icon">🏆</span>
-        <h3>Track your sign-ups</h3>
-        <p>Check the competition track to see your sign-up count and credit balance. Reach 20 to unlock your voucher or mentoring session.</p>
-        <a href="https://docs.google.com/spreadsheets/d/1PKgznu8-wTU8VcCY7yZDgV0bsehzqiIVhBZWOz0Z9b8/edit?gid=427802371#gid=427802371" target="_blank" rel="noopener">View spreadsheet →</a>
-      </div>
+      <div id="stats-error" style="display:none;color:#f3a0a0;font-size:0.88rem;"></div>
     </div>
+
   </div>
 </section>
 
@@ -522,10 +543,82 @@
     const codeStr = AmbassadorCode ? ` (${AmbassadorCode})` : '';
     document.getElementById('welcome-heading').innerHTML =
       `Welcome back, ${AmbassadorName}!${codeStr}`;
+
+    // Fetch live sign-up stats
+    if (AmbassadorCode) fetchStats(AmbassadorCode);
     
   } else {
     // Not logged in — redirect to login
     window.location.href = 'login.html';
+  }
+
+  function parseCSV(text) {
+    text = text.replace(/^\uFEFF/, '');
+    const rows = [];
+    const lines = text.split(/\r?\n/);
+    for (const line of lines) {
+      if (!line.trim()) continue;
+      const cols = [];
+      let cur = '', inQ = false;
+      for (let i = 0; i < line.length; i++) {
+        const c = line[i];
+        if (c === '"') { inQ = !inQ; }
+        else if (c === ',' && !inQ) { cols.push(cur.trim().replace(/^"|"$/g, '')); cur = ''; }
+        else { cur += c; }
+      }
+      cols.push(cur.trim().replace(/^"|"$/g, ''));
+      rows.push(cols);
+    }
+    return rows;
+  }
+
+  async function fetchStats(code) {
+    const SHEET_ID = '1PKgznu8-wTU8VcCY7yZDgV0bsehzqiIVhBZWOz0Z9b8';
+    const SIGNUPS_GID = '1217596572';
+    const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=${SIGNUPS_GID}`;
+
+    try {
+      const res = await fetch(url, { redirect: 'follow' });
+      if (!res.ok) throw new Error('fetch failed');
+      const text = await res.text();
+      const rows = parseCSV(text);
+
+      // Count rows (skip header) where any cell matches this ambassador's code
+      const signups = rows.slice(1).filter(row =>
+        row.some(cell => cell.trim().toUpperCase() === code.trim().toUpperCase())
+      ).length;
+
+      const credits = signups * 5;
+      const target = 20;
+      const remaining = Math.max(0, target - signups);
+      const pct = Math.min(100, (signups / target) * 100);
+
+      document.getElementById('stats-loading').style.display = 'none';
+      document.getElementById('stats-content').style.display = 'block';
+      document.getElementById('stat-signups').textContent = signups;
+      document.getElementById('stat-credits').textContent = `$${credits}`;
+      document.getElementById('stat-remaining').textContent = remaining > 0 ? remaining : '✓';
+      document.getElementById('stat-progress-label').textContent = `${signups} / ${target}`;
+
+      // Animate bar after a short delay
+      setTimeout(() => {
+        document.getElementById('stat-bar').style.width = pct + '%';
+      }, 200);
+
+      // Message
+      let msg = '';
+      if (signups === 0) msg = "You haven't had any sign-ups yet — share your code and get started!";
+      else if (signups < 3) msg = `Great start! ${remaining} more sign-ups to earn your Ambassador Certificate.`;
+      else if (signups < target) msg = `You're on your way! ${remaining} more sign-ups to unlock your $100 voucher or mentoring session.`;
+      else msg = "🎉 You've hit 20 sign-ups — you're eligible for your voucher or mentoring session!";
+      document.getElementById('stat-message').textContent = msg;
+
+    } catch(e) {
+      document.getElementById('stats-loading').style.display = 'none';
+      document.getElementById('stats-error').style.display = 'block';
+      document.getElementById('stats-error').textContent =
+        'Could not load your stats right now. Make sure the spreadsheet is shared publicly, or try refreshing.';
+    }
   }
 
   function toggleAcc(btn) {
