@@ -149,8 +149,8 @@
 <div class="welcome-strip">
   <div class="welcome-inner">
     
-    <h2>You're in. Now let's get to work.</h2>
-    <p>Welcome to the Global Ambassador Programme — a community of ambitious students helping peers around the world discover elite competitions. Everything you need is right here.</p>
+    <h2 id="welcome-heading">Welcome back!</h2>
+    <p>You're part of a global community of ambitious students helping peers discover elite competitions. Everything you need is right here.</p>
     <p>Join our WhatsApp community to stay connected, get updates, and engage with fellow Ambassadors in real time.</p>
     <a class="whatsapp-btn" href="https://chat.whatsapp.com/Df7XzTFVO1y6zLaH4thNY4" target="_blank" rel="noopener">💬 Join our WhatsApp Community</a>
   </div>
@@ -507,6 +507,8 @@
   if (AmbassadorName) {
     const codeStr = AmbassadorCode ? ` (${AmbassadorCode})` : '';
     document.getElementById('hero-greeting').innerHTML =
+      `Welcome back, ${AmbassadorName}!${codeStr}`;
+    document.getElementById('welcome-heading').innerHTML =
       `Welcome back, ${AmbassadorName}!${codeStr}`;
     
   } else {
