@@ -118,6 +118,13 @@
 
   footer{padding:24px;text-align:center;font-size:0.8rem;color:#8a8175;border-top:1px solid var(--line);}
 
+  /* ---------- Scroll animations ---------- */
+  .reveal{opacity:0;transform:translateX(-48px);transition:opacity 0.6s ease,transform 0.6s ease;}
+  .reveal.from-right{transform:translateX(48px);}
+  .reveal.from-bottom{transform:translateY(36px);}
+  .reveal.visible{opacity:1;transform:translate(0);}
+  @media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none;}}
+
   @media(max-width:760px){
     .card-grid,.team-grid,.events-grid{grid-template-columns:1fr;}
     .nav-links{display:none;}
@@ -533,6 +540,43 @@
     btn.setAttribute('aria-expanded', !open);
     body.classList.toggle('open', !open);
   }
+</script>
+<script>
+  const selectors = [
+    ['.section-head',         'reveal'],
+    ['.welcome-inner h2',     'reveal'],
+    ['.welcome-inner p',      'reveal'],
+    ['.whatsapp-btn',         'reveal from-bottom'],
+    ['.card',                 'reveal from-bottom'],
+    ['.acc-item',             'reveal'],
+    ['.comp-block',           'reveal'],
+    ['.team-card',            'reveal from-bottom'],
+    ['.faq-group-title',      'reveal'],
+    ['.faq-item',             'reveal'],
+    ['.announce-item',        'reveal'],
+    ['.resource-item',        'reveal from-bottom'],
+    ['.contact-strip h2',     'reveal'],
+    ['.contact-strip p',      'reveal from-bottom'],
+  ];
+
+  selectors.forEach(([sel, cls]) => {
+    document.querySelectorAll(sel).forEach((el, i) => {
+      cls.split(' ').forEach(c => el.classList.add(c));
+      el.style.transitionDelay = `${(i % 4) * 0.08}s`;
+    });
+  });
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      } else {
+        entry.target.classList.remove('visible');
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 </script>
 </body>
 </html>
