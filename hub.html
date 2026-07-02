@@ -24,7 +24,7 @@
   .brand{font-family:'Fraunces',serif;font-weight:700;font-size:1.1rem;letter-spacing:0.02em;color:var(--navy);text-decoration:none;}
   .brand span{color:var(--crimson);}
   .nav-links{display:flex;gap:4px;flex-wrap:wrap;}
-  .nav-links a{font-size:0.68rem;font-weight:600;color:#6b6258;text-decoration:none;padding:5px 8px;border-radius:2px;text-transform:uppercase;letter-spacing:0.04em;transition:all .15s;}
+  .nav-links a{font-size:0.78rem;font-weight:600;color:#6b6258;text-decoration:none;padding:6px 12px;border-radius:2px;text-transform:uppercase;letter-spacing:0.05em;transition:all .15s;}
   .nav-links a:hover{color:var(--navy);background:rgba(20,33,61,0.06);text-decoration:none;}
   .btn-logout{font-size:0.78rem;font-weight:600;color:#6b6258;text-decoration:none;padding:7px 14px;border:1px solid var(--line);border-radius:2px;text-transform:uppercase;letter-spacing:0.04em;transition:all .2s;}
   .btn-logout:hover{color:var(--crimson);border-color:var(--crimson);text-decoration:none;}
@@ -143,7 +143,7 @@
 
 <div class="hub-hero">
   <div class="tagline">Education <span>|</span> Leadership <span>|</span> Change</div>
-  <p id="hero-greeting">Global Ambassador Hub</p>
+  <p>Global Ambassador Hub</p>
 </div>
 
 <div class="welcome-strip">
@@ -168,13 +168,13 @@
         <span class="icon">🔗</span>
         <h3>Find your code</h3>
         <p>Share your unique Ambassador code to give your peers an exclusive discount and for us to track each and every one of your sign-ups.</p>
-        <a href="https://docs.google.com/spreadsheets/d/1YkW2ta-zEpA4SXccOVuRzrkCt_puZPWu-8aAFu1iumA/edit?gid=427802371#gid=427802371" target="_blank" rel="noopener">Find your code →</a>
+        <a href="https://docs.google.com/spreadsheets/d/1PKgznu8-wTU8VcCY7yZDgV0bsehzqiIVhBZWOz0Z9b8/edit?gid=427802371#gid=427802371" target="_blank" rel="noopener">Find your code →</a>
       </div>
       <div class="card">
         <span class="icon">🏆</span>
         <h3>Track your sign-ups</h3>
         <p>Check the competition track to see your sign-up count and credit balance. Reach 20 to unlock your voucher or mentoring session.</p>
-        <a href="https://docs.google.com/spreadsheets/d/1YkW2ta-zEpA4SXccOVuRzrkCt_puZPWu-8aAFu1iumA/edit?gid=427802371#gid=427802371" target="_blank" rel="noopener">View spreadsheet →</a>
+        <a href="https://docs.google.com/spreadsheets/d/1PKgznu8-wTU8VcCY7yZDgV0bsehzqiIVhBZWOz0Z9b8/edit?gid=427802371#gid=427802371" target="_blank" rel="noopener">View spreadsheet →</a>
       </div>
     </div>
   </div>
@@ -264,6 +264,13 @@
       <div class="link-row"><strong>Registration link:</strong> <a href="https://www.globinnovation.org/registernow" target="_blank" rel="noopener">https://www.globinnovation.org/registernow</a></div>
       <p style="margin-top:16px;">Formerly known as Pitch for the Future, the LSE Generate Global Innovation Challenge invites high school students worldwide to develop solutions to real-world problems through the lens of the UN Sustainable Development Goals.</p>
       <p>Hosted online in partnership with LSE Generate and Crimson Education, the competition builds creativity, problem-solving, and entrepreneurial confidence – connecting students with a global network of like-minded peers.</p>
+      <div style="margin-top:18px;background:#14213d;border-radius:2px;padding:20px 24px;display:flex;align-items:center;gap:20px;">
+        <div style="font-size:1.8rem;flex-shrink:0;">🎉</div>
+        <div>
+          <div style="font-size:0.72rem;text-transform:uppercase;letter-spacing:0.12em;color:#c9a449;font-weight:600;margin-bottom:4px;">Exclusive Ambassador Discount</div>
+          <div style="color:#fff;font-size:0.95rem;">Your Ambassador code gives peers a <strong style="color:#c9a449;">50% discount</strong> ($10 USD off) on LGIC registration — compared to the standard 25% / $5 USD available elsewhere.</div>
+        </div>
+      </div>
       <div style="margin-top:16px;">
         <p>Link to resources, including flyer, cold emails, and social media posts: <a href="https://docs.google.com/document/d/10zHAg-BgtejmSHhw2fEsJvU9D5Y3JxAFFUEEiJgUXW8/edit?tab=t.0" target="_blank" rel="noopener">Open resource document →</a></p>
       </div>
@@ -418,7 +425,7 @@
           <span>"How can I know what my Ambassador Code is? Where do I find it?"</span>
           <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
         </button>
-        <div class="faq-body"><a href="https://docs.google.com/spreadsheets/d/1YkW2ta-zEpA4SXccOVuRzrkCt_puZPWu-8aAFu1iumA/edit?gid=427802371#gid=427802371" target="_blank" rel="noopener">Click here to open the spreadsheet</a>. Please type your name into the drop down box.</div>
+        <div class="faq-body"><a href="https://docs.google.com/spreadsheets/d/1PKgznu8-wTU8VcCY7yZDgV0bsehzqiIVhBZWOz0Z9b8/edit?gid=427802371#gid=427802371" target="_blank" rel="noopener">Click here to open the spreadsheet</a>. Please type your name into the drop down box.</div>
       </div>
       <div class="faq-item">
         <button class="faq-trigger" aria-expanded="false" onclick="toggleFaq(this)">
@@ -506,8 +513,6 @@
 
   if (AmbassadorName) {
     const codeStr = AmbassadorCode ? ` (${AmbassadorCode})` : '';
-    document.getElementById('hero-greeting').innerHTML =
-      `Welcome back, ${AmbassadorName}!${codeStr}`;
     document.getElementById('welcome-heading').innerHTML =
       `Welcome back, ${AmbassadorName}!${codeStr}`;
     

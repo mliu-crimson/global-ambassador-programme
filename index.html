@@ -221,6 +221,20 @@
     flex-wrap:wrap; gap:12px; font-size:0.82rem; color:#8a8175;
   }
 
+  /* ---------- Scroll animations ---------- */
+  .reveal{
+    opacity:0;
+    transform:translateX(-48px);
+    transition:opacity 0.6s ease, transform 0.6s ease;
+  }
+  .reveal.from-right{transform:translateX(48px);}
+  .reveal.from-bottom{transform:translateY(36px);}
+  .reveal.visible{opacity:1;transform:translate(0);}
+
+  @media(prefers-reduced-motion:reduce){
+    .reveal{opacity:1;transform:none;transition:none;}
+  }
+
   @media (max-width:760px){
     .role-grid, .prize-box, .why-grid{grid-template-columns:1fr;}
     .testimonial-grid{column-count:1;}
@@ -449,4 +463,40 @@
 </footer>
 
 </body>
+<script>
+  // Add reveal classes to key elements
+  const selectors = [
+    ['.eyebrow',        'reveal'],
+    ['.hero h1',        'reveal'],
+    ['.hero p.lede',    'reveal'],
+    ['.hero-actions',   'reveal'],
+    ['.stat',           'reveal from-bottom'],
+    ['.section-head',   'reveal'],
+    ['.ledger-item',    'reveal'],
+    ['.role-grid > div','reveal'],
+    ['.prize-box > div','reveal'],
+    ['.why-card',       'reveal from-bottom'],
+    ['.t-card',         'reveal from-bottom'],
+    ['.footer-grid > div', 'reveal'],
+  ];
+
+  selectors.forEach(([sel, cls]) => {
+    document.querySelectorAll(sel).forEach((el, i) => {
+      cls.split(' ').forEach(c => el.classList.add(c));
+      el.style.transitionDelay = `${(i % 4) * 0.1}s`;
+    });
+  });
+
+  // Intersection Observer
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12 });
+
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
 </html>
