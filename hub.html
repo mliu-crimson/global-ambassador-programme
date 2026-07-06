@@ -157,6 +157,12 @@
   <div class="welcome-inner">
     
     <h2 id="welcome-heading">Welcome back!</h2>
+    <div id="welcome-code-box" style="display:inline-flex;align-items:center;gap:14px;background:var(--navy);border-radius:2px;padding:12px 20px;margin-bottom:20px;">
+      <div>
+        <div style="font-size:0.65rem;text-transform:uppercase;letter-spacing:0.12em;color:#c7cbda;margin-bottom:2px;">Your Ambassador Code</div>
+        <div id="welcome-code-display" style="font-family:'Fraunces',serif;font-size:1.3rem;font-weight:600;color:var(--gold);letter-spacing:0.06em;">—</div>
+      </div>
+    </div>
     <p>You're part of a global community of ambitious students helping peers discover elite competitions. Everything you need is right here.</p>
     <p>Join our WhatsApp community to stay connected, get updates, and engage with fellow Ambassadors in real time.</p>
     <a class="whatsapp-btn" href="https://chat.whatsapp.com/Df7XzTFVO1y6zLaH4thNY4" target="_blank" rel="noopener">💬 Join our WhatsApp Community</a>
@@ -551,7 +557,10 @@
     const codeStr = '';
     document.getElementById('welcome-heading').innerHTML =
       `Welcome back, ${AmbassadorName}!`;
-    if (AmbassadorCode) document.getElementById('display-code').textContent = AmbassadorCode;
+    if (AmbassadorCode) {
+      document.getElementById('display-code').textContent = AmbassadorCode;
+      document.getElementById('welcome-code-display').textContent = AmbassadorCode;
+    }
 
     // Fetch live sign-up stats
     if (AmbassadorCode) fetchStats(AmbassadorCode);
