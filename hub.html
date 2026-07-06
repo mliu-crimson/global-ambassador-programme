@@ -548,9 +548,9 @@
   const AmbassadorCode = sessionStorage.getItem('amb_code');
 
   if (AmbassadorName) {
-    const codeStr = AmbassadorCode ? ` (${AmbassadorCode})` : '';
+    const codeStr = '';
     document.getElementById('welcome-heading').innerHTML =
-      `Welcome back, ${AmbassadorName}!${codeStr}`;
+      `Welcome back, ${AmbassadorName}!`;
     if (AmbassadorCode) document.getElementById('display-code').textContent = AmbassadorCode;
 
     // Fetch live sign-up stats
