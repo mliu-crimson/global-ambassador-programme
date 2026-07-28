@@ -4,16 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Ambassador Hub | Global Ambassador Programme</title>
+<link rel="stylesheet" href="styles.css">
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap');
-  :root{
-    --ink:#1c1a17; --parchment:#f6f1e7; --crimson:#a31621; --crimson-deep:#7a0f17;
-    --gold:#c9a449; --navy:#14213d; --line:rgba(28,26,23,0.14);
-  }
-  *{box-sizing:border-box;margin:0;padding:0;}
   html{scroll-behavior:smooth;}
-  body{background:var(--parchment);color:var(--ink);font-family:'Inter',sans-serif;-webkit-font-smoothing:antialiased;}
-  h1,h2,h3,h4{font-family:'Fraunces',serif;font-weight:600;color:var(--navy);}
   a{color:var(--crimson);text-decoration:none;}
   a:hover{text-decoration:underline;}
   p{line-height:1.7;}
@@ -22,7 +15,6 @@
   header{position:sticky;top:0;z-index:50;background:rgba(246,241,231,0.95);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);}
   .nav{display:flex;align-items:center;justify-content:space-between;padding:16px 28px;max-width:1080px;margin:0 auto;gap:16px;flex-wrap:wrap;}
   .brand{font-family:'Fraunces',serif;font-weight:700;font-size:1.1rem;letter-spacing:0.02em;color:var(--navy);text-decoration:none;}
-  .brand span{color:var(--crimson);}
   .nav-links{display:flex;gap:4px;flex-wrap:wrap;}
   .nav-links a{font-size:0.78rem;font-weight:600;color:#6b6258;text-decoration:none;padding:6px 12px;border-radius:2px;text-transform:uppercase;letter-spacing:0.05em;transition:all .15s;}
   .nav-links a:hover{color:var(--navy);background:rgba(20,33,61,0.06);text-decoration:none;}
@@ -115,8 +107,6 @@
   .contact-strip p{color:#f3d9d6;margin-bottom:6px;font-size:0.95rem;}
   .contact-strip a{color:#fff;font-weight:700;border-bottom:1px solid rgba(255,255,255,0.4);}
   .contact-strip a:hover{text-decoration:none;border-bottom-color:#fff;}
-
-  footer{padding:24px;text-align:center;font-size:0.8rem;color:#8a8175;border-top:1px solid var(--line);}
 
   /* ---------- Scroll animations ---------- */
   .reveal{opacity:0;transform:translateX(-48px);transition:opacity 0.6s ease,transform 0.6s ease;}

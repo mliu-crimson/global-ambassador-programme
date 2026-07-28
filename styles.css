@@ -1,0 +1,24 @@
+/* Shared base styles for the Global Ambassador Programme site.
+   Page-specific styles (layout, components) stay inline in each page. */
+
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap');
+
+:root{
+  --ink:#1c1a17; --parchment:#f6f1e7; --crimson:#a31621; --crimson-deep:#7a0f17;
+  --gold:#c9a449; --navy:#14213d; --line:rgba(28,26,23,0.14);
+}
+
+*{box-sizing:border-box;margin:0;padding:0;}
+
+body{
+  background:var(--parchment);
+  color:var(--ink);
+  font-family:'Inter',sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+
+h1,h2,h3,h4{font-family:'Fraunces',serif;font-weight:600;color:var(--navy);}
+
+.brand span{color:var(--crimson);}
+
+footer{padding:24px;text-align:center;font-size:0.8rem;color:#8a8175;border-top:1px solid var(--line);}

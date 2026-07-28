@@ -4,20 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Ambassador Login | Global Ambassador Programme</title>
+<link rel="stylesheet" href="styles.css">
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap');
-  :root{
-    --ink:#1c1a17; --parchment:#f6f1e7; --crimson:#a31621; --crimson-deep:#7a0f17;
-    --gold:#c9a449; --navy:#14213d; --line:rgba(28,26,23,0.14);
-  }
-  *{box-sizing:border-box;margin:0;padding:0;}
-  body{background:var(--parchment);color:var(--ink);font-family:'Inter',sans-serif;min-height:100vh;display:flex;flex-direction:column;-webkit-font-smoothing:antialiased;}
-  h1{font-family:'Fraunces',serif;font-weight:600;color:var(--navy);}
+  body{min-height:100vh;display:flex;flex-direction:column;}
 
   header{position:sticky;top:0;z-index:50;background:rgba(246,241,231,0.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);}
   .nav{display:flex;align-items:center;justify-content:space-between;padding:18px 28px;max-width:1080px;margin:0 auto;}
   .brand{font-family:'Fraunces',serif;font-weight:700;font-size:1.15rem;letter-spacing:0.02em;color:var(--navy);text-decoration:none;}
-  .brand span{color:var(--crimson);}
   .nav a.back{font-size:0.85rem;color:#6b6258;text-decoration:none;}
   .nav a.back:hover{color:var(--ink);}
 
@@ -48,8 +41,6 @@
   .hint{margin-top:24px;font-size:0.83rem;color:#8a8175;text-align:center;border-top:1px solid var(--line);padding-top:20px;}
   .hint a{color:var(--crimson);text-decoration:none;}
   .hint a:hover{text-decoration:underline;}
-
-  footer{text-align:center;padding:24px;font-size:0.8rem;color:#8a8175;border-top:1px solid var(--line);}
 </style>
 </head>
 <body>
