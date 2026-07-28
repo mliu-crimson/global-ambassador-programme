@@ -35,8 +35,11 @@
   .welcome-inner h2{font-size:clamp(1.5rem,2.5vw,2rem);margin-bottom:18px;}
   .welcome-inner p{color:#3a352f;margin-bottom:14px;font-size:0.97rem;}
   .welcome-inner p:last-child{margin-bottom:0;}
-  .whatsapp-btn{display:inline-flex;align-items:center;gap:8px;margin-top:18px;background:#25D366;color:#fff;padding:11px 22px;border-radius:2px;font-weight:600;font-size:0.88rem;text-decoration:none;letter-spacing:0.03em;transition:opacity .2s;}
-  .whatsapp-btn:hover{opacity:0.88;text-decoration:none;}
+  .code-ribbon{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:11px 4px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin:4px 0 22px;flex-wrap:wrap;}
+  .code-ribbon-label{font-size:0.72rem;text-transform:uppercase;letter-spacing:0.1em;color:#6b6258;font-weight:600;}
+  .code-ribbon-value{font-weight:700;font-size:1rem;color:var(--crimson);letter-spacing:0.08em;font-variant-numeric:tabular-nums;}
+  .whatsapp-link{display:inline-flex;align-items:center;gap:6px;margin-top:4px;color:var(--crimson);text-decoration:underline;font-weight:600;font-size:0.92rem;transition:opacity .2s;}
+  .whatsapp-link:hover{opacity:0.75;}
 
   section{padding:64px 0;}
   .section-head{margin-bottom:36px;}
@@ -151,15 +154,13 @@
   <div class="welcome-inner">
     
     <h2 id="welcome-heading">Welcome back!</h2>
-    <div id="welcome-code-box" style="display:inline-flex;align-items:center;gap:14px;background:var(--navy);border-radius:2px;padding:12px 20px;margin-bottom:20px;">
-      <div>
-        <div style="font-size:0.65rem;text-transform:uppercase;letter-spacing:0.12em;color:#c7cbda;margin-bottom:2px;">Your Ambassador Code</div>
-        <div id="welcome-code-display" style="font-family:'Fraunces',serif;font-size:1.3rem;font-weight:600;color:var(--gold);letter-spacing:0.06em;">—</div>
-      </div>
+    <div class="code-ribbon">
+      <span class="code-ribbon-label">Your Ambassador Code</span>
+      <span id="welcome-code-display" class="code-ribbon-value">—</span>
     </div>
     <p>You're part of a global community of ambitious students helping peers discover elite competitions. Everything you need is right here.</p>
     <p>Join our WhatsApp community to stay connected, get updates, and engage with fellow Ambassadors in real time.</p>
-    <a class="whatsapp-btn" href="https://chat.whatsapp.com/Df7XzTFVO1y6zLaH4thNY4" target="_blank" rel="noopener">💬 Join our WhatsApp Community</a>
+    <a class="whatsapp-link" href="https://chat.whatsapp.com/Df7XzTFVO1y6zLaH4thNY4" target="_blank" rel="noopener">💬 Join the WhatsApp Community →</a>
   </div>
 </div>
 
@@ -750,7 +751,7 @@
     ['.section-head',         'reveal'],
     ['.welcome-inner h2',     'reveal'],
     ['.welcome-inner p',      'reveal'],
-    ['.whatsapp-btn',         'reveal from-bottom'],
+    ['.whatsapp-link',        'reveal from-bottom'],
     ['.card',                 'reveal from-bottom'],
     ['.acc-item',             'reveal'],
     ['.comp-block',           'reveal'],
