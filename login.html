@@ -65,7 +65,7 @@
   <div class="login-card">
     <span class="eyebrow">Ambassador Portal</span>
     <h1>Welcome back.</h1>
-    <p class="sub">Enter the email address you registered with to access the Ambassador Hub.</p>
+    <p class="sub">Enter the email and full name you registered with to access the Ambassador Hub.</p>
 
     <div class="msg error" id="errorMsg"></div>
     <div class="msg info" id="infoMsg"></div>
@@ -73,6 +73,11 @@
     <div class="field">
       <label for="email">Email address</label>
       <input type="email" id="email" placeholder="you@example.com" autocomplete="email">
+    </div>
+
+    <div class="field">
+      <label for="fullName">Full name</label>
+      <input type="text" id="fullName" placeholder="As you registered it" autocomplete="name">
     </div>
 
     <button class="btn-login" id="loginBtn" onclick="handleLogin()">
@@ -120,10 +125,11 @@
 
   async function handleLogin() {
     const emailInput = document.getElementById('email').value.trim().toLowerCase();
+    const nameInput = document.getElementById('fullName').value.trim();
     clearMessages();
 
-    if (!emailInput) {
-      showError('Please enter your email address.');
+    if (!emailInput || !nameInput) {
+      showError('Please enter both your email address and full name.');
       return;
     }
 
@@ -132,7 +138,7 @@
 
     let res;
     try {
-      res = await fetch(`/api/login?email=${encodeURIComponent(emailInput)}`);
+      res = await fetch(`/api/login?email=${encodeURIComponent(emailInput)}&name=${encodeURIComponent(nameInput)}`);
     } catch (e) {
       setLoading(false);
       showError('Could not connect to the Ambassador list right now. Please try again, or contact hello@competitions-ambs.com if the problem persists.');
@@ -144,8 +150,8 @@
 
     if (res.status === 404) {
       showError(
-        "We couldn't find that email address in our Ambassador list. " +
-        "Please check your spelling, or contact hello@competitions-ambs.com if you believe this is an error."
+        "We couldn't find a match for that email and name in our Ambassador list. " +
+        "Please check your spelling (use the full name you registered with), or contact hello@competitions-ambs.com if you believe this is an error."
       );
       return;
     }

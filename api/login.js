@@ -18,13 +18,9 @@ function normalizeName(s) {
 
 module.exports = async (req, res) => {
   const email = (req.query.email || '').trim().toLowerCase();
-  const rawName = req.query.name;
-  const name = normalizeName(rawName);
+  const name = normalizeName(req.query.name);
 
-  // `name` is temporarily optional while we roll this out: if the caller
-  // doesn't send it, fall back to the original email-only check so the
-  // live frontend (which doesn't send `name` yet) keeps working unchanged.
-  if (!email || (rawName !== undefined && !name)) {
+  if (!email || !name) {
     res.status(400).json({ error: 'missing_fields' });
     return;
   }
@@ -43,7 +39,7 @@ module.exports = async (req, res) => {
 
   const match = rows.slice(1).find(row =>
     (row[EMAIL_COL] || '').trim().toLowerCase() === email &&
-    (rawName === undefined || normalizeName(row[FULL_NAME_COL]) === name)
+    normalizeName(row[FULL_NAME_COL]) === name
   );
 
   if (!match) {
