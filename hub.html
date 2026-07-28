@@ -682,16 +682,19 @@
     }
 
     // Fetch live sign-up stats
-    if (AmbassadorCode) fetchStats(AmbassadorCode);
-    
+    const AmbassadorToken = sessionStorage.getItem('amb_token');
+    if (AmbassadorCode) fetchStats(AmbassadorCode, AmbassadorToken);
+
   } else {
     // Not logged in — redirect to login
     window.location.href = 'login.html';
   }
 
-  async function fetchStats(code) {
+  async function fetchStats(code, token) {
     try {
-      const res = await fetch(`/api/stats?code=${encodeURIComponent(code)}`);
+      const res = await fetch(`/api/stats?code=${encodeURIComponent(code)}`, {
+        headers: token ? { 'Authorization': `Bearer ${token}` } : {}
+      });
       if (!res.ok) throw new Error('fetch failed');
       const data = await res.json();
       const signups = data.signups;

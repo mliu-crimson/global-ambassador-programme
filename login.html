@@ -158,6 +158,7 @@
     const data = await res.json();
     sessionStorage.setItem('amb_name', data.name || 'Ambassador');
     sessionStorage.setItem('amb_code', data.code || '');
+    sessionStorage.setItem('amb_token', data.token || '');
     window.location.href = 'hub.html';
   }
 

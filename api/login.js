@@ -1,10 +1,13 @@
 const { parseCSV, fetchCSV } = require('./_csv');
+const { sign } = require('./_auth');
 
 const SHEET_ID = '1UFk5kFXwUearV5-MR5rbcei3chBieT2GNd7wUjw5LfA';
 const URLS = [
   `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=0`,
   `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=0`,
 ];
+
+const TOKEN_TTL_MS = 2 * 60 * 60 * 1000; // 2 hours
 
 // Column order: Ambassador Code, Full Name, First Name, Last Name, Email
 const CODE_COL = 0;
@@ -53,11 +56,15 @@ module.exports = async (req, res) => {
     return;
   }
 
+  const code = (match[CODE_COL] || '').trim();
+  const token = sign({ code: code.toUpperCase(), exp: Date.now() + TOKEN_TTL_MS });
+
   // Cache briefly at the edge: repeat logins for the same email+name within
   // this window are served without re-fetching the whole sheet from Google.
   res.setHeader('Cache-Control', 'public, s-maxage=30, stale-while-revalidate=59');
   res.status(200).json({
     name: (match[FIRST_NAME_COL] || '').trim() || 'Ambassador',
-    code: (match[CODE_COL] || '').trim(),
+    code,
+    token,
   });
 };

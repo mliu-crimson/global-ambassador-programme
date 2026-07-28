@@ -1,4 +1,5 @@
 const { parseCSV, fetchCSV } = require('./_csv');
+const { verify } = require('./_auth');
 
 const SHEET_ID = '1PKgznu8-wTU8VcCY7yZDgV0bsehzqiIVhBZWOz0Z9b8';
 const SIGNUPS_GID = '1217596572';
@@ -11,6 +12,16 @@ module.exports = async (req, res) => {
   if (!code) {
     res.setHeader('Cache-Control', 'no-store');
     res.status(400).json({ error: 'missing_code' });
+    return;
+  }
+
+  const authHeader = req.headers.authorization || '';
+  const token = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : null;
+  const claims = verify(token);
+
+  if (!claims || claims.code !== code) {
+    res.setHeader('Cache-Control', 'no-store');
+    res.status(401).json({ error: 'unauthorized' });
     return;
   }
 
@@ -27,8 +38,8 @@ module.exports = async (req, res) => {
     row.some(cell => cell.trim().toUpperCase() === code)
   ).length;
 
-  // Cache briefly at the edge: repeat stat checks for the same code within
+  // Cache briefly at the edge: repeat stat checks for the same code+token within
   // this window are served without re-fetching the whole sheet from Google.
-  res.setHeader('Cache-Control', 'public, s-maxage=30, stale-while-revalidate=59');
+  res.setHeader('Cache-Control', 'private, max-age=30');
   res.status(200).json({ signups });
 };
