@@ -1,7 +1,8 @@
 /* Shared base styles for the Global Ambassador Programme site.
-   Page-specific styles (layout, components) stay inline in each page. */
-
-@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap');
+   Page-specific styles (layout, components) stay inline in each page.
+   Google Fonts is loaded via <link> tags in each page's <head>, not
+   @import here, so the browser can fetch it in parallel instead of
+   waiting to parse this file first. */
 
 :root{
   --ink:#1c1a17; --parchment:#f6f1e7; --crimson:#a31621; --crimson-deep:#7a0f17;
