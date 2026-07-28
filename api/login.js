@@ -8,13 +8,20 @@ const URLS = [
 
 // Column order: Ambassador Code, Full Name, First Name, Last Name, Email
 const CODE_COL = 0;
-const NAME_COL = 2;
+const FULL_NAME_COL = 1;
+const FIRST_NAME_COL = 2;
 const EMAIL_COL = 4;
+
+function normalizeName(s) {
+  return (s || '').trim().toLowerCase().replace(/\s+/g, ' ');
+}
 
 module.exports = async (req, res) => {
   const email = (req.query.email || '').trim().toLowerCase();
-  if (!email) {
-    res.status(400).json({ error: 'missing_email' });
+  const name = normalizeName(req.query.name);
+
+  if (!email || !name) {
+    res.status(400).json({ error: 'missing_fields' });
     return;
   }
 
@@ -30,7 +37,11 @@ module.exports = async (req, res) => {
     return;
   }
 
-  const match = rows.slice(1).find(row => (row[EMAIL_COL] || '').trim().toLowerCase() === email);
+  const match = rows.slice(1).find(row =>
+    (row[EMAIL_COL] || '').trim().toLowerCase() === email &&
+    normalizeName(row[FULL_NAME_COL]) === name
+  );
+
   if (!match) {
     res.status(404).json({ error: 'not_found' });
     return;
@@ -38,7 +49,7 @@ module.exports = async (req, res) => {
 
   res.setHeader('Cache-Control', 'no-store');
   res.status(200).json({
-    name: (match[NAME_COL] || '').trim() || 'Ambassador',
+    name: (match[FIRST_NAME_COL] || '').trim() || 'Ambassador',
     code: (match[CODE_COL] || '').trim(),
   });
 };
