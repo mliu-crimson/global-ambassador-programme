@@ -18,11 +18,22 @@
   header{position:sticky;top:0;z-index:50;background:rgba(246,241,231,0.95);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);}
   .nav{display:flex;align-items:center;justify-content:space-between;padding:16px 28px;max-width:1080px;margin:0 auto;gap:16px;flex-wrap:wrap;}
   .brand{font-family:'Fraunces',serif;font-weight:700;font-size:1.1rem;letter-spacing:0.02em;color:var(--navy);text-decoration:none;}
-  .nav-links{display:flex;gap:4px;flex-wrap:wrap;}
-  .nav-links a{font-size:0.78rem;font-weight:600;color:#6b6258;text-decoration:none;padding:6px 12px;border-radius:2px;text-transform:uppercase;letter-spacing:0.05em;transition:all .15s;}
-  .nav-links a:hover{color:var(--navy);background:rgba(20,33,61,0.06);text-decoration:none;}
   .btn-logout{font-size:0.78rem;font-weight:600;color:#6b6258;text-decoration:none;padding:7px 14px;border:1px solid var(--line);border-radius:2px;text-transform:uppercase;letter-spacing:0.04em;transition:all .2s;}
   .btn-logout:hover{color:var(--crimson);border-color:var(--crimson);text-decoration:none;}
+
+  /* Vertical section-jump tabs, docked to the right edge (desktop only —
+     there isn't enough side margin to float this without overlapping
+     content below ~1440px, so it's hidden rather than crowding the page). */
+  .side-nav{position:fixed;top:50%;right:32px;transform:translateY(-50%);z-index:45;display:flex;flex-direction:column;gap:11px;background:transparent;}
+  .side-nav a{position:relative;display:block;font-size:0.78rem;font-weight:600;color:#6b6258;text-decoration:none;padding-left:17px;text-transform:uppercase;letter-spacing:0.04em;white-space:nowrap;transition:color .15s;}
+  .side-nav a::before{content:'';position:absolute;left:0;top:50%;width:6px;height:6px;border-radius:50%;background:#6b6258;transform:translateY(-50%);transition:all .15s;}
+  .side-nav a:hover{color:var(--navy);text-decoration:none;}
+  .side-nav a:hover::before{background:var(--navy);}
+  .side-nav a.active{color:var(--crimson);}
+  .side-nav a.active::before{background:var(--crimson);width:8px;height:8px;}
+  /* Needs real side margin to float without crowding the centered 1080px
+     content column — below this width there isn't room, so it's hidden. */
+  @media(max-width:1439px){.side-nav{display:none;}}
 
   .hub-hero{background:var(--navy);padding:64px 28px 52px;text-align:center;border-bottom:3px solid var(--crimson);}
   .hub-hero .tagline{font-family:'Fraunces',serif;font-size:clamp(1.6rem,4vw,3rem);font-weight:600;color:#fff;letter-spacing:0.02em;margin-bottom:12px;}
@@ -68,6 +79,7 @@
   .acc-body a{color:var(--crimson);}
 
   .comp-block{background:var(--parchment);border:1px solid var(--line);border-radius:2px;padding:36px 32px;margin-bottom:28px;}
+  .comp-block:last-child{margin-bottom:0;}
   .comp-block h3{font-size:1.2rem;margin-bottom:14px;}
   .comp-block p{font-size:0.93rem;color:#3a352f;margin-bottom:12px;}
   .comp-block .link-row{display:flex;align-items:baseline;gap:10px;margin-bottom:10px;font-size:0.92rem;color:#3a352f;}
@@ -98,8 +110,10 @@
   .tag-pill.ptft{background:#fff3e0;color:#b45309;}
 
   .faq-group{margin-bottom:36px;}
+  .faq-group:last-child{margin-bottom:0;}
   .faq-group-title{font-size:0.78rem;text-transform:uppercase;letter-spacing:0.1em;color:#6b6258;font-weight:700;margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid var(--line);}
   .faq-item{border:1px solid var(--line);border-radius:2px;margin-bottom:10px;background:var(--parchment);}
+  .faq-item:last-child{margin-bottom:0;}
   .faq-trigger{width:100%;background:none;border:none;padding:18px 20px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;text-align:left;gap:12px;}
   .faq-trigger span{font-size:0.92rem;font-weight:600;color:var(--navy);font-style:italic;}
   .faq-trigger .chevron{flex-shrink:0;width:18px;height:18px;color:#6b6258;transition:transform .2s;}
@@ -123,7 +137,6 @@
 
   @media(max-width:760px){
     .card-grid,.team-grid,.events-grid{grid-template-columns:1fr;}
-    .nav-links{display:none;}
   }
 </style>
 </head>
@@ -132,18 +145,19 @@
 <header>
   <div class="nav">
     <a class="brand" href="index.html">Global Ambassador <span>Programme</span></a>
-    <nav class="nav-links">
-      <a href="#toolkit">Toolkit</a>
-      <a href="#starter-kit">Starter Kit</a>
-      <a href="#competition">Current Competition</a>
-      <a href="#events">Events</a>
-      <a href="#referral">Referral</a>
-      <a href="#faq">FAQ</a>
-      <a href="#team">Team</a>
-    </nav>
     <a class="btn-logout" href="index.html">Log out</a>
   </div>
 </header>
+
+<nav class="side-nav" id="side-nav" aria-label="Section navigation">
+  <a href="#toolkit" data-section="toolkit">Toolkit</a>
+  <a href="#starter-kit" data-section="starter-kit">Starter Kit</a>
+  <a href="#competition" data-section="competition">Competition</a>
+  <a href="#events" data-section="events">Events</a>
+  <a href="#referral" data-section="referral">Referral</a>
+  <a href="#faq" data-section="faq">FAQ</a>
+  <a href="#team" data-section="team">Team</a>
+</nav>
 
 <div class="hub-hero">
   <div class="tagline">Education <span>|</span> Leadership <span>|</span> Change</div>
@@ -619,8 +633,7 @@
         <h3>Melanie Liu</h3>
         <div class="role">Global Programme Manager</div>
         <div class="contact">
-          <a href="mailto:m.liu@crimsoneducation.org">m.liu@crimsoneducation.org</a><br>
-          +30 697 235 6734
+          +30 697 235 6734 (WhatsApp)
         </div>
       </div>
       <div class="team-card">
@@ -628,7 +641,7 @@
         <h3>Helene Nguyen</h3>
         <div class="role">Admin and Operations Support</div>
         <div class="contact">
-          +31 6 82506336
+          +31 6 82506336 (WhatsApp)
         </div>
       </div>
       <div class="team-card">
@@ -782,6 +795,23 @@
   }, { threshold: 0.1 });
 
   document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  // Highlight the side-nav tab matching whichever section is currently in view.
+  const sideNavLinks = document.querySelectorAll('.side-nav a');
+  const sectionObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      const id = entry.target.id;
+      sideNavLinks.forEach(link => {
+        link.classList.toggle('active', link.dataset.section === id);
+      });
+    });
+  }, { rootMargin: '-45% 0px -50% 0px' });
+
+  sideNavLinks.forEach(link => {
+    const section = document.getElementById(link.dataset.section);
+    if (section) sectionObserver.observe(section);
+  });
 </script>
 </body>
 </html>
