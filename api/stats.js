@@ -13,9 +13,9 @@ module.exports = async (req, res) => {
     return;
   }
 
-  const csvText = await fetchCSV(URLS);
+  const { text: csvText, attempts } = await fetchCSV(URLS);
   if (!csvText) {
-    res.status(502).json({ error: 'sheet_unavailable' });
+    res.status(502).json({ error: 'sheet_unavailable', attempts });
     return;
   }
 

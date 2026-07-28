@@ -19,19 +19,42 @@ function parseCSV(text) {
   return rows;
 }
 
+const BROWSER_HEADERS = {
+  'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
+  'Accept': 'text/csv,text/plain,*/*',
+};
+
+// Returns { text, attempts }. `text` is null if every URL failed;
+// `attempts` records per-URL diagnostics so failures are debuggable
+// from the API response instead of requiring log access.
 async function fetchCSV(urls) {
+  const attempts = [];
   for (const url of urls) {
     try {
-      const res = await fetch(url, { redirect: 'follow' });
-      if (res.ok) {
-        const text = await res.text();
-        if (text.includes(',') || text.includes('\n')) return text;
+      const res = await fetch(url, { redirect: 'follow', headers: BROWSER_HEADERS });
+      const contentType = res.headers.get('content-type') || '';
+      const text = await res.text();
+      const trimmedLower = text.trim().toLowerCase();
+      const looksLikeHTML = trimmedLower.startsWith('<!doctype') || trimmedLower.startsWith('<html');
+      const looksLikeCSV = !looksLikeHTML && (contentType.includes('csv') || text.includes(','));
+
+      attempts.push({
+        url,
+        status: res.status,
+        contentType,
+        looksLikeCSV,
+        length: text.length,
+        snippet: text.slice(0, 150),
+      });
+
+      if (res.ok && looksLikeCSV) {
+        return { text, attempts };
       }
     } catch (e) {
-      // try next URL
+      attempts.push({ url, error: String((e && e.message) || e) });
     }
   }
-  return null;
+  return { text: null, attempts };
 }
 
 module.exports = { parseCSV, fetchCSV };

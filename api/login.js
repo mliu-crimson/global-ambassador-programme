@@ -8,29 +8,44 @@ const URLS = [
 
 // Column order: Ambassador Code, Full Name, First Name, Last Name, Email
 const CODE_COL = 0;
-const NAME_COL = 2;
+const FULL_NAME_COL = 1;
+const FIRST_NAME_COL = 2;
 const EMAIL_COL = 4;
+
+function normalizeName(s) {
+  return (s || '').trim().toLowerCase().replace(/\s+/g, ' ');
+}
 
 module.exports = async (req, res) => {
   const email = (req.query.email || '').trim().toLowerCase();
-  if (!email) {
-    res.status(400).json({ error: 'missing_email' });
+  const rawName = req.query.name;
+  const name = normalizeName(rawName);
+
+  // `name` is temporarily optional while we roll this out: if the caller
+  // doesn't send it, fall back to the original email-only check so the
+  // live frontend (which doesn't send `name` yet) keeps working unchanged.
+  if (!email || (rawName !== undefined && !name)) {
+    res.status(400).json({ error: 'missing_fields' });
     return;
   }
 
-  const csvText = await fetchCSV(URLS);
+  const { text: csvText, attempts } = await fetchCSV(URLS);
   if (!csvText) {
-    res.status(502).json({ error: 'sheet_unavailable' });
+    res.status(502).json({ error: 'sheet_unavailable', attempts });
     return;
   }
 
   const rows = parseCSV(csvText);
   if (rows.length < 2) {
-    res.status(502).json({ error: 'sheet_empty' });
+    res.status(502).json({ error: 'sheet_empty', attempts });
     return;
   }
 
-  const match = rows.slice(1).find(row => (row[EMAIL_COL] || '').trim().toLowerCase() === email);
+  const match = rows.slice(1).find(row =>
+    (row[EMAIL_COL] || '').trim().toLowerCase() === email &&
+    (rawName === undefined || normalizeName(row[FULL_NAME_COL]) === name)
+  );
+
   if (!match) {
     res.status(404).json({ error: 'not_found' });
     return;
@@ -38,7 +53,7 @@ module.exports = async (req, res) => {
 
   res.setHeader('Cache-Control', 'no-store');
   res.status(200).json({
-    name: (match[NAME_COL] || '').trim() || 'Ambassador',
+    name: (match[FIRST_NAME_COL] || '').trim() || 'Ambassador',
     code: (match[CODE_COL] || '').trim(),
   });
 };
