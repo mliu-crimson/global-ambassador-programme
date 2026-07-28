@@ -696,41 +696,12 @@
     window.location.href = 'login.html';
   }
 
-  function parseCSV(text) {
-    text = text.replace(/^\uFEFF/, '');
-    const rows = [];
-    const lines = text.split(/\r?\n/);
-    for (const line of lines) {
-      if (!line.trim()) continue;
-      const cols = [];
-      let cur = '', inQ = false;
-      for (let i = 0; i < line.length; i++) {
-        const c = line[i];
-        if (c === '"') { inQ = !inQ; }
-        else if (c === ',' && !inQ) { cols.push(cur.trim().replace(/^"|"$/g, '')); cur = ''; }
-        else { cur += c; }
-      }
-      cols.push(cur.trim().replace(/^"|"$/g, ''));
-      rows.push(cols);
-    }
-    return rows;
-  }
-
   async function fetchStats(code) {
-    const SHEET_ID = '1PKgznu8-wTU8VcCY7yZDgV0bsehzqiIVhBZWOz0Z9b8';
-    const SIGNUPS_GID = '1217596572';
-    const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=${SIGNUPS_GID}`;
-
     try {
-      const res = await fetch(url, { redirect: 'follow' });
+      const res = await fetch(`/api/stats?code=${encodeURIComponent(code)}`);
       if (!res.ok) throw new Error('fetch failed');
-      const text = await res.text();
-      const rows = parseCSV(text);
-
-      // Count rows (skip header) where any cell matches this ambassador's code
-      const signups = rows.slice(1).filter(row =>
-        row.some(cell => cell.trim().toUpperCase() === code.trim().toUpperCase())
-      ).length;
+      const data = await res.json();
+      const signups = data.signups;
 
       const credits = signups * 5;
       const target = 20;
@@ -761,7 +732,7 @@
       document.getElementById('stats-loading').style.display = 'none';
       document.getElementById('stats-error').style.display = 'block';
       document.getElementById('stats-error').textContent =
-        'Could not load your stats right now. Make sure the spreadsheet is shared publicly, or try refreshing.';
+        'Could not load your stats right now. Please try refreshing.';
     }
   }
 

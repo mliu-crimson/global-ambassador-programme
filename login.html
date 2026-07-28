@@ -89,14 +89,6 @@
 <footer>© 2026 The Global Ambassador Programme</footer>
 
 <script>
-  const SHEET_ID = '1UFk5kFXwUearV5-MR5rbcei3chBieT2GNd7wUjw5LfA';
-
-  // Two URL formats to try — gviz tends to handle CORS better
-  const URLS = [
-    `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=0`,
-    `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=0`
-  ];
-
   function setLoading(on) {
     const btn = document.getElementById('loginBtn');
     const spinner = document.getElementById('spinner');
@@ -126,42 +118,6 @@
     document.getElementById('infoMsg').classList.remove('show');
   }
 
-  function parseCSV(text) {
-    // Remove BOM if present
-    text = text.replace(/^\uFEFF/, '');
-    const rows = [];
-    const lines = text.split(/\r?\n/);
-    for (const line of lines) {
-      if (!line.trim()) continue;
-      const cols = [];
-      let cur = '', inQ = false;
-      for (let i = 0; i < line.length; i++) {
-        const c = line[i];
-        if (c === '"') { inQ = !inQ; }
-        else if (c === ',' && !inQ) { cols.push(cur.trim().replace(/^"|"$/g, '')); cur = ''; }
-        else { cur += c; }
-      }
-      cols.push(cur.trim().replace(/^"|"$/g, ''));
-      rows.push(cols);
-    }
-    return rows;
-  }
-
-  async function fetchSheet() {
-    for (const url of URLS) {
-      try {
-        const res = await fetch(url, { redirect: 'follow' });
-        if (res.ok) {
-          const text = await res.text();
-          if (text.includes(',') || text.includes('\n')) return text;
-        }
-      } catch (e) {
-        // Try next URL
-      }
-    }
-    return null;
-  }
-
   async function handleLogin() {
     const emailInput = document.getElementById('email').value.trim().toLowerCase();
     clearMessages();
@@ -174,51 +130,35 @@
     setLoading(true);
     showInfo('Checking your details…');
 
-    const csvText = await fetchSheet();
-
-    if (!csvText) {
+    let res;
+    try {
+      res = await fetch(`/api/login?email=${encodeURIComponent(emailInput)}`);
+    } catch (e) {
       setLoading(false);
-      showError(
-        'Could not connect to the Ambassador list. ' +
-        'Please make sure the spreadsheet is shared as "Anyone with the link can view", then try again. ' +
-        'If the problem persists, contact hello@competitions-ambs.com.'
-      );
+      showError('Could not connect to the Ambassador list right now. Please try again, or contact hello@competitions-ambs.com if the problem persists.');
       return;
     }
-
-    const rows = parseCSV(csvText);
-    if (rows.length < 2) {
-      setLoading(false);
-      showError('The Ambassador list appears to be empty. Please contact hello@competitions-ambs.com.');
-      return;
-    }
-
-    // Column order: Ambassador Code, Full Name, First Name, Last Name, Email
-    const codeCol  = 0;
-    const nameCol  = 2; // First Name
-    const emailCol = 4;
-
-    // Search for matching email
-    const match = rows.slice(1).find(row => {
-      const cell = (row[emailCol] || '').trim().toLowerCase();
-      return cell === emailInput;
-    });
 
     setLoading(false);
     clearMessages();
 
-    if (match) {
-      const name = nameCol !== -1 ? (match[nameCol] || '').trim() : '';
-      const code = codeCol !== -1 ? (match[codeCol] || '').trim() : '';
-      sessionStorage.setItem('amb_name', name || 'Ambassador');
-      sessionStorage.setItem('amb_code', code);
-      window.location.href = 'hub.html';
-    } else {
+    if (res.status === 404) {
       showError(
         "We couldn't find that email address in our Ambassador list. " +
         "Please check your spelling, or contact hello@competitions-ambs.com if you believe this is an error."
       );
+      return;
     }
+
+    if (!res.ok) {
+      showError('Could not connect to the Ambassador list right now. Please try again, or contact hello@competitions-ambs.com if the problem persists.');
+      return;
+    }
+
+    const data = await res.json();
+    sessionStorage.setItem('amb_name', data.name || 'Ambassador');
+    sessionStorage.setItem('amb_code', data.code || '');
+    window.location.href = 'hub.html';
   }
 
   document.addEventListener('keydown', e => { if (e.key === 'Enter') handleLogin(); });
