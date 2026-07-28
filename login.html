@@ -181,7 +181,7 @@
       showError(
         'Could not connect to the Ambassador list. ' +
         'Please make sure the spreadsheet is shared as "Anyone with the link can view", then try again. ' +
-        'If the problem persists, contact global.ambassadors@crimsoneducation.org.'
+        'If the problem persists, contact hello@competitions-ambs.com.'
       );
       return;
     }
@@ -189,7 +189,7 @@
     const rows = parseCSV(csvText);
     if (rows.length < 2) {
       setLoading(false);
-      showError('The Ambassador list appears to be empty. Please contact global.ambassadors@crimsoneducation.org.');
+      showError('The Ambassador list appears to be empty. Please contact hello@competitions-ambs.com.');
       return;
     }
 
@@ -216,7 +216,7 @@
     } else {
       showError(
         "We couldn't find that email address in our Ambassador list. " +
-        "Please check your spelling, or contact global.ambassadors@crimsoneducation.org if you believe this is an error."
+        "Please check your spelling, or contact hello@competitions-ambs.com if you believe this is an error."
       );
     }
   }
