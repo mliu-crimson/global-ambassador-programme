@@ -21,19 +21,24 @@ module.exports = async (req, res) => {
   const name = normalizeName(req.query.name);
 
   if (!email || !name) {
+    res.setHeader('Cache-Control', 'no-store');
     res.status(400).json({ error: 'missing_fields' });
     return;
   }
 
   const { text: csvText, attempts } = await fetchCSV(URLS);
   if (!csvText) {
-    res.status(502).json({ error: 'sheet_unavailable', attempts });
+    console.error('login: sheet fetch failed', JSON.stringify(attempts));
+    res.setHeader('Cache-Control', 'no-store');
+    res.status(502).json({ error: 'sheet_unavailable' });
     return;
   }
 
   const rows = parseCSV(csvText);
   if (rows.length < 2) {
-    res.status(502).json({ error: 'sheet_empty', attempts });
+    console.error('login: sheet parsed empty', JSON.stringify(attempts));
+    res.setHeader('Cache-Control', 'no-store');
+    res.status(502).json({ error: 'sheet_empty' });
     return;
   }
 
@@ -43,11 +48,14 @@ module.exports = async (req, res) => {
   );
 
   if (!match) {
+    res.setHeader('Cache-Control', 'no-store');
     res.status(404).json({ error: 'not_found' });
     return;
   }
 
-  res.setHeader('Cache-Control', 'no-store');
+  // Cache briefly at the edge: repeat logins for the same email+name within
+  // this window are served without re-fetching the whole sheet from Google.
+  res.setHeader('Cache-Control', 'public, s-maxage=30, stale-while-revalidate=59');
   res.status(200).json({
     name: (match[FIRST_NAME_COL] || '').trim() || 'Ambassador',
     code: (match[CODE_COL] || '').trim(),

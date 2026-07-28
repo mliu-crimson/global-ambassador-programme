@@ -9,13 +9,16 @@ const URLS = [
 module.exports = async (req, res) => {
   const code = (req.query.code || '').trim().toUpperCase();
   if (!code) {
+    res.setHeader('Cache-Control', 'no-store');
     res.status(400).json({ error: 'missing_code' });
     return;
   }
 
   const { text: csvText, attempts } = await fetchCSV(URLS);
   if (!csvText) {
-    res.status(502).json({ error: 'sheet_unavailable', attempts });
+    console.error('stats: sheet fetch failed', JSON.stringify(attempts));
+    res.setHeader('Cache-Control', 'no-store');
+    res.status(502).json({ error: 'sheet_unavailable' });
     return;
   }
 
@@ -24,6 +27,8 @@ module.exports = async (req, res) => {
     row.some(cell => cell.trim().toUpperCase() === code)
   ).length;
 
-  res.setHeader('Cache-Control', 'no-store');
+  // Cache briefly at the edge: repeat stat checks for the same code within
+  // this window are served without re-fetching the whole sheet from Google.
+  res.setHeader('Cache-Control', 'public, s-maxage=30, stale-while-revalidate=59');
   res.status(200).json({ signups });
 };
