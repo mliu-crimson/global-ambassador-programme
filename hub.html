@@ -187,9 +187,19 @@
       <h2>Everything you need, in one place.</h2>
     </div>
 
+    <!-- All-time milestone -->
+    <div id="alltime-milestone" style="display:none;background:var(--crimson);border-radius:2px;padding:30px 32px;margin-bottom:24px;text-align:center;">
+      <div style="font-size:0.72rem;letter-spacing:0.14em;text-transform:uppercase;color:#f3d9d6;font-weight:600;margin-bottom:10px;">🎉 All-Time Total</div>
+      <div id="alltime-milestone-value" style="font-family:'Fraunces',serif;font-size:3rem;font-weight:700;color:#fff;line-height:1;">—</div>
+      <div style="font-size:0.92rem;color:#f3d9d6;margin-top:10px;">Total sign-ups across every competition you've promoted</div>
+    </div>
+
     <!-- Live stats dashboard -->
     <div style="background:var(--navy);border-radius:2px;padding:36px 36px 32px;margin-bottom:0;" id="stats-box">
-      <div style="font-size:0.72rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold);font-weight:600;margin-bottom:20px;">Your progress</div>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px;">
+        <img src="images/lgic-logo.png" alt="LGIC" style="height:24px;width:auto;">
+        <span style="font-size:0.72rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold);font-weight:600;">Your progress — LGIC 2026</span>
+      </div>
       <div id="stats-loading" style="color:#c7cbda;font-size:0.92rem;">Loading your stats…</div>
       <div id="stats-content" style="display:none;">
         <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-bottom:28px;">
@@ -209,7 +219,7 @@
         <!-- Progress bar -->
         <div style="margin-bottom:14px;">
           <div style="display:flex;justify-content:space-between;font-size:0.78rem;color:#c7cbda;margin-bottom:8px;">
-            <span>LGIC sign-ups</span>
+            <span>LGIC 2026 sign-ups</span>
             <span id="stat-progress-label">0 / 20</span>
           </div>
           <div style="background:rgba(255,255,255,0.12);border-radius:20px;height:8px;overflow:hidden;">
@@ -530,16 +540,16 @@
           <p style="margin-top:10px;">High School Academic Research Competition <strong>(SARC)</strong> — a research-focused competition giving students the chance to conduct and present original academic research with guidance from mentors.</p>
           <div style="background:var(--parchment);border-radius:2px;padding:14px 20px;margin-top:16px;display:flex;align-items:center;justify-content:center;gap:28px;flex-wrap:wrap;">
             <a href="https://www.essaycomp.org/" target="_blank" rel="noopener" style="display:flex;align-items:center;opacity:0.9;transition:opacity .2s;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.9">
-              <img src="https://images.squarespace-cdn.com/content/v1/68e5cf9ccc2490707affd4f5/570ed67c-ba6a-4012-aa4e-8deb756c22dd/Harvard+Crimson+logo.png?format=1500w" alt="Harvard Crimson Global Essay Competition (HCGEC)" style="height:60px;width:auto;object-fit:contain;">
+              <img src="images/hcgec-logo.png" alt="Harvard Crimson Global Essay Competition (HCGEC)" style="height:60px;width:auto;object-fit:contain;">
             </a>
             <a href="https://www.casecomp.org/" target="_blank" rel="noopener" style="display:flex;align-items:center;opacity:0.9;transition:opacity .2s;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.9">
-              <img src="https://static.wixstatic.com/media/b19b78_cb9f51e4192f44178158051af1d4a9d8~mv2.png" alt="Harvard Crimson Global Case Competition (HCGCC)" style="height:60px;width:auto;object-fit:contain;">
+              <img src="images/hcgcc-logo.png" alt="Harvard Crimson Global Case Competition (HCGCC)" style="height:60px;width:auto;object-fit:contain;">
             </a>
             <a href="https://www.globinnovation.org/" target="_blank" rel="noopener" style="display:flex;align-items:center;opacity:0.9;transition:opacity .2s;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.9">
-              <img src="https://static.wixstatic.com/media/9d3641_d331ede9c21b44f1b48bddc4f5518da6~mv2.png" alt="LSE Generate Global Innovation Challenge (LGIC)" style="height:60px;width:auto;object-fit:contain;">
+              <img src="images/lgic-logo.png" alt="LSE Generate Global Innovation Challenge (LGIC)" style="height:60px;width:auto;object-fit:contain;">
             </a>
             <a href="https://www.researchcomp.org/" target="_blank" rel="noopener" style="display:flex;align-items:center;opacity:0.9;transition:opacity .2s;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.9">
-              <img src="https://static.wixstatic.com/media/b19b78_c33a063bcb494faeba739d04e5857861~mv2.png" alt="High School Academic Research Competition (SARC)" style="height:60px;width:auto;object-fit:contain;">
+              <img src="images/sarc-logo.png" alt="High School Academic Research Competition (SARC)" style="height:60px;width:auto;object-fit:contain;">
             </a>
           </div>
         </div>
@@ -738,6 +748,14 @@
       else if (signups < target) msg = `You're on your way! ${remaining} more sign-ups to unlock your $100 voucher or mentoring session.`;
       else msg = "🎉 You've hit 20 sign-ups — you're eligible for your voucher or mentoring session!";
       document.getElementById('stat-message').textContent = msg;
+
+      const milestone = document.getElementById('alltime-milestone');
+      if (typeof data.allTimeSignups === 'number') {
+        document.getElementById('alltime-milestone-value').textContent = data.allTimeSignups.toLocaleString();
+        milestone.style.display = 'block';
+      } else {
+        milestone.style.display = 'none';
+      }
 
     } catch(e) {
       document.getElementById('stats-loading').style.display = 'none';
