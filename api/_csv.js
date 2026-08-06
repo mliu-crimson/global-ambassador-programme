@@ -24,14 +24,46 @@ const BROWSER_HEADERS = {
   'Accept': 'text/csv,text/plain,*/*',
 };
 
-// Returns { text, attempts }. `text` is null if every URL failed;
-// `attempts` records per-URL diagnostics so failures are debuggable
-// from the API response instead of requiring log access.
+// Google's CSV-export endpoint is unofficial and occasionally extremely slow
+// (observed 250s+ for a request that normally takes ~2s) — not something we
+// can fix, only route around. Two mitigations:
+//   1. A per-request timeout so a slow Google response can't hang the whole
+//      function; we fall back to cached data instead of waiting it out.
+//   2. A short-lived in-memory cache (persists only for the life of a warm
+//      serverless instance) so concurrent/rapid requests don't all hit
+//      Google at once.
+const FETCH_TIMEOUT_MS = 8000;
+const CACHE_TTL_MS = 3 * 60 * 1000; // 3 minutes
+const cache = new Map(); // url -> { text, savedAt }
+
+async function fetchWithTimeout(url) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
+  try {
+    return await fetch(url, { redirect: 'follow', headers: BROWSER_HEADERS, signal: controller.signal });
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+// Returns { text, attempts }. `text` is null only if every URL failed AND
+// no cached copy (even a stale one) was available; `attempts` records
+// per-URL diagnostics so failures are debuggable from the API response
+// instead of requiring log access.
 async function fetchCSV(urls) {
   const attempts = [];
+
+  for (const url of urls) {
+    const cached = cache.get(url);
+    if (cached && Date.now() - cached.savedAt < CACHE_TTL_MS) {
+      attempts.push({ url, cacheHit: true });
+      return { text: cached.text, attempts };
+    }
+  }
+
   for (const url of urls) {
     try {
-      const res = await fetch(url, { redirect: 'follow', headers: BROWSER_HEADERS });
+      const res = await fetchWithTimeout(url);
       const contentType = res.headers.get('content-type') || '';
       const text = await res.text();
       const trimmedLower = text.trim().toLowerCase();
@@ -48,12 +80,24 @@ async function fetchCSV(urls) {
       });
 
       if (res.ok && looksLikeCSV) {
+        cache.set(url, { text, savedAt: Date.now() });
         return { text, attempts };
       }
     } catch (e) {
-      attempts.push({ url, error: String((e && e.message) || e) });
+      attempts.push({ url, error: String((e && e.message) || e), timedOut: e && e.name === 'AbortError' });
     }
   }
+
+  // Every fresh attempt failed or timed out — serve stale cached data
+  // rather than nothing, if we have any.
+  for (const url of urls) {
+    const cached = cache.get(url);
+    if (cached) {
+      attempts.push({ url, staleCacheFallback: true, ageMs: Date.now() - cached.savedAt });
+      return { text: cached.text, attempts };
+    }
+  }
+
   return { text: null, attempts };
 }
 
