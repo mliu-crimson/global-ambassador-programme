@@ -192,7 +192,7 @@
     <div style="background:var(--navy);border-radius:2px;padding:36px 36px 32px;margin-bottom:0;" id="stats-box">
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px;">
         <img src="images/lgic-logo.png" alt="LGIC" style="height:24px;width:auto;">
-        <span style="font-size:0.72rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold);font-weight:600;">Your progress — LGIC 2026</span>
+        <span style="font-size:0.72rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold);font-weight:600;">Your final results — LGIC 2026</span>
       </div>
       <div style="background:rgba(201,164,73,0.1);border:1px solid rgba(201,164,73,0.3);border-radius:2px;padding:14px 18px;margin-bottom:24px;">
         <div style="color:var(--gold);font-weight:600;font-size:0.9rem;margin-bottom:4px;">🎉 LGIC 2026 registrations are now closed</div>
@@ -209,7 +209,7 @@
       </div>
       <div id="stats-loading" style="color:#c7cbda;font-size:0.92rem;">Loading your stats…</div>
       <div id="stats-content" style="display:none;">
-        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-bottom:28px;">
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-bottom:28px;">
           <div>
             <div id="stat-signups" style="font-family:'Fraunces',serif;font-size:2.6rem;font-weight:600;color:#fff;line-height:1;">—</div>
             <div style="font-size:0.78rem;text-transform:uppercase;letter-spacing:0.08em;color:#c7cbda;margin-top:4px;">Sign-ups</div>
@@ -220,17 +220,11 @@
           </div>
           <div>
             <div id="stat-remaining" style="font-family:'Fraunces',serif;font-size:2.6rem;font-weight:600;color:#fff;line-height:1;">—</div>
-            <div style="font-size:0.78rem;text-transform:uppercase;letter-spacing:0.08em;color:#c7cbda;margin-top:4px;">Sign-ups to voucher</div>
+            <div style="font-size:0.78rem;text-transform:uppercase;letter-spacing:0.08em;color:#c7cbda;margin-top:4px;">Top 10 bonus</div>
           </div>
-        </div>
-        <!-- Progress bar -->
-        <div style="margin-bottom:14px;">
-          <div style="display:flex;justify-content:space-between;font-size:0.78rem;color:#c7cbda;margin-bottom:8px;">
-            <span>LGIC 2026 sign-ups</span>
-            <span id="stat-progress-label">0 / 20</span>
-          </div>
-          <div style="background:rgba(255,255,255,0.12);border-radius:20px;height:8px;overflow:hidden;">
-            <div id="stat-bar" style="height:100%;background:var(--gold);border-radius:20px;width:0%;transition:width 1s ease;"></div>
+          <div style="border:1px solid var(--gold);border-radius:4px;padding:10px 14px;background:rgba(201,164,73,0.08);">
+            <div id="stat-total-credits" style="font-family:'Fraunces',serif;font-size:2.6rem;font-weight:600;color:var(--gold);line-height:1;">—</div>
+            <div style="font-size:0.78rem;text-transform:uppercase;letter-spacing:0.08em;color:#c7cbda;margin-top:4px;">Total credits</div>
           </div>
         </div>
         <div id="stat-message" style="font-size:0.85rem;color:#c7cbda;font-style:italic;"></div>
@@ -677,31 +671,24 @@
       });
       if (!res.ok) throw new Error('fetch failed');
       const data = await res.json();
-      const signups = data.signups;
-
-      const credits = signups * 5;
-      const target = 20;
-      const remaining = Math.max(0, target - signups);
-      const pct = Math.min(100, (signups / target) * 100);
+      const { signups, credits, rank, bonus, totalCredits } = data;
 
       document.getElementById('stats-loading').style.display = 'none';
       document.getElementById('stats-content').style.display = 'block';
       document.getElementById('stat-signups').textContent = signups;
       document.getElementById('stat-credits').textContent = `$${credits}`;
-      document.getElementById('stat-remaining').textContent = remaining > 0 ? remaining : '✓';
-      document.getElementById('stat-progress-label').textContent = `${signups} / ${target}`;
-
-      // Animate bar after a short delay
-      setTimeout(() => {
-        document.getElementById('stat-bar').style.width = pct + '%';
-      }, 200);
+      document.getElementById('stat-remaining').textContent = bonus > 0 ? `$${bonus}` : '—';
+      document.getElementById('stat-total-credits').textContent = `$${totalCredits}`;
 
       // Message
       let msg = '';
-      if (signups === 0) msg = "You haven't had any sign-ups yet — share your code and get started!";
-      else if (signups < 3) msg = `Great start! ${remaining} more sign-ups to earn your Ambassador Certificate.`;
-      else if (signups < target) msg = `You're on your way! ${remaining} more sign-ups to unlock your $100 voucher or mentoring session.`;
-      else msg = "🎉 You've hit 20 sign-ups — you're eligible for your voucher or mentoring session!";
+      if (rank > 0) {
+        msg = `🏆 Congratulations — you placed #${rank} and earned a $${bonus} bonus! Total credits: $${totalCredits}.`;
+      } else if (signups > 0) {
+        msg = `Final results are in! You brought in ${signups} sign-up${signups === 1 ? '' : 's'} for $${credits} in credits. Thank you for your amazing effort!`;
+      } else {
+        msg = 'LGIC 2026 has concluded. Thank you for being part of the programme this round!';
+      }
       document.getElementById('stat-message').textContent = msg;
 
     } catch(e) {
