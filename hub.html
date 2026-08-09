@@ -726,7 +726,10 @@
 
       let msg = '';
       if (highlights.length) {
-        msg = `🏆 Congratulations — you ${highlights.join(', ')}! Total credits: $${displayTotal}.`;
+        msg = `🏆 Congratulations — you ${highlights.join(', ')}! Total credits for LGIC: $${totalCredits}.`;
+        if (sarcRolled > 0) {
+          msg += ` Plus $${sarcRolled} rolled over from SARC — your total credits are $${displayTotal}.`;
+        }
       } else if (signups > 0) {
         msg = `Final results are in! You brought in ${signups} sign-up${signups === 1 ? '' : 's'} for $${credits} in credits. Thank you for your amazing effort!`;
       } else {
