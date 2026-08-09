@@ -1,11 +1,8 @@
-const { parseCSV, fetchCSV } = require('./_csv');
+const { getSheetRows } = require('./_sheets');
 const { sign } = require('./_auth');
 
 const SHEET_ID = '1UFk5kFXwUearV5-MR5rbcei3chBieT2GNd7wUjw5LfA';
-const URLS = [
-  `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=0`,
-  `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=0`,
-];
+const GID = '0';
 
 const TOKEN_TTL_MS = 2 * 60 * 60 * 1000; // 2 hours
 
@@ -29,17 +26,18 @@ module.exports = async (req, res) => {
     return;
   }
 
-  const { text: csvText, attempts } = await fetchCSV(URLS);
-  if (!csvText) {
-    console.error('login: sheet fetch failed', JSON.stringify(attempts));
+  let rows;
+  try {
+    rows = await getSheetRows(SHEET_ID, GID);
+  } catch (e) {
+    console.error('login: sheet fetch failed', e.message);
     res.setHeader('Cache-Control', 'no-store');
     res.status(502).json({ error: 'sheet_unavailable' });
     return;
   }
 
-  const rows = parseCSV(csvText);
   if (rows.length < 2) {
-    console.error('login: sheet parsed empty', JSON.stringify(attempts));
+    console.error('login: sheet parsed empty');
     res.setHeader('Cache-Control', 'no-store');
     res.status(502).json({ error: 'sheet_empty' });
     return;

@@ -1,4 +1,4 @@
-const { parseCSV, fetchCSV } = require('./_csv');
+const { getSheetRows } = require('./_sheets');
 const { verify } = require('./_auth');
 
 // Final LGIC 2026 results sheet (registrations closed) — one row per
@@ -10,9 +10,6 @@ const { verify } = require('./_auth');
 // live sheet on 2026-08-09).
 const LGIC_SHEET_ID = '1o8k2Ea5FxDfTzEuM3QPili9SgHPeiWk6m3PqMf4enOI';
 const LGIC_GID = '1081451407';
-const LGIC_URLS = [
-  `https://docs.google.com/spreadsheets/d/${LGIC_SHEET_ID}/gviz/tq?tqx=out:csv&gid=${LGIC_GID}`,
-];
 const LGIC_CODE_COL = 0;
 const LGIC_SIGNUPS_COL = 2;
 const LGIC_CREDITS_COL = 3;
@@ -29,9 +26,6 @@ const LGIC_TOTAL_CREDITS_COL = 8;
 // subtotal columns ourselves instead of trusting F, to include 2023.
 const ALLTIME_SHEET_ID = '1x7R7-aQtvXSNE7q_0eBLHaQxUCLgUuPBpbTi1Ojaxds';
 const ALLTIME_GID = '1580466567';
-const ALLTIME_URLS = [
-  `https://docs.google.com/spreadsheets/d/${ALLTIME_SHEET_ID}/gviz/tq?tqx=out:csv&gid=${ALLTIME_GID}`,
-];
 const ALLTIME_CODE_COL = 3;
 const YEAR_TOTAL_COLS = [
   { year: 2026, col: 10 }, // K
@@ -75,19 +69,19 @@ module.exports = async (req, res) => {
     return;
   }
 
-  const [lgic, allTime] = await Promise.all([
-    fetchCSV(LGIC_URLS),
-    fetchCSV(ALLTIME_URLS),
+  const [lgicResult, allTimeResult] = await Promise.allSettled([
+    getSheetRows(LGIC_SHEET_ID, LGIC_GID),
+    getSheetRows(ALLTIME_SHEET_ID, ALLTIME_GID),
   ]);
 
-  if (!lgic.text) {
-    console.error('stats: LGIC sheet fetch failed', JSON.stringify(lgic.attempts));
+  if (lgicResult.status === 'rejected') {
+    console.error('stats: LGIC sheet fetch failed', lgicResult.reason.message);
     res.setHeader('Cache-Control', 'no-store');
     res.status(502).json({ error: 'sheet_unavailable' });
     return;
   }
 
-  const lgicRows = parseCSV(lgic.text);
+  const lgicRows = lgicResult.value;
   const lgicMatch = lgicRows.slice(1).find(row => (row[LGIC_CODE_COL] || '').trim().toUpperCase() === code);
 
   const signups = lgicMatch ? toNumber(lgicMatch[LGIC_SIGNUPS_COL]) : 0;
@@ -100,14 +94,14 @@ module.exports = async (req, res) => {
 
   let allTimeSignups = null;
   let allTimeByYear = null;
-  if (allTime.text) {
-    const result = getAllTime(parseCSV(allTime.text), code);
+  if (allTimeResult.status === 'fulfilled') {
+    const result = getAllTime(allTimeResult.value, code);
     if (result) {
       allTimeSignups = result.total;
       allTimeByYear = result.byYear;
     }
   } else {
-    console.error('stats: all-time sheet fetch failed', JSON.stringify(allTime.attempts));
+    console.error('stats: all-time sheet fetch failed', allTimeResult.reason.message);
   }
 
   // Cache briefly at the edge: repeat stat checks for the same code+token within
