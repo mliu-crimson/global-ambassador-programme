@@ -3,8 +3,11 @@ const { verify } = require('./_auth');
 
 // Final LGIC 2026 results sheet (registrations closed) — one row per
 // ambassador with columns: CODE, FULL NAME, LGIC TOTAL, LGIC Credits,
-// Rank, Top 10 (bonus $), Total credits. Rank/Top10 are 0 for anyone
-// outside the top 10 (ties share a rank), not a full leaderboard position.
+// Rank, Top 10, Weekly Top, Weekly Most Improved, Total Credits.
+// Rank/Top10 are 0 for anyone outside the top 10 (ties share a rank),
+// not a full leaderboard position. Total Credits = LGIC Credits +
+// Top 10 + Weekly Top + Weekly Most Improved (confirmed against the
+// live sheet on 2026-08-09).
 const SHEET_ID = '1o8k2Ea5FxDfTzEuM3QPili9SgHPeiWk6m3PqMf4enOI';
 const RESULTS_GID = '1081451407';
 const URLS = [
@@ -14,8 +17,10 @@ const CODE_COL = 0;
 const SIGNUPS_COL = 2;
 const CREDITS_COL = 3;
 const RANK_COL = 4;
-const BONUS_COL = 5;
-const TOTAL_CREDITS_COL = 6;
+const TOP10_BONUS_COL = 5;
+const WEEKLY_TOP_COL = 6;
+const WEEKLY_IMPROVED_COL = 7;
+const TOTAL_CREDITS_COL = 8;
 
 function toNumber(cell) {
   const n = parseFloat(cell);
@@ -54,11 +59,21 @@ module.exports = async (req, res) => {
   const signups = match ? toNumber(match[SIGNUPS_COL]) : 0;
   const credits = match ? toNumber(match[CREDITS_COL]) : 0;
   const rank = match ? toNumber(match[RANK_COL]) : 0;
-  const bonus = match ? toNumber(match[BONUS_COL]) : 0;
+  const topTenBonus = match ? toNumber(match[TOP10_BONUS_COL]) : 0;
+  const weeklyTopBonus = match ? toNumber(match[WEEKLY_TOP_COL]) : 0;
+  const weeklyImprovedBonus = match ? toNumber(match[WEEKLY_IMPROVED_COL]) : 0;
   const totalCredits = match ? toNumber(match[TOTAL_CREDITS_COL]) : 0;
 
   // Cache briefly at the edge: repeat stat checks for the same code+token within
   // this window are served without re-fetching the whole sheet from Google.
   res.setHeader('Cache-Control', 'private, max-age=30');
-  res.status(200).json({ signups, credits, rank, bonus, totalCredits });
+  res.status(200).json({
+    signups,
+    credits,
+    rank,
+    topTenBonus,
+    weeklyTopBonus,
+    weeklyImprovedBonus,
+    totalCredits,
+  });
 };

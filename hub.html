@@ -220,7 +220,7 @@
           </div>
           <div>
             <div id="stat-remaining" style="font-family:'Fraunces',serif;font-size:2.6rem;font-weight:600;color:#fff;line-height:1;">—</div>
-            <div style="font-size:0.78rem;text-transform:uppercase;letter-spacing:0.08em;color:#c7cbda;margin-top:4px;">Top 10 bonus</div>
+            <div style="font-size:0.78rem;text-transform:uppercase;letter-spacing:0.08em;color:#c7cbda;margin-top:4px;">Bonuses</div>
           </div>
           <div style="border:1px solid var(--gold);border-radius:4px;padding:10px 14px;background:rgba(201,164,73,0.08);">
             <div id="stat-total-credits" style="font-family:'Fraunces',serif;font-size:2.6rem;font-weight:600;color:var(--gold);line-height:1;">—</div>
@@ -671,7 +671,8 @@
       });
       if (!res.ok) throw new Error('fetch failed');
       const data = await res.json();
-      const { signups, credits, rank, bonus, totalCredits } = data;
+      const { signups, credits, rank, topTenBonus, weeklyTopBonus, weeklyImprovedBonus, totalCredits } = data;
+      const bonus = topTenBonus + weeklyTopBonus + weeklyImprovedBonus;
 
       document.getElementById('stats-loading').style.display = 'none';
       document.getElementById('stats-content').style.display = 'block';
@@ -680,10 +681,16 @@
       document.getElementById('stat-remaining').textContent = bonus > 0 ? `$${bonus}` : '—';
       document.getElementById('stat-total-credits').textContent = `$${totalCredits}`;
 
-      // Message
+      // Message — call out each bonus earned individually, since they're
+      // separate achievements (overall rank vs weekly recognition).
+      const highlights = [];
+      if (rank > 0) highlights.push(`placed #${rank} overall (+$${topTenBonus})`);
+      if (weeklyTopBonus > 0) highlights.push(`Weekly Top Ambassador (+$${weeklyTopBonus})`);
+      if (weeklyImprovedBonus > 0) highlights.push(`Weekly Most Improved (+$${weeklyImprovedBonus})`);
+
       let msg = '';
-      if (rank > 0) {
-        msg = `🏆 Congratulations — you placed #${rank} and earned a $${bonus} bonus! Total credits: $${totalCredits}.`;
+      if (highlights.length) {
+        msg = `🏆 Congratulations — you ${highlights.join(', ')}! Total credits: $${totalCredits}.`;
       } else if (signups > 0) {
         msg = `Final results are in! You brought in ${signups} sign-up${signups === 1 ? '' : 's'} for $${credits} in credits. Thank you for your amazing effort!`;
       } else {
