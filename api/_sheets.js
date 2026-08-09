@@ -15,10 +15,13 @@ function base64url(input) {
 }
 
 let cachedToken = null; // { accessToken, expiresAt } — reused across warm invocations
+let inFlightToken = null; // shared promise so concurrent callers don't each request their own token
 let sheetTitleCache = new Map(); // `${spreadsheetId}:${gid}` -> title
 let sheetRowsCache = new Map(); // `${spreadsheetId}:${gid}` -> { rows, savedAt }
 
-const FETCH_TIMEOUT_MS = 8000;
+// Generous timeout: a cold request can chain token exchange + sheet
+// metadata lookup + values fetch, each a separate round trip to Google.
+const FETCH_TIMEOUT_MS = 15000;
 const CACHE_TTL_MS = 3 * 60 * 1000; // 3 minutes — cuts down repeat API calls under load
 
 async function fetchWithTimeout(url, opts) {
@@ -35,7 +38,16 @@ async function getAccessToken() {
   if (cachedToken && Date.now() < cachedToken.expiresAt - 60000) {
     return cachedToken.accessToken;
   }
+  // Concurrent callers (e.g. two sheets fetched in parallel on a cold
+  // start) share one in-flight token request instead of each firing
+  // their own — halves the round trips on the common case.
+  if (inFlightToken) return inFlightToken;
 
+  inFlightToken = fetchAccessToken().finally(() => { inFlightToken = null; });
+  return inFlightToken;
+}
+
+async function fetchAccessToken() {
   const creds = JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_JSON);
   const now = Math.floor(Date.now() / 1000);
   const header = { alg: 'RS256', typ: 'JWT' };
