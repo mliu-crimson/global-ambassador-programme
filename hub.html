@@ -91,6 +91,7 @@
   .team-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
   .team-card{background:var(--parchment);border:1px solid var(--line);border-radius:2px;padding:24px 22px;}
   .team-card .initials{width:48px;height:48px;border-radius:50%;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:600;font-size:1.1rem;margin-bottom:14px;}
+  .team-card .photo{width:48px;height:48px;border-radius:50%;object-fit:cover;margin-bottom:14px;display:block;}
   .team-card h3{font-size:0.95rem;margin-bottom:4px;}
   .team-card .role{font-size:0.82rem;color:var(--crimson);font-weight:600;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:12px;}
   .team-card .contact{font-size:0.82rem;color:#6b6258;line-height:1.7;}
@@ -600,7 +601,7 @@
     <p class="team-intro">Questions? The team is here. Reach us directly at <a href="mailto:hello@competitions-ambs.com">hello@competitions-ambs.com</a>.</p>
     <div class="team-grid">
       <div class="team-card">
-        <div class="initials">ML</div>
+        <img class="photo" src="images/team/melanie.jpg" alt="Melanie Liu">
         <h3>Melanie Liu</h3>
         <div class="role">Global Programme Manager</div>
         <div class="contact">
@@ -608,7 +609,7 @@
         </div>
       </div>
       <div class="team-card">
-        <div class="initials">HN</div>
+        <img class="photo" src="images/team/helene.png" alt="Helene Nguyen">
         <h3>Helene Nguyen</h3>
         <div class="role">Admin and Operations Support</div>
         <div class="contact">
