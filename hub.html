@@ -188,6 +188,14 @@
       <h2>Everything you need, in one place.</h2>
     </div>
 
+    <!-- All-time milestone -->
+    <div id="alltime-milestone" style="display:none;background:var(--crimson);border-radius:2px;padding:30px 32px;margin-bottom:24px;text-align:center;">
+      <div style="font-size:0.72rem;letter-spacing:0.14em;text-transform:uppercase;color:#f3d9d6;font-weight:600;margin-bottom:10px;">🎉 All-Time Total</div>
+      <div id="alltime-milestone-value" style="font-family:'Fraunces',serif;font-size:3rem;font-weight:700;color:#fff;line-height:1;">—</div>
+      <div style="font-size:0.92rem;color:#f3d9d6;margin-top:10px;">Total sign-ups across every competition you've promoted</div>
+      <div id="alltime-byyear" style="margin-top:20px;padding-top:18px;border-top:1px solid rgba(255,255,255,0.25);display:flex;justify-content:center;gap:32px;flex-wrap:wrap;"></div>
+    </div>
+
     <!-- Live stats dashboard -->
     <div style="background:var(--navy);border-radius:2px;padding:36px 36px 32px;margin-bottom:0;" id="stats-box">
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px;">
@@ -697,6 +705,31 @@
         msg = 'LGIC 2026 has concluded. Thank you for being part of the programme this round!';
       }
       document.getElementById('stat-message').textContent = msg;
+
+      const milestone = document.getElementById('alltime-milestone');
+      const byYearRow = document.getElementById('alltime-byyear');
+      if (typeof data.allTimeSignups === 'number') {
+        document.getElementById('alltime-milestone-value').textContent = data.allTimeSignups.toLocaleString();
+        milestone.style.display = 'block';
+
+        byYearRow.innerHTML = '';
+        if (Array.isArray(data.allTimeByYear) && data.allTimeByYear.length) {
+          data.allTimeByYear.forEach(({ year, total }) => {
+            const item = document.createElement('div');
+            item.style.textAlign = 'center';
+            item.innerHTML = `
+              <div style="font-family:'Fraunces',serif;font-weight:700;font-size:1.35rem;color:#fff;line-height:1;">${total.toLocaleString()}</div>
+              <div style="font-size:0.68rem;text-transform:uppercase;letter-spacing:0.08em;color:#f3d9d6;margin-top:4px;">${year}</div>
+            `;
+            byYearRow.appendChild(item);
+          });
+          byYearRow.style.display = 'flex';
+        } else {
+          byYearRow.style.display = 'none';
+        }
+      } else {
+        milestone.style.display = 'none';
+      }
 
     } catch(e) {
       document.getElementById('stats-loading').style.display = 'none';
