@@ -213,6 +213,7 @@
           <li>Credit vouchers will be awarded between 24th August - 3rd September.</li>
           <li>Please fill in the form very carefully. If you do not, it may delay your claims process.</li>
           <li>Please only chase us after 3rd September if you haven't heard from us - we will be processing your claims as soon as possible.</li>
+          <li>You need at least $100 in total credits to claim this round. If you're below $100, your credits roll over to the end of the next competition.</li>
         </ul>
       </div>
       <div id="stats-loading" style="color:#c7cbda;font-size:0.92rem;">Loading your stats…</div>
@@ -233,9 +234,10 @@
           <div style="border:1px solid var(--gold);border-radius:4px;padding:10px 14px;background:rgba(201,164,73,0.08);">
             <div id="stat-total-credits" style="font-family:'Fraunces',serif;font-size:2.6rem;font-weight:600;color:var(--gold);line-height:1;">—</div>
             <div style="font-size:0.78rem;text-transform:uppercase;letter-spacing:0.08em;color:#c7cbda;margin-top:4px;">Total credits</div>
+            <div id="stat-sarc-badge" style="display:none;margin-top:8px;font-size:0.72rem;font-weight:700;color:var(--navy);background:var(--gold);border-radius:20px;padding:3px 10px;">+$<span id="stat-sarc-amount"></span> rolled over from SARC</div>
           </div>
         </div>
-        <div id="stat-sarc-note" style="display:none;font-size:0.82rem;color:#c7cbda;margin-bottom:14px;">Includes <span id="stat-sarc-amount"></span> rolled over from SARC.</div>
+        <div id="stat-eligibility" style="display:none;border-radius:2px;padding:12px 16px;margin-bottom:16px;font-size:0.86rem;font-weight:600;"></div>
         <div id="stat-message" style="font-size:0.85rem;color:#c7cbda;font-style:italic;"></div>
       </div>
       <div id="stats-error" style="display:none;color:#f3a0a0;font-size:0.88rem;"></div>
@@ -692,8 +694,27 @@
       document.getElementById('stat-total-credits').textContent = `$${displayTotal}`;
 
       if (sarcRolled > 0) {
-        document.getElementById('stat-sarc-amount').textContent = `$${sarcRolled}`;
-        document.getElementById('stat-sarc-note').style.display = 'block';
+        document.getElementById('stat-sarc-amount').textContent = sarcRolled;
+        document.getElementById('stat-sarc-badge').style.display = 'inline-block';
+      }
+
+      // Eligibility — the programme only pays out claims of $100+; anyone
+      // below that threshold rolls their balance into the next competition
+      // instead (see the claim-info bullet list above).
+      const CLAIM_THRESHOLD = 100;
+      const eligibilityEl = document.getElementById('stat-eligibility');
+      if (displayTotal >= CLAIM_THRESHOLD) {
+        eligibilityEl.style.display = 'block';
+        eligibilityEl.style.background = 'rgba(111,187,124,0.12)';
+        eligibilityEl.style.border = '1px solid rgba(111,187,124,0.35)';
+        eligibilityEl.style.color = '#a8dab5';
+        eligibilityEl.textContent = `✅ You've reached the $${CLAIM_THRESHOLD} minimum — you're eligible to claim your credits!`;
+      } else if (displayTotal > 0) {
+        eligibilityEl.style.display = 'block';
+        eligibilityEl.style.background = 'rgba(243,160,160,0.08)';
+        eligibilityEl.style.border = '1px solid rgba(243,160,160,0.3)';
+        eligibilityEl.style.color = '#f3a0a0';
+        eligibilityEl.textContent = `Your total credits ($${displayTotal}) are below the $${CLAIM_THRESHOLD} minimum to claim this round — they'll roll over to the end of the next competition.`;
       }
 
       // Message — call out each bonus earned individually, since they're
