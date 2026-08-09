@@ -3,11 +3,12 @@ const { verify } = require('./_auth');
 
 // Final LGIC 2026 results sheet (registrations closed) — one row per
 // ambassador with columns: CODE, FULL NAME, LGIC TOTAL, LGIC Credits,
-// Rank, Top 10, Weekly Top, Weekly Most Improved, Total Credits.
+// Rank, Top 10, Weekly Top, Weekly Most Improved, LGIC Total Credits,
+// Rolled from SARC, Final Total.
 // Rank/Top10 are 0 for anyone outside the top 10 (ties share a rank),
-// not a full leaderboard position. Total Credits = LGIC Credits +
-// Top 10 + Weekly Top + Weekly Most Improved (confirmed against the
-// live sheet on 2026-08-09).
+// not a full leaderboard position. LGIC Total Credits = LGIC Credits +
+// Top 10 + Weekly Top + Weekly Most Improved. Final Total additionally
+// rolls in leftover credits carried over from SARC (added 2026-08-09).
 const LGIC_SHEET_ID = '1o8k2Ea5FxDfTzEuM3QPili9SgHPeiWk6m3PqMf4enOI';
 const LGIC_GID = '1081451407';
 const LGIC_CODE_COL = 0;
@@ -18,6 +19,8 @@ const LGIC_TOP10_BONUS_COL = 5;
 const LGIC_WEEKLY_TOP_COL = 6;
 const LGIC_WEEKLY_IMPROVED_COL = 7;
 const LGIC_TOTAL_CREDITS_COL = 8;
+const LGIC_SARC_ROLLED_COL = 9;
+const LGIC_FINAL_TOTAL_COL = 10;
 
 // Master ambassador sheet: one row per ambassador. Column F is a
 // pre-computed "all time total" but it silently excludes 2023 (verified
@@ -91,6 +94,8 @@ module.exports = async (req, res) => {
   const weeklyTopBonus = lgicMatch ? toNumber(lgicMatch[LGIC_WEEKLY_TOP_COL]) : 0;
   const weeklyImprovedBonus = lgicMatch ? toNumber(lgicMatch[LGIC_WEEKLY_IMPROVED_COL]) : 0;
   const totalCredits = lgicMatch ? toNumber(lgicMatch[LGIC_TOTAL_CREDITS_COL]) : 0;
+  const sarcRolled = lgicMatch ? toNumber(lgicMatch[LGIC_SARC_ROLLED_COL]) : 0;
+  const finalTotal = lgicMatch ? toNumber(lgicMatch[LGIC_FINAL_TOTAL_COL]) : 0;
 
   let allTimeSignups = null;
   let allTimeByYear = null;
@@ -115,6 +120,8 @@ module.exports = async (req, res) => {
     weeklyTopBonus,
     weeklyImprovedBonus,
     totalCredits,
+    sarcRolled,
+    finalTotal,
     allTimeSignups,
     allTimeByYear,
   });

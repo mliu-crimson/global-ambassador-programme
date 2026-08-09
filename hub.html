@@ -235,6 +235,7 @@
             <div style="font-size:0.78rem;text-transform:uppercase;letter-spacing:0.08em;color:#c7cbda;margin-top:4px;">Total credits</div>
           </div>
         </div>
+        <div id="stat-sarc-note" style="display:none;font-size:0.82rem;color:#c7cbda;margin-bottom:14px;">Includes <span id="stat-sarc-amount"></span> rolled over from SARC.</div>
         <div id="stat-message" style="font-size:0.85rem;color:#c7cbda;font-style:italic;"></div>
       </div>
       <div id="stats-error" style="display:none;color:#f3a0a0;font-size:0.88rem;"></div>
@@ -679,15 +680,21 @@
       });
       if (!res.ok) throw new Error('fetch failed');
       const data = await res.json();
-      const { signups, credits, rank, topTenBonus, weeklyTopBonus, weeklyImprovedBonus, totalCredits } = data;
+      const { signups, credits, rank, topTenBonus, weeklyTopBonus, weeklyImprovedBonus, totalCredits, sarcRolled, finalTotal } = data;
       const bonus = topTenBonus + weeklyTopBonus + weeklyImprovedBonus;
+      const displayTotal = finalTotal > 0 ? finalTotal : totalCredits;
 
       document.getElementById('stats-loading').style.display = 'none';
       document.getElementById('stats-content').style.display = 'block';
       document.getElementById('stat-signups').textContent = signups;
       document.getElementById('stat-credits').textContent = `$${credits}`;
       document.getElementById('stat-remaining').textContent = bonus > 0 ? `$${bonus}` : '—';
-      document.getElementById('stat-total-credits').textContent = `$${totalCredits}`;
+      document.getElementById('stat-total-credits').textContent = `$${displayTotal}`;
+
+      if (sarcRolled > 0) {
+        document.getElementById('stat-sarc-amount').textContent = `$${sarcRolled}`;
+        document.getElementById('stat-sarc-note').style.display = 'block';
+      }
 
       // Message — call out each bonus earned individually, since they're
       // separate achievements (overall rank vs weekly recognition).
@@ -698,7 +705,7 @@
 
       let msg = '';
       if (highlights.length) {
-        msg = `🏆 Congratulations — you ${highlights.join(', ')}! Total credits: $${totalCredits}.`;
+        msg = `🏆 Congratulations — you ${highlights.join(', ')}! Total credits: $${displayTotal}.`;
       } else if (signups > 0) {
         msg = `Final results are in! You brought in ${signups} sign-up${signups === 1 ? '' : 's'} for $${credits} in credits. Thank you for your amazing effort!`;
       } else {
