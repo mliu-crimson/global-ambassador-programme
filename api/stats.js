@@ -37,6 +37,16 @@ const YEAR_TOTAL_COLS = [
   { year: 2023, col: 21 }, // V — only column for 2023, no subtotal exists
 ];
 
+// HCGCC 2026 tracker (registrations open) — Sheet5 is the raw list of
+// discount codes entered at checkout, one per registration, no header
+// beyond row 1. An ambassador's live sign-up count is just how many rows
+// match their code; credits are that count times the $3/sign-up rate
+// (mirrors the sheet's own `=COUNTIF(...)` / `=count*3` tracker formulas).
+const HCGCC_SHEET_ID = '1IEjgdP_YcLlzcHrxdMhwsDfTrmvaESlqX4l9oDpnpdE';
+const HCGCC_GID = '1217596572';
+const HCGCC_CODE_COL = 0;
+const HCGCC_CREDIT_PER_SIGNUP = 3;
+
 function toNumber(cell) {
   const n = parseFloat(cell);
   return isNaN(n) ? 0 : n;
@@ -72,9 +82,10 @@ module.exports = async (req, res) => {
     return;
   }
 
-  const [lgicResult, allTimeResult] = await Promise.allSettled([
+  const [lgicResult, allTimeResult, hcgccResult] = await Promise.allSettled([
     getSheetRows(LGIC_SHEET_ID, LGIC_GID),
     getSheetRows(ALLTIME_SHEET_ID, ALLTIME_GID),
+    getSheetRows(HCGCC_SHEET_ID, HCGCC_GID),
   ]);
 
   if (lgicResult.status === 'rejected') {
@@ -109,6 +120,15 @@ module.exports = async (req, res) => {
     console.error('stats: all-time sheet fetch failed', allTimeResult.reason.message);
   }
 
+  let hcgccSignups = null;
+  let hcgccCredits = null;
+  if (hcgccResult.status === 'fulfilled') {
+    hcgccSignups = hcgccResult.value.slice(1).filter(row => (row[HCGCC_CODE_COL] || '').trim().toUpperCase() === code).length;
+    hcgccCredits = hcgccSignups * HCGCC_CREDIT_PER_SIGNUP;
+  } else {
+    console.error('stats: HCGCC sheet fetch failed', hcgccResult.reason.message);
+  }
+
   // Cache briefly at the edge: repeat stat checks for the same code+token within
   // this window are served without re-fetching the whole sheet from Google.
   res.setHeader('Cache-Control', 'private, max-age=30');
@@ -124,5 +144,7 @@ module.exports = async (req, res) => {
     finalTotal,
     allTimeSignups,
     allTimeByYear,
+    hcgccSignups,
+    hcgccCredits,
   });
 };

@@ -196,6 +196,29 @@
       <div id="alltime-byyear" style="margin-top:20px;padding-top:18px;border-top:1px solid rgba(255,255,255,0.25);display:flex;justify-content:center;gap:32px;flex-wrap:wrap;"></div>
     </div>
 
+    <!-- Live HCGCC tracker -->
+    <div style="background:var(--navy);border-radius:2px;padding:36px 36px 32px;margin-bottom:28px;" id="hcgcc-stats-box">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px;">
+        <img src="images/hcgcc-logo.png" alt="HCGCC" style="height:24px;width:auto;">
+        <span style="font-size:0.72rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold);font-weight:600;">Your live results — HCGCC 2026</span>
+      </div>
+      <div id="hcgcc-stats-loading" style="color:#c7cbda;font-size:0.92rem;">Loading your stats…</div>
+      <div id="hcgcc-stats-content" style="display:none;">
+        <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:20px;margin-bottom:20px;">
+          <div>
+            <div id="hcgcc-stat-signups" style="font-family:'Fraunces',serif;font-size:2.6rem;font-weight:600;color:#fff;line-height:1;">—</div>
+            <div style="font-size:0.78rem;text-transform:uppercase;letter-spacing:0.08em;color:#c7cbda;margin-top:4px;">Sign-ups</div>
+          </div>
+          <div>
+            <div id="hcgcc-stat-credits" style="font-family:'Fraunces',serif;font-size:2.6rem;font-weight:600;color:var(--gold);line-height:1;">—</div>
+            <div style="font-size:0.78rem;text-transform:uppercase;letter-spacing:0.08em;color:#c7cbda;margin-top:4px;">Credits earned</div>
+          </div>
+        </div>
+        <div id="hcgcc-stat-message" style="font-size:0.85rem;color:#c7cbda;font-style:italic;"></div>
+      </div>
+      <div id="hcgcc-stats-error" style="display:none;color:#f3a0a0;font-size:0.88rem;"></div>
+    </div>
+
     <!-- Live stats dashboard -->
     <div style="background:var(--navy);border-radius:2px;padding:36px 36px 32px;margin-bottom:0;" id="stats-box">
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px;">
@@ -692,9 +715,22 @@
       });
       if (!res.ok) throw new Error('fetch failed');
       const data = await res.json();
-      const { signups, credits, rank, topTenBonus, weeklyTopBonus, weeklyImprovedBonus, totalCredits, sarcRolled, finalTotal } = data;
+      const { signups, credits, rank, topTenBonus, weeklyTopBonus, weeklyImprovedBonus, totalCredits, sarcRolled, finalTotal, hcgccSignups, hcgccCredits } = data;
       const bonus = topTenBonus + weeklyTopBonus + weeklyImprovedBonus;
       const displayTotal = finalTotal > 0 ? finalTotal : totalCredits;
+
+      document.getElementById('hcgcc-stats-loading').style.display = 'none';
+      if (typeof hcgccSignups === 'number') {
+        document.getElementById('hcgcc-stats-content').style.display = 'block';
+        document.getElementById('hcgcc-stat-signups').textContent = hcgccSignups;
+        document.getElementById('hcgcc-stat-credits').textContent = `$${hcgccCredits}`;
+        document.getElementById('hcgcc-stat-message').textContent = hcgccSignups > 0
+          ? `You've brought in ${hcgccSignups} sign-up${hcgccSignups === 1 ? '' : 's'} so far for HCGCC 2026 — keep sharing your code to earn more!`
+          : `No sign-ups yet for HCGCC 2026 — share your code to start earning credit!`;
+      } else {
+        document.getElementById('hcgcc-stats-error').style.display = 'block';
+        document.getElementById('hcgcc-stats-error').textContent = 'Unable to load your HCGCC stats right now — please refresh in a moment.';
+      }
 
       document.getElementById('stats-loading').style.display = 'none';
       document.getElementById('stats-content').style.display = 'block';
@@ -790,6 +826,10 @@
       document.getElementById('stats-loading').style.display = 'none';
       document.getElementById('stats-error').style.display = 'block';
       document.getElementById('stats-error').textContent =
+        'Could not load your stats right now. Please try refreshing.';
+      document.getElementById('hcgcc-stats-loading').style.display = 'none';
+      document.getElementById('hcgcc-stats-error').style.display = 'block';
+      document.getElementById('hcgcc-stats-error').textContent =
         'Could not load your stats right now. Please try refreshing.';
     }
   }
