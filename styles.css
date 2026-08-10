@@ -5,8 +5,9 @@
    waiting to parse this file first. */
 
 :root{
-  --ink:#1c1a17; --parchment:#f6f1e7; --crimson:#a31621; --crimson-deep:#7a0f17;
-  --gold:#c9a449; --navy:#14213d; --line:rgba(28,26,23,0.14);
+  /* AMB3197 rebrand preview — Midnight/Meridian/Horizon/Atlas/Summit Gold */
+  --ink:#1c1a17; --parchment:#faf7f0; --crimson:#3f4968; --crimson-deep:#1c2755;
+  --gold:#c9a159; --navy:#1c2755; --horizon:#a6aec4; --line:rgba(28,39,85,0.16);
 }
 
 *{box-sizing:border-box;margin:0;padding:0;}
