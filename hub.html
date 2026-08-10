@@ -209,7 +209,7 @@
       <div style="background:rgba(201,164,73,0.1);border:1px solid rgba(201,164,73,0.3);border-radius:2px;padding:14px 18px;margin-bottom:24px;">
         <div style="color:var(--gold);font-weight:600;font-size:0.9rem;margin-bottom:8px;">Important information regarding credit claim:</div>
         <ul style="color:#c7cbda;font-size:0.88rem;line-height:1.7;margin:0;padding-left:20px;">
-          <li><a href="https://form.typeform.com/to/vIfK8UxU" target="_blank" rel="noopener" style="color:var(--gold);">Claim your credits here until 23rd August.</a></li>
+          <li id="claim-link-item"><a href="https://form.typeform.com/to/vIfK8UxU" target="_blank" rel="noopener" style="color:var(--gold);">Claim your credits here until 23rd August.</a></li>
           <li>Credit vouchers will be awarded between 24th August - 3rd September.</li>
           <li>Please fill in the form very carefully. If you do not, it may delay your claims process.</li>
           <li>Please only chase us after 3rd September if you haven't heard from us - we will be processing your claims as soon as possible.</li>
@@ -717,6 +717,11 @@
         eligibilityEl.style.border = '1px solid rgba(243,160,160,0.3)';
         eligibilityEl.style.color = '#f3a0a0';
         eligibilityEl.textContent = `Your total credits ($${displayTotal}) are below the $${CLAIM_THRESHOLD} minimum to claim this round — they'll roll over to the end of the next competition.`;
+      }
+
+      if (displayTotal < CLAIM_THRESHOLD) {
+        const claimLinkItem = document.getElementById('claim-link-item');
+        if (claimLinkItem) claimLinkItem.style.display = 'none';
       }
 
       // Certificates are awarded to anyone who brought in 3+ sign-ups (see
