@@ -214,6 +214,15 @@
             <div style="font-size:0.78rem;text-transform:uppercase;letter-spacing:0.08em;color:#dbdbdb;margin-top:4px;">Credits earned</div>
           </div>
         </div>
+        <div style="margin-bottom:20px;">
+          <div style="display:flex;justify-content:space-between;font-size:0.78rem;color:#dbdbdb;margin-bottom:6px;">
+            <span id="hcgcc-progress-label">0 / 20 sign-ups</span>
+            <span>Cash out at $60</span>
+          </div>
+          <div style="background:rgba(219,219,219,0.2);border-radius:20px;height:10px;overflow:hidden;">
+            <div id="hcgcc-progress-bar" style="background:#ed4b53;height:100%;width:0%;border-radius:20px;transition:width .4s ease;"></div>
+          </div>
+        </div>
         <div id="hcgcc-stat-message" style="font-size:0.85rem;color:#dbdbdb;font-style:italic;"></div>
       </div>
       <div id="hcgcc-stats-error" style="display:none;color:#dbdbdb;font-size:0.88rem;"></div>
@@ -724,8 +733,18 @@
         document.getElementById('hcgcc-stats-content').style.display = 'block';
         document.getElementById('hcgcc-stat-signups').textContent = hcgccSignups;
         document.getElementById('hcgcc-stat-credits').textContent = `$${hcgccCredits}`;
-        document.getElementById('hcgcc-stat-message').textContent = hcgccSignups > 0
-          ? `You've brought in ${hcgccSignups} sign-up${hcgccSignups === 1 ? '' : 's'} so far for HCGCC 2026 — keep sharing your code to earn more!`
+
+        const CASHOUT_SIGNUPS = 20;
+        const progressPct = Math.min(100, (hcgccSignups / CASHOUT_SIGNUPS) * 100);
+        document.getElementById('hcgcc-progress-bar').style.width = `${progressPct}%`;
+        document.getElementById('hcgcc-progress-label').textContent = hcgccSignups >= CASHOUT_SIGNUPS
+          ? `${hcgccSignups} / ${CASHOUT_SIGNUPS} sign-ups ✅`
+          : `${hcgccSignups} / ${CASHOUT_SIGNUPS} sign-ups`;
+
+        document.getElementById('hcgcc-stat-message').textContent = hcgccSignups >= CASHOUT_SIGNUPS
+          ? `🎉 You've hit ${CASHOUT_SIGNUPS} sign-ups and $${hcgccCredits} in credit — you're eligible to cash out as a credit voucher!`
+          : hcgccSignups > 0
+          ? `You've brought in ${hcgccSignups} sign-up${hcgccSignups === 1 ? '' : 's'} so far for HCGCC 2026 — ${CASHOUT_SIGNUPS - hcgccSignups} more to reach $60 and cash out!`
           : `No sign-ups yet for HCGCC 2026 — share your code to start earning credit!`;
       } else {
         document.getElementById('hcgcc-stats-error').style.display = 'block';
