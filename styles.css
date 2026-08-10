@@ -5,9 +5,15 @@
    waiting to parse this file first. */
 
 :root{
-  /* AMB3197 rebrand preview — Midnight/Meridian/Horizon/Atlas/Summit Gold */
-  --ink:#1c1a17; --parchment:#faf7f0; --crimson:#3f4968; --crimson-deep:#1c2755;
+  /* AMB3197 rebrand preview — DECK-ONLY variant, with the original
+     crimson red restored as the accent/link color. Every other color
+     here is either a named deck swatch (Midnight/Meridian/Horizon/
+     Atlas/Summit Gold) or that same Midnight hue at reduced opacity —
+     no outside grays or tans. */
+  --ink:#1c2755; --parchment:#faf7f0; --crimson:#a31621; --crimson-deep:#7a0f17;
   --gold:#c9a159; --navy:#1c2755; --horizon:#a6aec4; --line:rgba(28,39,85,0.16);
+  --graphite:rgba(28,39,85,0.72); --label:rgba(28,39,85,0.55); --faint:rgba(28,39,85,0.42);
+  --panel-tint:rgba(166,174,196,0.16);
 }
 
 *{box-sizing:border-box;margin:0;padding:0;}
@@ -23,4 +29,4 @@ h1,h2,h3,h4{font-family:'Fraunces',serif;font-weight:600;color:var(--navy);}
 
 .brand span{color:var(--crimson);}
 
-footer{padding:24px;text-align:center;font-size:0.8rem;color:#8a8175;border-top:1px solid var(--line);}
+footer{padding:24px;text-align:center;font-size:0.8rem;color:var(--faint);border-top:1px solid var(--line);}

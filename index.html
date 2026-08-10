@@ -40,7 +40,7 @@
     display:inline-flex; align-items:center; gap:8px; white-space:nowrap; flex-shrink:0;
   }
   .nav a.cta{
-    background:var(--crimson); color:#fff; padding:10px 22px;
+    background:var(--crimson); color:var(--parchment); padding:10px 22px;
     border-radius:2px; font-size:0.85rem; font-weight:600;
     text-decoration:none; letter-spacing:0.03em; text-transform:uppercase;
     transition:background .2s ease;
@@ -74,11 +74,11 @@
   }
   .hero h1 em{font-style:italic; color:var(--crimson);}
   .hero p.lede{
-    max-width:560px; font-size:1.12rem; color:#3a352f; margin-bottom:36px;
+    max-width:560px; font-size:1.12rem; color:var(--graphite); margin-bottom:36px;
   }
   .hero-actions{display:flex; gap:18px; align-items:center; flex-wrap:wrap;}
   .btn-primary{
-    background:var(--ink); color:#fff; padding:15px 34px;
+    background:var(--ink); color:var(--parchment); padding:15px 34px;
     text-decoration:none; font-weight:600; font-size:0.92rem;
     letter-spacing:0.03em; text-transform:uppercase; border-radius:2px;
     border:1px solid var(--ink); transition:all .2s ease;
@@ -91,7 +91,7 @@
   .stat .num{
     font-family:'Fraunces', serif; font-size:2.1rem; font-weight:600; color:var(--navy);
   }
-  .stat .label{font-size:0.8rem; color:#6b6258; text-transform:uppercase; letter-spacing:0.06em;}
+  .stat .label{font-size:0.8rem; color:var(--label); text-transform:uppercase; letter-spacing:0.06em;}
 
   /* ---------- Section shared ---------- */
   section{padding:84px 0;}
@@ -101,18 +101,18 @@
     color:var(--crimson); font-weight:600; margin-bottom:14px; display:block;
   }
   .section-head h2{font-size:clamp(1.8rem,3.2vw,2.5rem); line-height:1.1;}
-  .alt{background:#efe7d6; border-top:1px solid var(--line); border-bottom:1px solid var(--line);}
+  .alt{background:var(--panel-tint); border-top:1px solid var(--line); border-bottom:1px solid var(--line);}
 
   /* ---------- What is the program ---------- */
   .role-grid{
     display:grid; grid-template-columns:1fr 1fr; gap:48px; align-items:start;
   }
-  .role-grid p{color:#3a352f; margin-bottom:18px;}
+  .role-grid p{color:var(--graphite); margin-bottom:18px;}
   .role-card{
-    background:var(--navy); color:#f1ede2; padding:36px 32px; border-radius:2px;
+    background:var(--navy); color:var(--parchment); padding:36px 32px; border-radius:2px;
   }
-  .role-card h3{color:#fff; font-size:1.1rem; margin-bottom:14px;}
-  .role-card p{color:#cfd2dd; font-size:0.95rem;}
+  .role-card h3{color:var(--parchment); font-size:1.1rem; margin-bottom:14px;}
+  .role-card p{color:var(--horizon); font-size:0.95rem;}
 
   /* ---------- Benefits ledger ---------- */
   .ledger{border-top:1px solid var(--line);}
@@ -125,18 +125,18 @@
     font-weight:600;
   }
   .ledger-item h3{font-size:1.2rem; margin-bottom:8px;}
-  .ledger-item p{color:#3a352f; font-size:0.97rem; max-width:600px;}
+  .ledger-item p{color:var(--graphite); font-size:0.97rem; max-width:600px;}
   .ledger-item .sub{
-    margin-top:10px; font-size:0.88rem; color:#6b6258; font-style:italic;
+    margin-top:10px; font-size:0.88rem; color:var(--label); font-style:italic;
   }
 
   /* ---------- Prize table ---------- */
   .prize-box{
-    background:var(--crimson); color:#fff; padding:48px 44px; border-radius:2px;
+    background:var(--crimson); color:var(--parchment); padding:48px 44px; border-radius:2px;
     display:grid; grid-template-columns:1.1fr 1fr; gap:40px; align-items:center;
   }
-  .prize-box h3{color:#fff; font-size:1.4rem; margin-bottom:14px;}
-  .prize-box p{color:#f3d9d6; font-size:0.95rem; margin-bottom:8px;}
+  .prize-box h3{color:var(--parchment); font-size:1.4rem; margin-bottom:14px;}
+  .prize-box p{color:var(--horizon); font-size:0.95rem; margin-bottom:8px;}
   .prize-list{list-style:none;}
   .prize-list li{
     display:flex; justify-content:space-between;
@@ -144,10 +144,10 @@
     font-size:0.95rem;
   }
   .prize-list li:last-child{border-bottom:none;}
-  .prize-list .place{color:#f3d9d6;}
+  .prize-list .place{color:var(--horizon);}
   .prize-list .amt{font-family:'Fraunces', serif; font-weight:600; font-size:1.05rem;}
   .bonus-note{
-    margin-top:28px; font-size:0.85rem; color:#f3d9d6; border-top:1px solid rgba(255,255,255,0.22);
+    margin-top:28px; font-size:0.85rem; color:var(--horizon); border-top:1px solid rgba(255,255,255,0.22);
     padding-top:18px;
   }
 
@@ -162,11 +162,11 @@
     font-family:'Fraunces', serif; color:var(--gold); font-size:1rem; margin-bottom:18px; display:block;
   }
   .why-card h3{font-size:1.05rem; margin-bottom:10px;}
-  .why-card p{font-size:0.92rem; color:#3a352f;}
+  .why-card p{font-size:0.92rem; color:var(--graphite);}
 
   /* ---------- CTA banner ---------- */
   /* ---------- Testimonials ---------- */
-  .testimonials{background:#efe7d6; border-top:1px solid var(--line); border-bottom:1px solid var(--line);}
+  .testimonials{background:var(--panel-tint); border-top:1px solid var(--line); border-bottom:1px solid var(--line);}
   .testimonial-grid{
     column-count:2; column-gap:28px;
   }
@@ -178,7 +178,7 @@
     font-family:'Fraunces', serif; font-size:2.4rem; color:var(--gold); line-height:1;
     display:block; margin-bottom:10px;
   }
-  .t-card p{font-size:0.94rem; color:#3a352f; margin-bottom:18px;}
+  .t-card p{font-size:0.94rem; color:var(--graphite); margin-bottom:18px;}
   .t-card .attribution{
     font-size:0.85rem; font-weight:600; color:var(--navy);
     border-top:1px solid var(--line); padding-top:14px;
@@ -186,12 +186,12 @@
   .t-card .attribution span{color:var(--crimson); font-weight:500;}
 
   .cta-banner{
-    background:var(--navy); color:#fff; text-align:center; padding:90px 28px;
+    background:var(--navy); color:var(--parchment); text-align:center; padding:90px 28px;
   }
-  .cta-banner h2{color:#fff; font-size:clamp(1.9rem,4vw,2.7rem); max-width:680px; margin:0 auto 22px;}
-  .cta-banner p{color:#c7cbda; max-width:520px; margin:0 auto 36px;}
-  .cta-banner .btn-primary{background:var(--crimson); border-color:var(--crimson); color:#fff;}
-  .cta-banner .btn-primary:hover{background:transparent; color:#fff;}
+  .cta-banner h2{color:var(--parchment); font-size:clamp(1.9rem,4vw,2.7rem); max-width:680px; margin:0 auto 22px;}
+  .cta-banner p{color:var(--horizon); max-width:520px; margin:0 auto 36px;}
+  .cta-banner .btn-primary{background:var(--crimson); border-color:var(--crimson); color:var(--parchment);}
+  .cta-banner .btn-primary:hover{background:transparent; color:var(--parchment);}
 
   /* ---------- Footer ---------- */
   footer{padding:56px 28px 36px; border-top:1px solid var(--line);}
@@ -199,14 +199,14 @@
     display:flex; justify-content:space-between; flex-wrap:wrap; gap:32px; margin-bottom:40px;
   }
   .footer-grid .brand{margin-bottom:10px;}
-  .footer-grid p{color:#6b6258; font-size:0.9rem; max-width:340px;}
+  .footer-grid p{color:var(--label); font-size:0.9rem; max-width:340px;}
   .footer-links{display:flex; gap:48px; flex-wrap:wrap;}
-  .footer-links h4{font-size:0.78rem; text-transform:uppercase; letter-spacing:0.08em; color:#6b6258; margin-bottom:14px; font-family:'Inter',sans-serif; font-weight:600;}
+  .footer-links h4{font-size:0.78rem; text-transform:uppercase; letter-spacing:0.08em; color:var(--label); margin-bottom:14px; font-family:'Inter',sans-serif; font-weight:600;}
   .footer-links a{display:block; text-decoration:none; color:var(--ink); font-size:0.92rem; margin-bottom:9px;}
   .footer-links a:hover{color:var(--crimson);}
   .footer-bottom{
     border-top:1px solid var(--line); padding-top:24px; display:flex; justify-content:space-between;
-    flex-wrap:wrap; gap:12px; font-size:0.82rem; color:#8a8175;
+    flex-wrap:wrap; gap:12px; font-size:0.82rem; color:var(--faint);
   }
 
   /* ---------- Scroll animations ---------- */
