@@ -37,13 +37,13 @@ const YEAR_TOTAL_COLS = [
   { year: 2023, col: 21 }, // V — only column for 2023, no subtotal exists
 ];
 
-// HCGCC 2026 tracker (registrations open) — Sheet5 is the raw list of
+// HCGCC 2026 tracker (registrations open) — Sheet2 is the raw list of
 // discount codes entered at checkout, one per registration, no header
 // beyond row 1. An ambassador's live sign-up count is just how many rows
 // match their code; credits are that count times the $3/sign-up rate
 // (mirrors the sheet's own `=COUNTIF(...)` / `=count*3` tracker formulas).
-const HCGCC_SHEET_ID = '1IEjgdP_YcLlzcHrxdMhwsDfTrmvaESlqX4l9oDpnpdE';
-const HCGCC_GID = '1217596572';
+const HCGCC_SHEET_ID = '1zmFp2FpZ05RkFus5f70nMf2v6Hf4z48RDPLNoVao5DQ';
+const HCGCC_GID = '2123041535';
 const HCGCC_CODE_COL = 0;
 const HCGCC_CREDIT_PER_SIGNUP = 3;
 
