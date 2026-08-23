@@ -1,0 +1,34 @@
+name: Close LGIC 2026 claims
+
+on:
+  schedule:
+    - cron: '59 23 23 8 *'
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  close-claims:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Merge prepared closure branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git fetch origin lgic-closure-pending
+          git merge --ff-only origin/lgic-closure-pending
+          git push origin main
+
+      - name: Remove this one-time workflow and its source branch
+        run: |
+          git rm .github/workflows/close-lgic-claims.yml
+          git commit -m "Remove one-time LGIC closure automation"
+          git push origin main
+          git push origin --delete lgic-closure-pending
