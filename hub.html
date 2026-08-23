@@ -151,7 +151,7 @@
 <body>
 
 <div style="background:var(--gold);color:var(--navy);text-align:center;padding:11px 20px;font-size:0.88rem;font-weight:600;">
-  ⏰ Reminder: LGIC credit claims close <strong>23rd August</strong> — <a href="https://form.typeform.com/to/vIfK8UxU" target="_blank" rel="noopener" style="color:var(--navy);text-decoration:underline;">claim yours here</a> before the deadline.
+  ⏰ LGIC 2026 credit claims are now closed.
 </div>
 <header>
   <div class="nav">
@@ -253,7 +253,7 @@
       <div style="background:rgba(201,164,73,0.1);border:1px solid rgba(201,164,73,0.3);border-radius:2px;padding:14px 18px;margin-bottom:24px;">
         <div style="color:var(--gold);font-weight:600;font-size:0.9rem;margin-bottom:8px;">Important information regarding credit claim:</div>
         <ul style="color:#c7cbda;font-size:0.88rem;line-height:1.7;margin:0;padding-left:20px;">
-          <li id="claim-link-item"><a href="https://form.typeform.com/to/vIfK8UxU" target="_blank" rel="noopener" style="color:var(--gold);">Claim your credits here until 23rd August.</a></li>
+          <li id="claim-link-item">Credit claims for LGIC 2026 are now closed.</li>
           <li id="claim-vouchers-item">Credit vouchers will be awarded between 24th August - 3rd September.</li>
           <li id="claim-fillin-item">Please fill in the form very carefully. If you do not, it may delay your claims process.</li>
           <li>Certificates will be distributed to all those eligible by 23rd August.</li>
@@ -908,7 +908,7 @@
       }
 
       if (displayTotal < CLAIM_THRESHOLD) {
-        ['claim-link-item', 'claim-vouchers-item', 'claim-fillin-item'].forEach(id => {
+        ['claim-vouchers-item', 'claim-fillin-item'].forEach(id => {
           const item = document.getElementById(id);
           if (item) item.style.display = 'none';
         });
