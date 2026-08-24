@@ -18,12 +18,12 @@ jobs:
           ref: main
           fetch-depth: 0
 
-      - name: Merge prepared closure branch
+      - name: Apply prepared closure commit
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git fetch origin lgic-closure-pending
-          git merge --ff-only origin/lgic-closure-pending
+          git cherry-pick 3113c8aa4de0a2e7f9b8cc06c1fc7a4986ac52a6
           git push origin main
 
       - name: Remove this one-time workflow and its source branch
