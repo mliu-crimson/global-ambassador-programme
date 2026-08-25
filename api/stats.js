@@ -23,18 +23,22 @@ const LGIC_SARC_ROLLED_COL = 9;
 const LGIC_FINAL_TOTAL_COL = 10;
 
 // Master ambassador sheet: one row per ambassador. Column F is a
-// pre-computed "all time total" but it silently excludes 2023 (verified
-// 2026-08-09: for every ambassador with 2023 activity, F exactly equals
-// 2026+2025+2024, dropping 2023 entirely). So we sum the four yearly
-// subtotal columns ourselves instead of trusting F, to include 2023.
+// pre-computed "all time total" that we can trust directly — verified
+// 2026-08-25 across all 2,603 rows that F exactly equals the sum of the
+// three per-year "20XX Total" columns below, with zero mismatches. The
+// per-year columns themselves shift whenever a competition column gets
+// inserted into the sheet (e.g. SARC26/PFF25/PFF24 were added after this
+// was first written, silently shifting every later column over by one) —
+// re-verify these indices against the sheet's header row if totals ever
+// look off again, rather than assuming they're still correct.
 const ALLTIME_SHEET_ID = '1x7R7-aQtvXSNE7q_0eBLHaQxUCLgUuPBpbTi1Ojaxds';
 const ALLTIME_GID = '1580466567';
 const ALLTIME_CODE_COL = 3;
+const ALLTIME_TOTAL_COL = 5; // F — "All time total"
 const YEAR_TOTAL_COLS = [
-  { year: 2026, col: 10 }, // K
-  { year: 2025, col: 15 }, // P
-  { year: 2024, col: 20 }, // U
-  { year: 2023, col: 21 }, // V — only column for 2023, no subtotal exists
+  { year: 2026, col: 11 }, // L — "2026 Total"
+  { year: 2025, col: 16 }, // Q — "2025 Total"
+  { year: 2024, col: 21 }, // V — "2024 Total"
 ];
 
 // HCGCC 2026 tracker (registrations open) — Sheet2 is the raw list of
@@ -60,7 +64,7 @@ function getAllTime(rows, code) {
     .map(({ year, col }) => ({ year, total: toNumber(match[col]) }))
     .filter(({ total }) => total > 0);
 
-  const total = byYear.reduce((sum, { total: t }) => sum + t, 0);
+  const total = toNumber(match[ALLTIME_TOTAL_COL]);
   return { total, byYear };
 }
 
