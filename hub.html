@@ -150,9 +150,6 @@
 </head>
 <body>
 
-<div style="background:var(--gold);color:var(--navy);text-align:center;padding:11px 20px;font-size:0.88rem;font-weight:600;">
-  ⏰ LGIC 2026 credit claims are now closed.
-</div>
 <header>
   <div class="nav">
     <a class="brand" href="index.html">Global Ambassador <span>Programme</span></a>
@@ -238,55 +235,6 @@
         <div id="hcgcc-stat-message" style="font-size:0.85rem;color:#dbdbdb;font-style:italic;"></div>
       </div>
       <div id="hcgcc-stats-error" style="display:none;color:#dbdbdb;font-size:0.88rem;"></div>
-    </div>
-
-    <!-- Live stats dashboard -->
-    <div style="background:var(--navy);border-radius:2px;padding:36px 36px 32px;margin-bottom:0;" id="stats-box">
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px;">
-        <img src="images/lgic-logo.png" alt="LGIC" style="height:24px;width:auto;">
-        <span style="font-size:0.72rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold);font-weight:600;">Your final results — LGIC 2026</span>
-      </div>
-      <div style="background:rgba(201,164,73,0.1);border:1px solid rgba(201,164,73,0.3);border-radius:2px;padding:14px 18px;margin-bottom:24px;">
-        <div style="color:var(--gold);font-weight:600;font-size:0.9rem;margin-bottom:4px;">🎉 LGIC 2026 registrations are now closed</div>
-        <div style="color:#c7cbda;font-size:0.88rem;">Thank you to every Ambassador who promoted LGIC this round — your outreach helped students around the world discover this competition, and it truly made a difference. We appreciate you!</div>
-      </div>
-      <div style="background:rgba(201,164,73,0.1);border:1px solid rgba(201,164,73,0.3);border-radius:2px;padding:14px 18px;margin-bottom:24px;">
-        <div style="color:var(--gold);font-weight:600;font-size:0.9rem;margin-bottom:8px;">Important information regarding credit claim:</div>
-        <ul style="color:#c7cbda;font-size:0.88rem;line-height:1.7;margin:0;padding-left:20px;">
-          <li id="claim-link-item">Credit claims for LGIC 2026 are now closed.</li>
-          <li id="claim-vouchers-item">Credit vouchers will be awarded between 24th August - 3rd September.</li>
-          <li id="claim-fillin-item">Please fill in the form very carefully. If you do not, it may delay your claims process.</li>
-          <li>Certificates will be distributed to all those eligible by 23rd August.</li>
-          <li>You need at least $100 in total credits to claim this round. If you're below $100, your credits roll over to the end of the next competition.</li>
-          <li>Please only chase us after 3rd September if you haven't heard from us - we will be processing your claims as soon as possible.</li>
-        </ul>
-      </div>
-      <div id="stats-loading" style="color:#c7cbda;font-size:0.92rem;">Loading your stats…</div>
-      <div id="stats-content" style="display:none;">
-        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-bottom:28px;">
-          <div>
-            <div id="stat-signups" style="font-family:'Fraunces',serif;font-size:2.6rem;font-weight:600;color:#fff;line-height:1;">—</div>
-            <div style="font-size:0.78rem;text-transform:uppercase;letter-spacing:0.08em;color:#c7cbda;margin-top:4px;">Sign-ups</div>
-          </div>
-          <div>
-            <div id="stat-credits" style="font-family:'Fraunces',serif;font-size:2.6rem;font-weight:600;color:var(--gold);line-height:1;">—</div>
-            <div style="font-size:0.78rem;text-transform:uppercase;letter-spacing:0.08em;color:#c7cbda;margin-top:4px;">Credits earned</div>
-          </div>
-          <div>
-            <div id="stat-remaining" style="font-family:'Fraunces',serif;font-size:2.6rem;font-weight:600;color:#fff;line-height:1;">—</div>
-            <div style="font-size:0.78rem;text-transform:uppercase;letter-spacing:0.08em;color:#c7cbda;margin-top:4px;">Bonuses</div>
-          </div>
-          <div style="border:1px solid var(--gold);border-radius:4px;padding:10px 14px;background:rgba(201,164,73,0.08);">
-            <div id="stat-total-credits" style="font-family:'Fraunces',serif;font-size:2.6rem;font-weight:600;color:var(--gold);line-height:1;">—</div>
-            <div style="font-size:0.78rem;text-transform:uppercase;letter-spacing:0.08em;color:#c7cbda;margin-top:4px;">Total credits</div>
-            <div id="stat-sarc-badge" style="display:none;margin-top:8px;font-size:0.72rem;font-weight:700;color:var(--navy);background:var(--gold);border-radius:20px;padding:3px 10px;">+$<span id="stat-sarc-amount"></span> rolled over from SARC</div>
-          </div>
-        </div>
-        <div id="stat-eligibility" style="display:none;border-radius:2px;padding:12px 16px;margin-bottom:16px;font-size:0.86rem;font-weight:600;"></div>
-        <div id="stat-certificate" style="display:none;border-radius:2px;padding:12px 16px;margin-bottom:16px;font-size:0.86rem;font-weight:600;background:rgba(201,164,73,0.1);border:1px solid rgba(201,164,73,0.3);color:var(--gold);">🎓 You brought in 3+ sign-ups — you're eligible for an Ambassador Certificate!</div>
-        <div id="stat-message" style="font-size:0.85rem;color:#c7cbda;font-style:italic;"></div>
-      </div>
-      <div id="stats-error" style="display:none;color:#f3a0a0;font-size:0.88rem;"></div>
     </div>
 
   </div>
@@ -867,9 +815,7 @@
       });
       if (!res.ok) throw new Error('fetch failed');
       const data = await res.json();
-      const { signups, credits, rank, topTenBonus, weeklyTopBonus, weeklyImprovedBonus, totalCredits, sarcRolled, finalTotal, hcgccSignups, hcgccCredits } = data;
-      const bonus = topTenBonus + weeklyTopBonus + weeklyImprovedBonus;
-      const displayTotal = finalTotal > 0 ? finalTotal : totalCredits;
+      const { hcgccSignups, hcgccCredits } = data;
 
       document.getElementById('hcgcc-stats-loading').style.display = 'none';
       if (typeof hcgccSignups === 'number') {
@@ -893,71 +839,6 @@
         document.getElementById('hcgcc-stats-error').style.display = 'block';
         document.getElementById('hcgcc-stats-error').textContent = 'Unable to load your HCGCC stats right now — please refresh in a moment.';
       }
-
-      document.getElementById('stats-loading').style.display = 'none';
-      document.getElementById('stats-content').style.display = 'block';
-      document.getElementById('stat-signups').textContent = signups;
-      document.getElementById('stat-credits').textContent = `$${credits}`;
-      document.getElementById('stat-remaining').textContent = bonus > 0 ? `$${bonus}` : '—';
-      document.getElementById('stat-total-credits').textContent = `$${displayTotal}`;
-
-      if (sarcRolled > 0) {
-        document.getElementById('stat-sarc-amount').textContent = sarcRolled;
-        document.getElementById('stat-sarc-badge').style.display = 'inline-block';
-      }
-
-      // Eligibility — the programme only pays out claims of $100+; anyone
-      // below that threshold rolls their balance into the next competition
-      // instead (see the claim-info bullet list above).
-      const CLAIM_THRESHOLD = 100;
-      const eligibilityEl = document.getElementById('stat-eligibility');
-      if (displayTotal >= CLAIM_THRESHOLD) {
-        eligibilityEl.style.display = 'block';
-        eligibilityEl.style.background = 'rgba(111,187,124,0.12)';
-        eligibilityEl.style.border = '1px solid rgba(111,187,124,0.35)';
-        eligibilityEl.style.color = '#a8dab5';
-        eligibilityEl.textContent = `✅ You've reached the $${CLAIM_THRESHOLD} minimum — you're eligible to claim your credits!`;
-      } else if (displayTotal > 0) {
-        eligibilityEl.style.display = 'block';
-        eligibilityEl.style.background = 'rgba(243,160,160,0.08)';
-        eligibilityEl.style.border = '1px solid rgba(243,160,160,0.3)';
-        eligibilityEl.style.color = '#f3a0a0';
-        eligibilityEl.textContent = `Your total credits ($${displayTotal}) are below the $${CLAIM_THRESHOLD} minimum to claim this round — they'll roll over to the end of the next competition.`;
-      }
-
-      if (displayTotal < CLAIM_THRESHOLD) {
-        ['claim-vouchers-item', 'claim-fillin-item'].forEach(id => {
-          const item = document.getElementById(id);
-          if (item) item.style.display = 'none';
-        });
-      }
-
-      // Certificates are awarded to anyone who brought in 3+ sign-ups (see
-      // the Ambassador compensation section further down the page).
-      const CERTIFICATE_THRESHOLD = 3;
-      if (signups >= CERTIFICATE_THRESHOLD) {
-        document.getElementById('stat-certificate').style.display = 'block';
-      }
-
-      // Message — call out each bonus earned individually, since they're
-      // separate achievements (overall rank vs weekly recognition).
-      const highlights = [];
-      if (rank > 0) highlights.push(`placed #${rank} overall (+$${topTenBonus})`);
-      if (weeklyTopBonus > 0) highlights.push(`Weekly Top Ambassador (+$${weeklyTopBonus})`);
-      if (weeklyImprovedBonus > 0) highlights.push(`Weekly Most Improved (+$${weeklyImprovedBonus})`);
-
-      let msg = '';
-      if (highlights.length) {
-        msg = `🏆 Congratulations — you ${highlights.join(', ')}! Total credits for LGIC: $${totalCredits}.`;
-        if (sarcRolled > 0) {
-          msg += ` Plus $${sarcRolled} rolled over from SARC — your total credits are $${displayTotal}.`;
-        }
-      } else if (signups > 0) {
-        msg = `Final results are in! You brought in ${signups} sign-up${signups === 1 ? '' : 's'} for $${credits} in credits. Thank you for your amazing effort!`;
-      } else {
-        msg = 'LGIC 2026 has concluded. Thank you for being part of the programme this round!';
-      }
-      document.getElementById('stat-message').textContent = msg;
 
       const milestone = document.getElementById('alltime-milestone');
       const byYearRow = document.getElementById('alltime-byyear');
@@ -985,10 +866,6 @@
       }
 
     } catch(e) {
-      document.getElementById('stats-loading').style.display = 'none';
-      document.getElementById('stats-error').style.display = 'block';
-      document.getElementById('stats-error').textContent =
-        'Could not load your stats right now. Please try refreshing.';
       document.getElementById('hcgcc-stats-loading').style.display = 'none';
       document.getElementById('hcgcc-stats-error').style.display = 'block';
       document.getElementById('hcgcc-stats-error').textContent =
