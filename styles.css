@@ -11,7 +11,7 @@
      Atlas/Summit Gold) or that same Midnight hue at reduced opacity —
      no outside grays or tans. */
   --ink:#1c2755; --parchment:#faf7f0; --crimson:#a31621; --crimson-deep:#7a0f17;
-  --gold:#c9a159; --navy:#1c2755; --horizon:#a6aec4; --line:rgba(28,39,85,0.16);
+  --gold:#c9a159; --navy:#1c2755; --meridian:#3f4968; --horizon:#a6aec4; --line:rgba(28,39,85,0.16);
   --graphite:rgba(28,39,85,0.72); --label:rgba(28,39,85,0.55); --faint:rgba(28,39,85,0.42);
   --panel-tint:rgba(166,174,196,0.16);
 }
