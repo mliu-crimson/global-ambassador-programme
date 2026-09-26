@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Global Ambassador Programme</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='42' fill='none' stroke='%231c2755' stroke-width='9'/%3E%3Cline x1='9' y1='60' x2='91' y2='60' stroke='%231c2755' stroke-width='9' stroke-linecap='round'/%3E%3C/svg%3E">
 <meta name="description" content="Join the Global Ambassador Programme: promote elite international student competitions to your school and community, and earn cash credit, mentoring, and leadership experience.">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Global Ambassador Programme">
@@ -31,15 +32,16 @@
     border-bottom:1px solid var(--line);
   }
   .nav{
-    display:flex; align-items:center; justify-content:space-between;
+    display:flex; align-items:center; justify-content:space-between; gap:20px;
     padding:18px 28px; max-width:1080px; margin:0 auto;
   }
   .brand{
-    font-family:'Fraunces', serif; font-weight:700; font-size:1.15rem;
-    letter-spacing:0.02em; color:var(--navy);
+    font-family:'Times New Roman',Times,serif; font-weight:600; font-size:0.85rem;
+    letter-spacing:0.06em; text-transform:uppercase; color:var(--navy);
+    display:inline-flex; align-items:center; gap:8px; white-space:nowrap; flex-shrink:0;
   }
   .nav a.cta{
-    background:var(--crimson); color:#fff; padding:10px 22px;
+    background:var(--crimson); color:var(--parchment); padding:10px 22px;
     border-radius:2px; font-size:0.85rem; font-weight:600;
     text-decoration:none; letter-spacing:0.03em; text-transform:uppercase;
     transition:background .2s ease;
@@ -73,11 +75,11 @@
   }
   .hero h1 em{font-style:italic; color:var(--crimson);}
   .hero p.lede{
-    max-width:560px; font-size:1.12rem; color:#3a352f; margin-bottom:36px;
+    max-width:560px; font-size:1.12rem; color:var(--graphite); margin-bottom:36px;
   }
   .hero-actions{display:flex; gap:18px; align-items:center; flex-wrap:wrap;}
   .btn-primary{
-    background:var(--ink); color:#fff; padding:15px 34px;
+    background:var(--ink); color:var(--parchment); padding:15px 34px;
     text-decoration:none; font-weight:600; font-size:0.92rem;
     letter-spacing:0.03em; text-transform:uppercase; border-radius:2px;
     border:1px solid var(--ink); transition:all .2s ease;
@@ -90,7 +92,7 @@
   .stat .num{
     font-family:'Fraunces', serif; font-size:2.1rem; font-weight:600; color:var(--navy);
   }
-  .stat .label{font-size:0.8rem; color:#6b6258; text-transform:uppercase; letter-spacing:0.06em;}
+  .stat .label{font-size:0.8rem; color:var(--label); text-transform:uppercase; letter-spacing:0.06em;}
 
   /* ---------- Section shared ---------- */
   section{padding:84px 0;}
@@ -100,18 +102,18 @@
     color:var(--crimson); font-weight:600; margin-bottom:14px; display:block;
   }
   .section-head h2{font-size:clamp(1.8rem,3.2vw,2.5rem); line-height:1.1;}
-  .alt{background:#efe7d6; border-top:1px solid var(--line); border-bottom:1px solid var(--line);}
+  .alt{background:var(--panel-tint); border-top:1px solid var(--line); border-bottom:1px solid var(--line);}
 
   /* ---------- What is the program ---------- */
   .role-grid{
     display:grid; grid-template-columns:1fr 1fr; gap:48px; align-items:start;
   }
-  .role-grid p{color:#3a352f; margin-bottom:18px;}
+  .role-grid p{color:var(--graphite); margin-bottom:18px;}
   .role-card{
-    background:var(--navy); color:#f1ede2; padding:36px 32px; border-radius:2px;
+    background:var(--navy); color:var(--parchment); padding:36px 32px; border-radius:2px;
   }
-  .role-card h3{color:#fff; font-size:1.1rem; margin-bottom:14px;}
-  .role-card p{color:#cfd2dd; font-size:0.95rem;}
+  .role-card h3{color:var(--parchment); font-size:1.1rem; margin-bottom:14px;}
+  .role-card p{color:var(--horizon); font-size:0.95rem;}
 
   /* ---------- Benefits ledger ---------- */
   .ledger{border-top:1px solid var(--line);}
@@ -124,18 +126,18 @@
     font-weight:600;
   }
   .ledger-item h3{font-size:1.2rem; margin-bottom:8px;}
-  .ledger-item p{color:#3a352f; font-size:0.97rem; max-width:600px;}
+  .ledger-item p{color:var(--graphite); font-size:0.97rem; max-width:600px;}
   .ledger-item .sub{
-    margin-top:10px; font-size:0.88rem; color:#6b6258; font-style:italic;
+    margin-top:10px; font-size:0.88rem; color:var(--label); font-style:italic;
   }
 
   /* ---------- Prize table ---------- */
   .prize-box{
-    background:var(--crimson); color:#fff; padding:48px 44px; border-radius:2px;
+    background:var(--crimson); color:var(--parchment); padding:48px 44px; border-radius:2px;
     display:grid; grid-template-columns:1.1fr 1fr; gap:40px; align-items:center;
   }
-  .prize-box h3{color:#fff; font-size:1.4rem; margin-bottom:14px;}
-  .prize-box p{color:#f3d9d6; font-size:0.95rem; margin-bottom:8px;}
+  .prize-box h3{color:var(--parchment); font-size:1.4rem; margin-bottom:14px;}
+  .prize-box p{color:var(--parchment); font-size:0.95rem; margin-bottom:8px;}
   .prize-list{list-style:none;}
   .prize-list li{
     display:flex; justify-content:space-between;
@@ -143,10 +145,10 @@
     font-size:0.95rem;
   }
   .prize-list li:last-child{border-bottom:none;}
-  .prize-list .place{color:#f3d9d6;}
+  .prize-list .place{color:var(--parchment);}
   .prize-list .amt{font-family:'Fraunces', serif; font-weight:600; font-size:1.05rem;}
   .bonus-note{
-    margin-top:28px; font-size:0.85rem; color:#f3d9d6; border-top:1px solid rgba(255,255,255,0.22);
+    margin-top:28px; font-size:0.85rem; color:var(--parchment); border-top:1px solid rgba(255,255,255,0.22);
     padding-top:18px;
   }
 
@@ -161,11 +163,11 @@
     font-family:'Fraunces', serif; color:var(--gold); font-size:1rem; margin-bottom:18px; display:block;
   }
   .why-card h3{font-size:1.05rem; margin-bottom:10px;}
-  .why-card p{font-size:0.92rem; color:#3a352f;}
+  .why-card p{font-size:0.92rem; color:var(--graphite);}
 
   /* ---------- CTA banner ---------- */
   /* ---------- Testimonials ---------- */
-  .testimonials{background:#efe7d6; border-top:1px solid var(--line); border-bottom:1px solid var(--line);}
+  .testimonials{background:var(--panel-tint); border-top:1px solid var(--line); border-bottom:1px solid var(--line);}
   .testimonial-grid{
     column-count:2; column-gap:28px;
   }
@@ -177,7 +179,7 @@
     font-family:'Fraunces', serif; font-size:2.4rem; color:var(--gold); line-height:1;
     display:block; margin-bottom:10px;
   }
-  .t-card p{font-size:0.94rem; color:#3a352f; margin-bottom:18px;}
+  .t-card p{font-size:0.94rem; color:var(--graphite); margin-bottom:18px;}
   .t-card .attribution{
     font-size:0.85rem; font-weight:600; color:var(--navy);
     border-top:1px solid var(--line); padding-top:14px;
@@ -185,12 +187,12 @@
   .t-card .attribution span{color:var(--crimson); font-weight:500;}
 
   .cta-banner{
-    background:var(--navy); color:#fff; text-align:center; padding:90px 28px;
+    background:var(--navy); color:var(--parchment); text-align:center; padding:90px 28px;
   }
-  .cta-banner h2{color:#fff; font-size:clamp(1.9rem,4vw,2.7rem); max-width:680px; margin:0 auto 22px;}
-  .cta-banner p{color:#c7cbda; max-width:520px; margin:0 auto 36px;}
-  .cta-banner .btn-primary{background:var(--crimson); border-color:var(--crimson); color:#fff;}
-  .cta-banner .btn-primary:hover{background:transparent; color:#fff;}
+  .cta-banner h2{color:var(--parchment); font-size:clamp(1.9rem,4vw,2.7rem); max-width:680px; margin:0 auto 22px;}
+  .cta-banner p{color:var(--horizon); max-width:520px; margin:0 auto 36px;}
+  .cta-banner .btn-primary{background:var(--crimson); border-color:var(--crimson); color:var(--parchment);}
+  .cta-banner .btn-primary:hover{background:transparent; color:var(--parchment);}
 
   /* ---------- Footer ---------- */
   footer{padding:56px 28px 36px; border-top:1px solid var(--line);}
@@ -198,14 +200,14 @@
     display:flex; justify-content:space-between; flex-wrap:wrap; gap:32px; margin-bottom:40px;
   }
   .footer-grid .brand{margin-bottom:10px;}
-  .footer-grid p{color:#6b6258; font-size:0.9rem; max-width:340px;}
+  .footer-grid p{color:var(--label); font-size:0.9rem; max-width:340px;}
   .footer-links{display:flex; gap:48px; flex-wrap:wrap;}
-  .footer-links h4{font-size:0.78rem; text-transform:uppercase; letter-spacing:0.08em; color:#6b6258; margin-bottom:14px; font-family:'Inter',sans-serif; font-weight:600;}
+  .footer-links h4{font-size:0.78rem; text-transform:uppercase; letter-spacing:0.08em; color:var(--label); margin-bottom:14px; font-family:'Inter',sans-serif; font-weight:600;}
   .footer-links a{display:block; text-decoration:none; color:var(--ink); font-size:0.92rem; margin-bottom:9px;}
   .footer-links a:hover{color:var(--crimson);}
   .footer-bottom{
     border-top:1px solid var(--line); padding-top:24px; display:flex; justify-content:space-between;
-    flex-wrap:wrap; gap:12px; font-size:0.82rem; color:#8a8175;
+    flex-wrap:wrap; gap:12px; font-size:0.82rem; color:var(--faint);
   }
 
   /* ---------- Scroll animations ---------- */
@@ -244,7 +246,13 @@
 </header>
 
 <section class="hero">
-  <div class="wrap">
+  <svg width="300" height="300" viewBox="-4 -4 111.32 122.80" xmlns="http://www.w3.org/2000/svg" style="position:absolute;top:48px;right:48px;z-index:0;">
+    <g fill="none" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M44.93,12.01 C18.99,15.89 0.00,38.47 0.63,64.69 M0.63,64.69 C1.27,90.91 21.33,112.56 47.42,115.18 M47.42,115.18 C73.52,117.80 97.48,100.58 103.32,75.00 M87.41,24.80 C79.83,17.97 70.40,13.52 60.30,12.01 M103.32,75.01 L31.77,75.01 M25.58,97.24 L49.41,11.54 M79.66,97.24 L55.83,11.54 M20.12,97.24 L31.04,97.24 M74.20,97.24 L85.12,97.24" stroke="var(--navy)" opacity="0.4"/>
+      <path d="M49.41,11.54 L52.62,-0.00 M52.62,-0.00 L55.83,11.54" stroke="var(--gold)" opacity="1"/>
+    </g>
+  </svg>
+  <div class="wrap" style="position:relative;z-index:1;">
     <span class="eyebrow">Global Ambassador Programme</span>
     <h1>Promote what matters. <em>Get rewarded</em> for building community.</h1>
     <p class="lede">Join a global community of 2,500+ student Ambassadors helping fellow students discover elite international competitions — and earn cash, mentorship, and leadership credit while you do it.</p>
@@ -457,8 +465,15 @@
       </div>
     </div>
     <div class="footer-bottom">
-      <span>© 2026 The Global Ambassador Programme</span>
-
+      <span style="display:inline-flex;align-items:center;gap:12px;">
+        <svg width="40" height="40" viewBox="-4 -4 111.32 122.80" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0;">
+          <g fill="none" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M44.93,12.01 C18.99,15.89 0.00,38.47 0.63,64.69 M0.63,64.69 C1.27,90.91 21.33,112.56 47.42,115.18 M47.42,115.18 C73.52,117.80 97.48,100.58 103.32,75.00 M87.41,24.80 C79.83,17.97 70.40,13.52 60.30,12.01 M103.32,75.01 L31.77,75.01 M25.58,97.24 L49.41,11.54 M79.66,97.24 L55.83,11.54 M20.12,97.24 L31.04,97.24 M74.20,97.24 L85.12,97.24" stroke="var(--navy)"/>
+            <path d="M49.41,11.54 L52.62,-0.00 M52.62,-0.00 L55.83,11.54" stroke="var(--gold)"/>
+          </g>
+        </svg>
+        © 2026 The Global Ambassador Programme
+      </span>
     </div>
   </div>
 </footer>

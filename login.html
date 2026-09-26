@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Ambassador Login | Global Ambassador Programme</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='42' fill='none' stroke='%231c2755' stroke-width='9'/%3E%3Cline x1='9' y1='60' x2='91' y2='60' stroke='%231c2755' stroke-width='9' stroke-linecap='round'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap">
@@ -13,15 +14,15 @@
 
   header{position:sticky;top:0;z-index:50;background:rgba(246,241,231,0.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);}
   .nav{display:flex;align-items:center;justify-content:space-between;padding:18px 28px;max-width:1080px;margin:0 auto;}
-  .brand{font-family:'Fraunces',serif;font-weight:700;font-size:1.15rem;letter-spacing:0.02em;color:var(--navy);text-decoration:none;}
-  .nav a.back{font-size:0.85rem;color:#6b6258;text-decoration:none;}
+  .brand{font-family:'Times New Roman',Times,serif;font-weight:600;font-size:0.9rem;letter-spacing:0.06em;text-transform:uppercase;color:var(--navy);text-decoration:none;display:inline-flex;align-items:center;gap:8px;white-space:nowrap;}
+  .nav a.back{font-size:0.85rem;color:var(--label);text-decoration:none;}
   .nav a.back:hover{color:var(--ink);}
 
   main{flex:1;display:flex;align-items:center;justify-content:center;padding:60px 28px;}
-  .login-card{background:#fff;border:1px solid var(--line);border-radius:2px;padding:52px 48px;width:100%;max-width:440px;box-shadow:0 2px 24px rgba(28,26,23,0.07);}
+  .login-card{background:var(--parchment);border:1px solid var(--line);border-radius:2px;padding:52px 48px;width:100%;max-width:440px;box-shadow:0 2px 24px rgba(28,26,23,0.07);}
   .login-card .eyebrow{font-size:0.72rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--crimson);font-weight:600;margin-bottom:14px;display:block;}
   .login-card h1{font-size:1.8rem;margin-bottom:8px;line-height:1.1;}
-  .login-card p.sub{font-size:0.92rem;color:#6b6258;margin-bottom:36px;line-height:1.6;}
+  .login-card p.sub{font-size:0.92rem;color:var(--label);margin-bottom:36px;line-height:1.6;}
 
   .field{margin-bottom:20px;}
   .field label{display:block;font-size:0.8rem;font-weight:600;text-transform:uppercase;letter-spacing:0.07em;color:var(--ink);margin-bottom:8px;}
@@ -33,15 +34,15 @@
   .msg.info{background:#f0f4ff;border:1px solid rgba(20,33,61,0.2);color:var(--navy);}
   .msg.show{display:block;}
 
-  .btn-login{width:100%;padding:14px;background:var(--crimson);color:#fff;border:none;border-radius:2px;font-family:'Inter',sans-serif;font-size:0.9rem;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;cursor:pointer;transition:background .2s;display:flex;align-items:center;justify-content:center;gap:8px;}
+  .btn-login{width:100%;padding:14px;background:var(--crimson);color:var(--parchment);border:none;border-radius:2px;font-family:'Inter',sans-serif;font-size:0.9rem;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;cursor:pointer;transition:background .2s;display:flex;align-items:center;justify-content:center;gap:8px;}
   .btn-login:hover:not(:disabled){background:var(--crimson-deep);}
   .btn-login:disabled{background:#bbb;cursor:not-allowed;}
 
-  .spinner{width:16px;height:16px;border:2px solid rgba(255,255,255,0.4);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;display:none;}
+  .spinner{width:16px;height:16px;border:2px solid rgba(255,255,255,0.4);border-top-color:var(--parchment);border-radius:50%;animation:spin .7s linear infinite;display:none;}
   .btn-login.loading .spinner{display:block;}
   @keyframes spin{to{transform:rotate(360deg);}}
 
-  .hint{margin-top:24px;font-size:0.83rem;color:#8a8175;text-align:center;border-top:1px solid var(--line);padding-top:20px;}
+  .hint{margin-top:24px;font-size:0.83rem;color:var(--faint);text-align:center;border-top:1px solid var(--line);padding-top:20px;}
   .hint a{color:var(--crimson);text-decoration:none;}
   .hint a:hover{text-decoration:underline;}
 </style>
@@ -56,6 +57,15 @@
 </header>
 
 <main>
+ <div style="display:flex;flex-direction:column;align-items:center;">
+  <div style="text-align:center;margin-bottom:32px;">
+    <svg width="64" height="64" viewBox="-4 -4 111.32 122.80" xmlns="http://www.w3.org/2000/svg">
+      <g fill="none" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M44.93,12.01 C18.99,15.89 0.00,38.47 0.63,64.69 M0.63,64.69 C1.27,90.91 21.33,112.56 47.42,115.18 M47.42,115.18 C73.52,117.80 97.48,100.58 103.32,75.00 M87.41,24.80 C79.83,17.97 70.40,13.52 60.30,12.01 M103.32,75.01 L31.77,75.01 M25.58,97.24 L49.41,11.54 M79.66,97.24 L55.83,11.54 M20.12,97.24 L31.04,97.24 M74.20,97.24 L85.12,97.24" stroke="#1c2755"/>
+        <path d="M49.41,11.54 L52.62,-0.00 M52.62,-0.00 L55.83,11.54" stroke="#c9a159"/>
+      </g>
+    </svg>
+  </div>
   <div class="login-card">
     <span class="eyebrow">Ambassador Portal</span>
     <h1>Welcome back.</h1>
@@ -83,9 +93,18 @@
       Don't have access yet? <a href="https://form.typeform.com/to/Mgpstxtp" target="_blank">Apply to become an Ambassador</a>
     </div>
   </div>
+ </div>
 </main>
 
-<footer>© 2026 The Global Ambassador Programme</footer>
+<footer>
+  <svg width="20" height="20" viewBox="-4 -4 111.32 122.80" xmlns="http://www.w3.org/2000/svg" style="vertical-align:middle;margin-right:8px;margin-bottom:2px;">
+    <g fill="none" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M44.93,12.01 C18.99,15.89 0.00,38.47 0.63,64.69 M0.63,64.69 C1.27,90.91 21.33,112.56 47.42,115.18 M47.42,115.18 C73.52,117.80 97.48,100.58 103.32,75.00 M87.41,24.80 C79.83,17.97 70.40,13.52 60.30,12.01 M103.32,75.01 L31.77,75.01 M25.58,97.24 L49.41,11.54 M79.66,97.24 L55.83,11.54 M20.12,97.24 L31.04,97.24 M74.20,97.24 L85.12,97.24" stroke="var(--faint)"/>
+      <path d="M49.41,11.54 L52.62,-0.00 M52.62,-0.00 L55.83,11.54" stroke="var(--gold)"/>
+    </g>
+  </svg>
+  © 2026 The Global Ambassador Programme
+</footer>
 
 <script>
   function setLoading(on) {
