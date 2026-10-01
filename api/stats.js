@@ -42,14 +42,30 @@ const YEAR_TOTAL_COLS = [
 ];
 
 // HCGCC 2026 tracker (registrations open) — Sheet2 is the raw list of
-// discount codes entered at checkout, one per registration, no header
-// beyond row 1. An ambassador's live sign-up count is just how many rows
-// match their code; credits are that count times the $3/sign-up rate
-// (mirrors the sheet's own `=COUNTIF(...)` / `=count*3` tracker formulas).
+// discount codes entered at checkout, one row per registration, with a
+// "Submitted At" timestamp added in column B (M/D/YYYY H:MM:SS, added
+// 2026-10-01 — rows before that only had the code, no date). Credit rate
+// is tiered: $3/sign-up normally, boosted to $5/sign-up for the final
+// stretch before Regular Round registrations close (2026-09-23 through
+// 2026-10-14, per 2026-09-26 decision). Boundary is by calendar date only.
 const HCGCC_SHEET_ID = '1zmFp2FpZ05RkFus5f70nMf2v6Hf4z48RDPLNoVao5DQ';
 const HCGCC_GID = '2123041535';
 const HCGCC_CODE_COL = 0;
-const HCGCC_CREDIT_PER_SIGNUP = 3;
+const HCGCC_DATE_COL = 1;
+const HCGCC_BASE_CREDIT_PER_SIGNUP = 3;
+const HCGCC_BOOSTED_CREDIT_PER_SIGNUP = 5;
+const HCGCC_BOOST_START = 20260923; // yyyymmdd, inclusive
+
+// Parses "M/D/YYYY H:MM:SS" (or just "M/D/YYYY") into a yyyymmdd integer
+// for simple date-only comparison, sidestepping timezone/Date-parsing
+// quirks entirely. Returns null if the cell isn't in this shape.
+function parseDateOnly(cell) {
+  const datePart = (cell || '').trim().split(' ')[0];
+  const m = datePart.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+  if (!m) return null;
+  const [, month, day, year] = m;
+  return parseInt(year, 10) * 10000 + parseInt(month, 10) * 100 + parseInt(day, 10);
+}
 
 function toNumber(cell) {
   const n = parseFloat(cell);
@@ -127,8 +143,17 @@ module.exports = async (req, res) => {
   let hcgccSignups = null;
   let hcgccCredits = null;
   if (hcgccResult.status === 'fulfilled') {
-    hcgccSignups = hcgccResult.value.slice(1).filter(row => (row[HCGCC_CODE_COL] || '').trim().toUpperCase() === code).length;
-    hcgccCredits = hcgccSignups * HCGCC_CREDIT_PER_SIGNUP;
+    const matches = hcgccResult.value.slice(1).filter(row => (row[HCGCC_CODE_COL] || '').trim().toUpperCase() === code);
+    hcgccSignups = matches.length;
+    hcgccCredits = matches.reduce((sum, row) => {
+      const dateNum = parseDateOnly(row[HCGCC_DATE_COL]);
+      // Undated rows (pre-dates the "Submitted At" column) are treated as
+      // pre-boost — they're all from well before the boost window anyway.
+      const rate = dateNum !== null && dateNum >= HCGCC_BOOST_START
+        ? HCGCC_BOOSTED_CREDIT_PER_SIGNUP
+        : HCGCC_BASE_CREDIT_PER_SIGNUP;
+      return sum + rate;
+    }, 0);
   } else {
     console.error('stats: HCGCC sheet fetch failed', hcgccResult.reason.message);
   }
