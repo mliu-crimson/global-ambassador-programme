@@ -5,6 +5,7 @@ const SHEET_ID = '1UFk5kFXwUearV5-MR5rbcei3chBieT2GNd7wUjw5LfA';
 const GID = '0';
 
 const TOKEN_TTL_MS = 2 * 60 * 60 * 1000; // 2 hours
+const REMEMBER_TOKEN_TTL_MS = 30 * 24 * 60 * 60 * 1000; // 30 days, for "keep me signed in"
 
 // Column order: Ambassador Code, Full Name, First Name, Last Name, Email
 const CODE_COL = 0;
@@ -19,6 +20,7 @@ function normalizeName(s) {
 module.exports = async (req, res) => {
   const email = (req.query.email || '').trim().toLowerCase();
   const name = normalizeName(req.query.name);
+  const remember = req.query.remember === '1';
 
   if (!email || !name) {
     res.setHeader('Cache-Control', 'no-store');
@@ -55,7 +57,7 @@ module.exports = async (req, res) => {
   }
 
   const code = (match[CODE_COL] || '').trim();
-  const token = sign({ code: code.toUpperCase(), exp: Date.now() + TOKEN_TTL_MS });
+  const token = sign({ code: code.toUpperCase(), exp: Date.now() + (remember ? REMEMBER_TOKEN_TTL_MS : TOKEN_TTL_MS) });
 
   // Cache briefly at the edge: repeat logins for the same email+name within
   // this window are served without re-fetching the whole sheet from Google.

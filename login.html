@@ -29,6 +29,9 @@
   .field input{width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:2px;font-family:'Inter',sans-serif;font-size:0.95rem;color:var(--ink);background:var(--parchment);outline:none;transition:border-color .2s;}
   .field input:focus{border-color:var(--navy);}
 
+  .remember{display:flex;align-items:center;gap:10px;margin:-4px 0 22px;font-size:0.88rem;color:var(--graphite);cursor:pointer;user-select:none;}
+  .remember input{width:16px;height:16px;accent-color:var(--navy);cursor:pointer;margin:0;}
+
   .msg{display:none;font-size:0.85rem;padding:12px 14px;border-radius:2px;margin-bottom:20px;line-height:1.5;}
   .msg.error{background:#fdf0f0;border:1px solid rgba(163,22,33,0.25);color:var(--crimson);}
   .msg.info{background:#f0f4ff;border:1px solid rgba(20,33,61,0.2);color:var(--navy);}
@@ -84,6 +87,11 @@
       <input type="text" id="fullName" placeholder="As you registered it" autocomplete="name">
     </div>
 
+    <label class="remember">
+      <input type="checkbox" id="rememberMe">
+      Keep me signed in on this device
+    </label>
+
     <button class="btn-login" id="loginBtn" onclick="handleLogin()">
       <span class="spinner" id="spinner"></span>
       <span id="btnText">Log in</span>
@@ -136,6 +144,29 @@
     document.getElementById('infoMsg').classList.remove('show');
   }
 
+  function clearSavedLogin() {
+    ['amb_name', 'amb_code', 'amb_token'].forEach(k => {
+      sessionStorage.removeItem(k);
+      localStorage.removeItem(k);
+    });
+  }
+
+  // If a still-valid saved login exists, skip straight to the hub.
+  (function resumeSavedLogin() {
+    try {
+      const token = localStorage.getItem('amb_token') || sessionStorage.getItem('amb_token');
+      if (!token || !token.includes('.')) return;
+      const payload = JSON.parse(atob(token.split('.')[0].replace(/-/g, '+').replace(/_/g, '/')));
+      if (payload && typeof payload.exp === 'number' && Date.now() < payload.exp) {
+        window.location.href = 'hub.html';
+      } else {
+        clearSavedLogin();
+      }
+    } catch (e) {
+      clearSavedLogin();
+    }
+  })();
+
   async function handleLogin() {
     const emailInput = document.getElementById('email').value.trim().toLowerCase();
     const nameInput = document.getElementById('fullName').value.trim();
@@ -151,7 +182,8 @@
 
     let res;
     try {
-      res = await fetch(`/api/login?email=${encodeURIComponent(emailInput)}&name=${encodeURIComponent(nameInput)}`);
+      const remember = document.getElementById('rememberMe').checked;
+      res = await fetch(`/api/login?email=${encodeURIComponent(emailInput)}&name=${encodeURIComponent(nameInput)}${remember ? '&remember=1' : ''}`);
     } catch (e) {
       setLoading(false);
       showError('Could not connect to the Ambassador list right now. Please try again, or contact hello@competitions-ambs.com if the problem persists.');
@@ -175,9 +207,13 @@
     }
 
     const data = await res.json();
-    sessionStorage.setItem('amb_name', data.name || 'Ambassador');
-    sessionStorage.setItem('amb_code', data.code || '');
-    sessionStorage.setItem('amb_token', data.token || '');
+    // "Keep me signed in" persists across browser restarts (localStorage,
+    // 30-day token); otherwise the login lasts only for this tab (sessionStorage).
+    const store = document.getElementById('rememberMe').checked ? localStorage : sessionStorage;
+    clearSavedLogin();
+    store.setItem('amb_name', data.name || 'Ambassador');
+    store.setItem('amb_code', data.code || '');
+    store.setItem('amb_token', data.token || '');
     window.location.href = 'hub.html';
   }
 

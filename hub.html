@@ -157,7 +157,7 @@
 <header>
   <div class="nav">
     <a class="brand" href="index.html">Global Ambassador <span>Programme</span></a>
-    <a class="btn-logout" href="index.html">Log out</a>
+    <a class="btn-logout" href="index.html" onclick="signOut()">Log out</a>
   </div>
 </header>
 
@@ -797,9 +797,20 @@
 </footer>
 
 <script>
-  // Personalise with name + code from sessionStorage
-  const AmbassadorName = sessionStorage.getItem('amb_name');
-  const AmbassadorCode = sessionStorage.getItem('amb_code');
+  // Login lives in localStorage ("keep me signed in") or sessionStorage (this tab only).
+  function getAuth(key) {
+    return sessionStorage.getItem(key) || localStorage.getItem(key);
+  }
+  function signOut() {
+    ['amb_name', 'amb_code', 'amb_token'].forEach(k => {
+      sessionStorage.removeItem(k);
+      localStorage.removeItem(k);
+    });
+  }
+
+  // Personalise with name + code from the saved login
+  const AmbassadorName = getAuth('amb_name');
+  const AmbassadorCode = getAuth('amb_code');
 
   if (AmbassadorName) {
     const codeStr = '';
@@ -810,7 +821,7 @@
     }
 
     // Fetch live sign-up stats
-    const AmbassadorToken = sessionStorage.getItem('amb_token');
+    const AmbassadorToken = getAuth('amb_token');
     if (AmbassadorCode) fetchStats(AmbassadorCode, AmbassadorToken);
 
   } else {
@@ -823,6 +834,12 @@
       const res = await fetch(`/api/stats?code=${encodeURIComponent(code)}`, {
         headers: token ? { 'Authorization': `Bearer ${token}` } : {}
       });
+      if (res.status === 401) {
+        // Saved login expired or is no longer valid — send back to sign in.
+        signOut();
+        window.location.href = 'login.html';
+        return;
+      }
       if (!res.ok) throw new Error('fetch failed');
       const data = await res.json();
       const { hcgccSignups, hcgccCredits } = data;
