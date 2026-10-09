@@ -235,7 +235,7 @@
         </div>
         <div style="margin-bottom:20px;">
           <div style="display:flex;justify-content:space-between;font-size:0.78rem;color:#dbdbdb;margin-bottom:6px;">
-            <span id="hcgcc-progress-label">0 / 20 sign-ups</span>
+            <span id="hcgcc-progress-label">$0 / $60 in credit</span>
             <span>Cash out at $60</span>
           </div>
           <div style="background:rgba(219,219,219,0.2);border-radius:20px;height:10px;overflow:hidden;">
@@ -275,7 +275,7 @@
           <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
         </button>
         <div class="acc-body">
-          <p>You earn $3 USD in credit for every registration you bring in. Once you've built up $60 (20 registrations), you can cash it out as a credit voucher — or exchange it for an hour of 1:1 mentoring on university applications, essays, extracurriculars, and interview prep.</p>
+          <p>You earn $3 USD in credit for every registration you bring in. Once you've built up $60 in credit, you can cash it out as a credit voucher — or exchange it for an hour of 1:1 mentoring on university applications, essays, extracurriculars, and interview prep.</p>
           <p>Sign-ups carry over from one competition to the next. There are also weekly bonus credits and round-end prizes for the top ambassadors.</p>
         </div>
       </div>
@@ -392,7 +392,7 @@
 
       <p style="margin-top:20px;"><strong>Ambassador compensation</strong> <span style="font-weight:400;color:var(--label);">(all USD)</span></p>
       <ul style="margin:0 0 12px 20px;font-size:0.93rem;color:var(--graphite);line-height:1.8;">
-        <li>$3 credit per sign-up — boosted to <strong>$5 per sign-up from 23rd September through 14th October</strong> — cash out as a credit voucher once you reach $60+ (20 registrations).</li>
+        <li>$3 credit per sign-up — boosted to <strong>$5 per sign-up from 23rd September through 14th October</strong> — cash out as a credit voucher once you reach $60+ in credit.</li>
         <li>Exchange $60 in credit for 1 hour of Crimson Consulting mentoring (university application prep, essay support, extracurricular &amp; leadership mentoring).</li>
         <li>Weekly bonuses up for grabs: $25 for the most improved, $50 for the most sign-ups that week.</li>
         <li>Top 10 Ambassador Prizes (per recruitment round): 1st — $150, 2nd–3rd — $100, 4th–5th — $50, 6th–10th — $25.</li>
@@ -850,17 +850,20 @@
         document.getElementById('hcgcc-stat-signups').textContent = hcgccSignups;
         document.getElementById('hcgcc-stat-credits').textContent = `$${hcgccCredits}`;
 
-        const CASHOUT_SIGNUPS = 20;
-        const progressPct = Math.min(100, (hcgccSignups / CASHOUT_SIGNUPS) * 100);
+        // Cash-out is $60 in credit regardless of the per-sign-up rate ($3 or $5),
+        // so progress is measured in dollars, not sign-ups.
+        const CASHOUT_CREDITS = 60;
+        const reachedCashout = hcgccCredits >= CASHOUT_CREDITS;
+        const progressPct = Math.min(100, (hcgccCredits / CASHOUT_CREDITS) * 100);
         document.getElementById('hcgcc-progress-bar').style.width = `${progressPct}%`;
-        document.getElementById('hcgcc-progress-label').textContent = hcgccSignups >= CASHOUT_SIGNUPS
-          ? `${hcgccSignups} / ${CASHOUT_SIGNUPS} sign-ups ✅`
-          : `${hcgccSignups} / ${CASHOUT_SIGNUPS} sign-ups`;
+        document.getElementById('hcgcc-progress-label').textContent = reachedCashout
+          ? `$${hcgccCredits} / $${CASHOUT_CREDITS} in credit ✅`
+          : `$${hcgccCredits} / $${CASHOUT_CREDITS} in credit`;
 
-        document.getElementById('hcgcc-stat-message').textContent = hcgccSignups >= CASHOUT_SIGNUPS
-          ? `🎉 You've hit ${CASHOUT_SIGNUPS} sign-ups and $${hcgccCredits} in credit — you're eligible to cash out as a credit voucher!`
+        document.getElementById('hcgcc-stat-message').textContent = reachedCashout
+          ? `🎉 You've reached $${CASHOUT_CREDITS} in credit with ${hcgccSignups} sign-up${hcgccSignups === 1 ? '' : 's'} — you're eligible to cash out as a credit voucher!`
           : hcgccSignups > 0
-          ? `You've brought in ${hcgccSignups} sign-up${hcgccSignups === 1 ? '' : 's'} so far for HCGCC 2026 — ${CASHOUT_SIGNUPS - hcgccSignups} more to reach $60 and cash out!`
+          ? `You've brought in ${hcgccSignups} sign-up${hcgccSignups === 1 ? '' : 's'} so far for HCGCC 2026 — $${CASHOUT_CREDITS - hcgccCredits} more in credit to reach $${CASHOUT_CREDITS} and cash out!`
           : `No sign-ups yet for HCGCC 2026 — share your code to start earning credit!`;
       } else {
         document.getElementById('hcgcc-stats-error').style.display = 'block';
