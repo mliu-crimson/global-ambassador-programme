@@ -1,0 +1,60 @@
+name: HCGCC boost ended banner
+
+on:
+  schedule:
+    # 00:10 UTC on 15 Oct — just after the 23:59 GMT+0 individual-registration deadline
+    - cron: '10 0 15 10 *'
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Test only: show what would change without committing"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+jobs:
+  update-banner:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Swap the boost banner for the "ended" banner
+        id: swap
+        run: |
+          python3 - <<'PY'
+          import os, sys
+          p = 'hub.html'
+          s = open(p, encoding='utf-8').read()
+          old = '🚀 HCGCC credit boost: $5 per sign-up (up from $3) for the final stretch — 23rd September through 14th October.'
+          new = '⏰ HCGCC individual registrations are now closed and the $5 credit boost has ended — thank you for every sign-up!'
+          changed = False
+          if new in s:
+              print('Already applied — nothing to do.')
+          elif old not in s:
+              print('::error::Boost banner text not found in hub.html — it may have been edited. Not changing anything.')
+              sys.exit(1)
+          else:
+              open(p, 'w', encoding='utf-8').write(s.replace(old, new, 1))
+              changed = True
+              print('Banner text swapped.')
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
+              f.write('changed=' + ('true' if changed else 'false') + '\n')
+          PY
+
+      - name: Show the change (dry run)
+        if: ${{ inputs.dry_run }}
+        run: git --no-pager diff --stat && git --no-pager diff -U0 hub.html
+
+      - name: Commit and push
+        if: ${{ steps.swap.outputs.changed == 'true' && !inputs.dry_run }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add hub.html
+          git commit -m "HCGCC deadline passed: replace boost banner with 'ended' banner"
+          git push origin main
