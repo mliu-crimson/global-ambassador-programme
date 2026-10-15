@@ -47,7 +47,8 @@ const YEAR_TOTAL_COLS = [
 // 2026-10-01 — rows before that only had the code, no date). Credit rate
 // is tiered: $3/sign-up normally, boosted to $5/sign-up for the final
 // stretch before Regular Round registrations close (2026-09-23 through
-// 2026-10-14, per 2026-09-26 decision). Boundary is by calendar date only.
+// 2026-10-18 — deadline extended from 10-14 on 2026-10-15; per 2026-09-26
+// decision). Boundary is by calendar date only; no end date is applied.
 const HCGCC_SHEET_ID = '1zmFp2FpZ05RkFus5f70nMf2v6Hf4z48RDPLNoVao5DQ';
 const HCGCC_GID = '2123041535';
 const HCGCC_CODE_COL = 0;
