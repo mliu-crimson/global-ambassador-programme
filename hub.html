@@ -7,7 +7,7 @@
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='42' fill='none' stroke='%231c2755' stroke-width='9'/%3E%3Cline x1='9' y1='60' x2='91' y2='60' stroke='%231c2755' stroke-width='9' stroke-linecap='round'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=Montserrat:wght@500;600;700&display=swap">
 <link rel="stylesheet" href="styles.css">
 <style>
   html{scroll-behavior:smooth;}
@@ -92,6 +92,37 @@
   .comp-block p{font-size:0.93rem;color:var(--graphite);margin-bottom:12px;}
   .comp-block .link-row{display:flex;align-items:baseline;gap:10px;margin-bottom:10px;font-size:0.92rem;color:var(--graphite);}
   .comp-block .link-row strong{color:var(--navy);min-width:130px;flex-shrink:0;}
+
+  /* HCGEC — competition brand (its own colours + Montserrat), per the Programme guide: competitions keep their own colour */
+  .hcgec{padding:0;overflow:hidden;border-top:3px solid #cc143d;}
+  .hcgec-head{background:#740a42;padding:26px 32px;display:flex;align-items:center;gap:20px;flex-wrap:wrap;}
+  .hcgec-logo{background:#fff;border-radius:4px;padding:8px 12px;display:inline-flex;align-items:center;}
+  .hcgec-kicker{font-family:'Montserrat',sans-serif;font-size:0.74rem;letter-spacing:0.14em;text-transform:uppercase;font-weight:700;color:#fff;opacity:0.85;margin-bottom:6px;}
+  .comp-block.hcgec .hcgec-head h3{font-family:'Montserrat',sans-serif;color:#fff;font-size:1.35rem;font-weight:700;margin:0;line-height:1.25;}
+  .hcgec-body{padding:30px 32px 34px;}
+  .hcgec h4{font-family:'Montserrat',sans-serif;color:#cc143d;font-size:0.8rem;letter-spacing:0.12em;text-transform:uppercase;font-weight:700;margin:28px 0 12px;padding-top:22px;border-top:1px solid var(--line);}
+  .hcgec h4.first{margin-top:22px;border-top:none;padding-top:0;}
+  .hcgec-list{margin:0 0 12px 20px;font-size:0.93rem;color:var(--graphite);line-height:1.8;}
+  .hcgec-prices{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:6px;}
+  .hcgec-price{border:1px solid var(--line);border-top:3px solid #cc143d;border-radius:2px;padding:18px 20px;background:#fff;}
+  .hcgec-price .lbl{font-family:'Montserrat',sans-serif;font-size:0.74rem;letter-spacing:0.12em;text-transform:uppercase;font-weight:700;color:#221d1e;margin-bottom:8px;}
+  .hcgec-price .big{font-family:'Montserrat',sans-serif;font-size:1.7rem;font-weight:700;color:#cc143d;line-height:1.1;}
+  .hcgec-price .sub{font-size:0.85rem;color:var(--graphite);margin-top:6px;}
+  .hcgec-dates{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:repeat(4,auto);grid-auto-flow:column;gap:0 28px;list-style:none;margin:0 0 6px;padding:0;font-size:0.93rem;}
+  .hcgec-dates li{display:flex;gap:12px;align-items:baseline;border-bottom:1px solid var(--line);padding:8px 0;color:var(--graphite);}
+  .hcgec-dates li strong{font-family:'Montserrat',sans-serif;color:#221d1e;min-width:118px;flex-shrink:0;font-size:0.86rem;}
+  .hcgec-cta{background:#221d1e;border-radius:2px;padding:20px 24px;color:#fff;margin-top:10px;}
+  .hcgec-cta .cta-line{font-size:0.92rem;line-height:1.7;color:#fff;}
+  .hcgec-cta .cta-line em{color:#e8b4c4;}
+  .hcgec-cta .cta-label{font-family:'Montserrat',sans-serif;font-size:0.74rem;letter-spacing:0.12em;text-transform:uppercase;font-weight:700;color:#fff;opacity:0.7;margin:14px 0 4px;}
+  .hcgec-cta .cta-label:first-child{margin-top:0;}
+  .hcgec-swatches{display:flex;gap:18px;flex-wrap:wrap;align-items:center;margin-bottom:8px;}
+  .hcgec-swatch{display:flex;align-items:center;gap:8px;font-size:0.82rem;color:var(--graphite);}
+  .hcgec-swatch i{display:inline-block;width:22px;height:22px;border-radius:50%;border:1px solid var(--line);}
+  .callout-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+  @media (max-width:700px){.callout-grid{grid-template-columns:1fr;}}
+  .comp-divider{font-size:0.78rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--label);font-weight:700;margin:8px 0 18px;padding-bottom:10px;border-bottom:1px solid var(--line);}
+  @media (max-width:700px){.hcgec-prices,.hcgec-dates{grid-template-columns:1fr;}.hcgec-dates{grid-template-rows:none;grid-auto-flow:row;}.hcgec-head,.hcgec-body{padding-left:22px;padding-right:22px;}}
   .resource-cta{display:inline-flex;align-items:center;gap:8px;margin-top:18px;background:var(--navy);color:var(--parchment);padding:12px 22px;border-radius:2px;font-weight:600;font-size:0.88rem;text-decoration:none;letter-spacing:0.03em;transition:opacity .2s;}
   .resource-cta:hover{opacity:0.85;text-decoration:none;}
 
@@ -328,9 +359,101 @@
 <section id="competition">
   <div class="wrap">
     <div class="section-head">
-      <span class="tag">Competition</span>
-      <h2>What we've been promoting.</h2>
+      <span class="tag">Current Competition</span>
+      <h2>What you're promoting right now.</h2>
     </div>
+
+    <!-- HCGEC 2027 -->
+    <div class="comp-block hcgec" id="hcgec">
+      <div class="hcgec-head">
+        <span class="hcgec-logo"><img src="images/hcgec-logo.png" alt="Harvard Crimson Global Essay Competition (HCGEC)" style="height:46px;width:auto;"></span>
+        <div>
+          <div class="hcgec-kicker">HCGEC is here! 🎉</div>
+          <h3>Harvard Crimson Global Essay Competition 2027</h3>
+        </div>
+      </div>
+      <div class="hcgec-body">
+        <p>After absolutely smashing HCGCC out of the park, we're super excited to hit the ground running with HCGEC. Read this whole section for everything you need!</p>
+        <div class="link-row"><strong>Website:</strong> <a href="https://www.essaycomp.org/" target="_blank" rel="noopener">https://www.essaycomp.org/</a> — bookmark it; you'll use it a lot!</div>
+
+        <h4 class="first">The competition in a nutshell</h4>
+        <p><strong>Who is it for?</strong> Students aged 10–18, anywhere in the world. It's 100% online — there are no barriers to entry!</p>
+        <p><strong>What is the competition?</strong> Pick one category to write an essay for: <strong>Creative</strong>, <strong>Argumentative</strong>, or <strong>Journalistic</strong>. There are 3 questions to choose from in each category.</p>
+        <ul class="hcgec-list">
+          <li><strong>Regional round:</strong> 500-word essay. The top 30 essays per region advance to the global final (150 in total). Regions: North America, LATAM, APAC (East Asia, Southeast Asia, Oceania), Middle East, Africa &amp; Russia, Europe &amp; Central Asia.</li>
+          <li><strong>Global round:</strong> 1,000–1,500 word essay. The top 9 essays (3 per category) are crowned global winners.</li>
+        </ul>
+
+        <h4>Prizes</h4>
+        <ul class="hcgec-list">
+          <li>Up to <strong>$8,000 USD</strong> in cash prizes and Crimson Education mentorship credits.</li>
+          <li>Top 9 winners: a free spot on The Harvard Crimson Summer Journalism Course, and their essay featured on the HCGEC website.</li>
+        </ul>
+
+        <h4>Price</h4>
+        <div class="hcgec-prices">
+          <div class="hcgec-price"><div class="lbl">Early Bird</div><div class="big">$10 USD</div><div class="sub">with your Ambassador code (otherwise $15 USD)</div></div>
+          <div class="hcgec-price"><div class="lbl">Regular</div><div class="big">$15 USD</div><div class="sub">with your Ambassador code (otherwise $20 USD)</div></div>
+        </div>
+
+        <h4>Key dates <span style="font-weight:500;letter-spacing:0;text-transform:none;color:var(--label);">(all 23:59 GMT+0)</span></h4>
+        <ul class="hcgec-dates">
+          <li><strong>15 Dec 2026</strong> Early Bird closes</li>
+          <li><strong>30 Jan 2027</strong> Prompts released</li>
+          <li><strong>10 Feb 2027</strong> Registration closes</li>
+          <li><strong>23 Feb 2027</strong> Regional essays due</li>
+          <li><strong>10 Mar 2027</strong> Global Finalists announced</li>
+          <li><strong>19 Mar 2027</strong> Global essays due</li>
+          <li><strong>31 Mar 2027</strong> Winners announced</li>
+        </ul>
+
+        <h4>Your toolkit</h4>
+        <ul class="hcgec-list">
+          <li><strong>Ambassador Hub</strong> (you're here!) — find your code at the top of the page and track your sign-ups and credits.</li>
+          <li><a href="https://docs.google.com/document/d/10qHr4IZok81cInjOgyhUIh97R7g9_be-ndeZac5DOcc/edit?tab=t.vtlnvzhpxgdf" target="_blank" rel="noopener"><strong>Marketing pack</strong></a> — social media posts, email templates and posters. Make a copy and personalise everything with your unique code.</li>
+          <li><strong>Questions?</strong> Check the <a href="https://www.essaycomp.org/faq" target="_blank" rel="noopener">HCGEC FAQs</a>.</li>
+        </ul>
+
+        <h4>What you win</h4>
+        <ul class="hcgec-list">
+          <li>$3 USD credit per sign-up.</li>
+          <li>Weekly bonuses: $50 USD credit for the most sign-ups, $25 USD credit for the most improved.</li>
+          <li>Top 10 Ambassadors: 1st $150 USD credit, 2nd–3rd $100 USD credit, 4th–5th $50 USD credit, 6th–10th $25 USD credit.</li>
+          <li>Credits are redeemed as online gift vouchers / e-vouchers and are not redeemable for cash or bank transfers.</li>
+        </ul>
+
+        <h4>Please don't forget</h4>
+        <ul class="hcgec-list">
+          <li>Your code must be typed correctly — it's your responsibility to make sure your sign-ups enter it correctly (e.g. <strong>AMBXXXX</strong>), or we can't count the sign-up. Remind everyone!</li>
+          <li>Don't register again as an Ambassador. You have one code for all competitions!</li>
+        </ul>
+
+        <h4>Social media CTAs</h4>
+        <div class="hcgec-cta">
+          <div class="cta-label">Stories</div>
+          <div class="cta-line">“Sign up now!” · “Learn more!” · “Register now”</div>
+          <div class="cta-line"><em>Always add the registration link as a button and mention your code.</em></div>
+          <div class="cta-label">Reels, statics &amp; carousels</div>
+          <div class="cta-line">“Register now with link in bio”</div>
+          <div class="cta-line">“Use code AMBXXXX. Register here: https://www.essaycomp.org”</div>
+        </div>
+
+        <h4>HCGEC brand</h4>
+        <div class="hcgec-swatches">
+          <span class="hcgec-swatch"><i style="background:#cc143d;"></i>#cc143d</span>
+          <span class="hcgec-swatch"><i style="background:#221d1e;"></i>#221d1e</span>
+          <span class="hcgec-swatch"><i style="background:#740a42;"></i>#740a42</span>
+          <span class="hcgec-swatch"><i style="background:#ffffff;"></i>#ffffff</span>
+        </div>
+        <p style="margin-bottom:0;"><strong>Font:</strong> Montserrat</p>
+
+        <div style="margin-top:28px;padding:16px 20px;border-left:3px solid #cc143d;background:#fff;border-radius:2px;font-size:0.93rem;color:var(--graphite);">
+          If you got this far, please tag Melanie in Global Chit Chat with your favourite fruit emoji 🫐
+        </div>
+      </div>
+    </div>
+
+    <div class="comp-divider">Previous round · HCGCC 2026 — registrations closed; the competition itself runs through December</div>
     <div class="comp-block">
       <p style="display:flex;align-items:center;gap:14px;"><img src="images/hcgcc-logo.png" alt="Harvard Crimson Global Case Competition (HCGCC)" style="height:44px;width:auto;object-fit:contain;flex-shrink:0;"><span><strong>Harvard Crimson Global Case Competition 2026 (HCGCC)</strong> — powered by Crimson Education, in partnership with <a href="https://www.thecrimson.com/" target="_blank" rel="noopener">The Harvard Crimson</a>.</span></p>
       <p><strong>What is the HCGCC?</strong></p>
@@ -547,7 +670,7 @@
     </div>
 
     <!-- Book rec + Testimonials callouts -->
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+    <div class="callout-grid">
       <div style="background:var(--parchment);border:1px solid var(--line);border-radius:2px;padding:28px 26px;">
         <div style="font-size:1.4rem;margin-bottom:12px;">📚</div>
         <h3 style="font-size:1rem;margin-bottom:8px;">Submit a book recommendation</h3>
