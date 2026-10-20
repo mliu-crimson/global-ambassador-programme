@@ -49,6 +49,23 @@ const HCGCC_FINAL = {
 const HCGCC_WEEKLY_TOP_PER_WIN = 50;
 const HCGCC_IMPROVED_PER_WIN = 25;
 
+// Exact Top 10 place for a prize winner. Ambassadors tied on sign-ups share a place
+// and the next place follows on (1st, 2nd, 3rd, 4th, 4th, 5th, ...). Prize tiers:
+// 1st $150, 2nd-3rd $100, 4th-5th $50, 6th-10th $25. Checked against all 12 winners
+// in the HCGCC results; returns null (front end falls back to the prize tier) if the
+// sheet's prize doesn't fit this rule.
+function hcgccTop10Place(rows, signups, prize) {
+  if (!(prize > 0)) return null;
+  const counts = rows
+    .filter(r => (r[HCGCC_FINAL.code] || '').trim())
+    .map(r => toNumber(r[HCGCC_FINAL.signups]));
+  const distinct = [...new Set(counts)].sort((a, b) => b - a);
+  const place = distinct.indexOf(signups) + 1;
+  const tied = counts.filter(c => c === signups).length > 1;
+  const expectedPrize = place === 1 ? 150 : place <= 3 ? 100 : place <= 5 ? 50 : place <= 10 ? 25 : 0;
+  return expectedPrize === prize ? { place, tied } : null;
+}
+
 // "$1,101.00" -> 1101; blank/garbage -> 0
 function toMoney(cell) {
   const n = parseFloat(String(cell || '').replace(/[$,\s]/g, ''));
@@ -188,6 +205,7 @@ module.exports = async (req, res) => {
         improvedCredit,
         improvedWins: Math.round(improvedCredit / HCGCC_IMPROVED_PER_WIN),
         top10Prize: toMoney(row[HCGCC_FINAL.top10]),
+        top10Place: hcgccTop10Place(hcgccResult.value.slice(1), toNumber(row[HCGCC_FINAL.signups]), toMoney(row[HCGCC_FINAL.top10])),
         hcgccTotal: toMoney(row[HCGCC_FINAL.hcgccTotal]),
         rollover: toMoney(row[HCGCC_FINAL.rollover]),
         total: toMoney(row[HCGCC_FINAL.total]),
