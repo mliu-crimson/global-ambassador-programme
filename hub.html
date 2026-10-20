@@ -121,6 +121,21 @@
   .hcgec-swatches{display:flex;gap:18px;flex-wrap:wrap;align-items:center;margin-bottom:8px;}
   .hcgec-swatch{display:flex;align-items:center;gap:8px;font-size:0.82rem;color:var(--graphite);}
   .hcgec-swatch i{display:inline-block;width:22px;height:22px;border-radius:50%;border:1px solid var(--line);}
+  /* HCGCC final results box (competition colours: wine + coral) */
+  .hcgcc-thanks{background:rgba(255,255,255,0.08);border:1px solid rgba(219,219,219,0.28);border-radius:2px;padding:14px 18px;margin-bottom:24px;}
+  .hcgcc-thanks .t1{color:#fff;font-weight:600;font-size:0.92rem;margin-bottom:4px;}
+  .hcgcc-thanks .t2{color:#dbdbdb;font-size:0.88rem;line-height:1.6;}
+  .hcgcc-tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:22px 20px;margin-bottom:26px;}
+  .hcgcc-tile .num{font-family:'Fraunces',serif;font-size:2.4rem;font-weight:600;color:#dbdbdb;line-height:1;}
+  .hcgcc-tile .lbl{font-size:0.76rem;text-transform:uppercase;letter-spacing:0.08em;color:#dbdbdb;margin-top:6px;}
+  .hcgcc-tile .sub{font-size:0.82rem;color:#e8c3d4;margin-top:3px;}
+  .hcgcc-total{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;border:1px solid rgba(219,219,219,0.5);border-radius:4px;padding:16px 22px;background:rgba(255,255,255,0.07);margin-bottom:18px;}
+  .hcgcc-total .lbl{font-size:0.8rem;text-transform:uppercase;letter-spacing:0.1em;color:#fff;font-weight:600;}
+  .hcgcc-total .sub{font-size:0.82rem;color:#e8c3d4;margin-top:3px;}
+  .hcgcc-total .big{font-family:'Fraunces',serif;font-size:2.8rem;font-weight:700;color:#fff;line-height:1;}
+  .hcgcc-status{border-radius:2px;padding:14px 18px;font-size:0.9rem;line-height:1.6;color:#dbdbdb;background:rgba(255,255,255,0.08);border:1px solid rgba(219,219,219,0.28);}
+  .hcgcc-status.claim{background:rgba(111,187,124,0.14);border-color:rgba(111,187,124,0.4);color:#bfe6c9;}
+  .hcgcc-status .claim-btn{display:inline-block;margin-top:10px;background:#fff;color:#751443;font-weight:700;font-size:0.82rem;letter-spacing:0.04em;text-transform:uppercase;text-decoration:none;padding:10px 20px;border-radius:2px;}
   .callout-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
   @media (max-width:700px){.callout-grid{grid-template-columns:1fr;}}
   .comp-divider{font-size:0.78rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--label);font-weight:700;margin:8px 0 18px;padding-bottom:10px;border-bottom:1px solid var(--line);}
@@ -248,40 +263,29 @@
       <div id="alltime-byyear" style="margin-top:20px;padding-top:18px;border-top:1px solid rgba(255,255,255,0.25);display:flex;justify-content:center;gap:32px;flex-wrap:wrap;"></div>
     </div>
 
-    <!-- Live HCGCC tracker -->
-    <div style="background:#751443;border-top:3px solid #ed4b53;border-radius:2px;padding:36px 36px 32px;margin-bottom:28px;" id="hcgcc-stats-box">
+    <!-- HCGCC final results -->
+    <div style="background:#751443;border-top:3px solid #ed4b53;border-radius:2px;padding:36px 36px 32px;margin-bottom:28px;" id="hcgcc-final-box">
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px;">
         <span style="background:#dbdbdb;border-radius:4px;padding:5px 8px;display:inline-flex;align-items:center;"><img src="images/hcgcc-logo.png" alt="HCGCC" style="height:20px;width:auto;"></span>
         <span style="font-size:0.72rem;letter-spacing:0.14em;text-transform:uppercase;color:#dbdbdb;font-weight:600;">Your final results — HCGCC 2026</span>
       </div>
-      <div style="background:rgba(255,255,255,0.08);border:1px solid rgba(219,219,219,0.28);border-radius:2px;padding:14px 18px;margin-bottom:22px;">
-        <div style="color:#fff;font-weight:600;font-size:0.9rem;margin-bottom:4px;">🎉 HCGCC individual registrations are now closed</div>
-        <div style="color:#dbdbdb;font-size:0.88rem;">Thank you to every Ambassador who promoted HCGCC this round — your outreach helped students around the world discover this competition, and it truly made a difference. We appreciate you!</div>
+      <div class="hcgcc-thanks">
+        <div class="t1">🎉 That's a wrap on HCGCC 2026!</div>
+        <div class="t2">Thank you so much to every Ambassador for the time and energy you put in. You helped students around the world discover this competition, and it truly made a difference. We appreciate you!</div>
       </div>
-      <div id="hcgcc-stats-loading" style="color:#dbdbdb;font-size:0.92rem;">Loading your stats…</div>
-      <div id="hcgcc-stats-content" style="display:none;">
-        <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:20px;margin-bottom:20px;">
+      <div id="hcgcc-final-loading" style="color:#dbdbdb;font-size:0.92rem;">Loading your results…</div>
+      <div id="hcgcc-final-content" style="display:none;">
+        <div class="hcgcc-tiles" id="hcgcc-final-tiles"></div>
+        <div class="hcgcc-total" id="hcgcc-final-totalrow">
           <div>
-            <div id="hcgcc-stat-signups" style="font-family:'Fraunces',serif;font-size:2.6rem;font-weight:600;color:#dbdbdb;line-height:1;">—</div>
-            <div style="font-size:0.78rem;text-transform:uppercase;letter-spacing:0.08em;color:#dbdbdb;margin-top:4px;">Sign-ups</div>
+            <div class="lbl">Your total credit</div>
+            <div class="sub" id="hcgcc-final-total-sub"></div>
           </div>
-          <div>
-            <div id="hcgcc-stat-credits" style="font-family:'Fraunces',serif;font-size:2.6rem;font-weight:600;color:#dbdbdb;line-height:1;">—</div>
-            <div style="font-size:0.78rem;text-transform:uppercase;letter-spacing:0.08em;color:#dbdbdb;margin-top:4px;">Credits earned</div>
-          </div>
+          <div class="big" id="hcgcc-final-total">—</div>
         </div>
-        <div style="margin-bottom:20px;">
-          <div style="display:flex;justify-content:space-between;font-size:0.78rem;color:#dbdbdb;margin-bottom:6px;">
-            <span id="hcgcc-progress-label">$0 / $60 in credit</span>
-            <span>Redeem at $60</span>
-          </div>
-          <div style="background:rgba(219,219,219,0.2);border-radius:20px;height:10px;overflow:hidden;">
-            <div id="hcgcc-progress-bar" style="background:#ed4b53;height:100%;width:0%;border-radius:20px;transition:width .4s ease;"></div>
-          </div>
-        </div>
-        <div id="hcgcc-stat-message" style="font-size:0.85rem;color:#dbdbdb;font-style:italic;"></div>
+        <div class="hcgcc-status" id="hcgcc-final-status"></div>
       </div>
-      <div id="hcgcc-stats-error" style="display:none;color:#dbdbdb;font-size:0.88rem;"></div>
+      <div id="hcgcc-final-error" style="display:none;color:#dbdbdb;font-size:0.88rem;"></div>
     </div>
 
   </div>
@@ -961,6 +965,74 @@
     window.location.href = 'login.html';
   }
 
+  // HCGCC credit claim form (shown to ambassadors with $60+ in credit).
+  const CLAIM_FORM_URL = 'https://form.typeform.com/to/dXB9LEBu';
+  const CLAIM_MINIMUM = 60;
+
+  function money(n) {
+    return '$' + Number(n).toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
+  }
+
+  function renderHcgccFinal(f) {
+    const content = document.getElementById('hcgcc-final-content');
+    const tilesEl = document.getElementById('hcgcc-final-tiles');
+    const totalRow = document.getElementById('hcgcc-final-totalrow');
+    const statusEl = document.getElementById('hcgcc-final-status');
+    content.style.display = 'block';
+    statusEl.className = 'hcgcc-status';
+    statusEl.textContent = '';
+
+    const total = f ? f.total : 0;
+    const hasResults = !!f && (f.signups > 0 || total > 0);
+
+    if (!hasResults) {
+      tilesEl.style.display = 'none';
+      totalRow.style.display = 'none';
+      statusEl.textContent = 'Thank you for being part of HCGCC 2026 this round — your code carries over to the next competition!';
+      return;
+    }
+
+    const tile = (num, label, sub) =>
+      `<div class="hcgcc-tile"><div class="num">${num}</div><div class="lbl">${label}</div>${sub ? `<div class="sub">${sub}</div>` : ''}</div>`;
+    const tiles = [];
+    if (f.signups > 0) {
+      tiles.push(tile(f.signups.toLocaleString('en-US'), 'HCGCC sign-ups', ''));
+      tiles.push(tile(money(f.signupCredit), 'HCGCC credit (USD)', 'from sign-ups'));
+    }
+    if (f.weeklyTopWins > 0) tiles.push(tile(`${f.weeklyTopWins}×`, 'Weekly wins: most sign-ups', `${money(f.weeklyTopCredit)} credit`));
+    if (f.improvedWins > 0) tiles.push(tile(`${f.improvedWins}×`, 'Weekly wins: most improved', `${money(f.improvedCredit)} credit`));
+    if (f.top10Prize > 0) tiles.push(tile(money(f.top10Prize), 'Top 10 Ambassador prize', 'credit'));
+    if (f.rollover > 0) tiles.push(tile(money(f.rollover), 'Previous competitions', 'rolled over'));
+    tilesEl.innerHTML = tiles.join('');
+    tilesEl.style.display = tiles.length ? 'grid' : 'none';
+
+    document.getElementById('hcgcc-final-total').textContent = money(total);
+    document.getElementById('hcgcc-final-total-sub').textContent =
+      f.rollover > 0 ? `HCGCC 2026 ${money(f.hcgccTotal)} + ${money(f.rollover)} from previous competitions` : '';
+    totalRow.style.display = 'flex';
+
+    if (total >= CLAIM_MINIMUM) {
+      statusEl.classList.add('claim');
+      statusEl.appendChild(document.createTextNode(`✅ You have ${money(total)} in credit — you're eligible to claim!`));
+      if (CLAIM_FORM_URL) {
+        const a = document.createElement('a');
+        a.className = 'claim-btn';
+        a.href = CLAIM_FORM_URL;
+        a.target = '_blank';
+        a.rel = 'noopener';
+        a.textContent = 'Claim your credit →';
+        statusEl.appendChild(document.createElement('br'));
+        statusEl.appendChild(a);
+      } else {
+        statusEl.appendChild(document.createElement('br'));
+        statusEl.appendChild(document.createTextNode('Claim form coming shortly.'));
+      }
+    } else {
+      statusEl.textContent =
+        `Your total credit (${money(total)}) is under the $${CLAIM_MINIMUM} needed to claim, so it rolls over to the next competition. Thank you for your amazing effort!`;
+    }
+  }
+
   async function fetchStats(code, token) {
     try {
       const res = await fetch(`/api/stats?code=${encodeURIComponent(code)}`, {
@@ -974,32 +1046,13 @@
       }
       if (!res.ok) throw new Error('fetch failed');
       const data = await res.json();
-      const { hcgccSignups, hcgccCredits } = data;
-
-      document.getElementById('hcgcc-stats-loading').style.display = 'none';
-      if (typeof hcgccSignups === 'number') {
-        document.getElementById('hcgcc-stats-content').style.display = 'block';
-        document.getElementById('hcgcc-stat-signups').textContent = hcgccSignups;
-        document.getElementById('hcgcc-stat-credits').textContent = `$${hcgccCredits}`;
-
-        // Redeeming starts at $60 in credit regardless of the per-sign-up rate ($3 or $5),
-        // so progress is measured in dollars, not sign-ups.
-        const REDEEM_CREDITS = 60;
-        const reachedRedeem = hcgccCredits >= REDEEM_CREDITS;
-        const progressPct = Math.min(100, (hcgccCredits / REDEEM_CREDITS) * 100);
-        document.getElementById('hcgcc-progress-bar').style.width = `${progressPct}%`;
-        document.getElementById('hcgcc-progress-label').textContent = reachedRedeem
-          ? `$${hcgccCredits} / $${REDEEM_CREDITS} in credit ✅`
-          : `$${hcgccCredits} / $${REDEEM_CREDITS} in credit`;
-
-        document.getElementById('hcgcc-stat-message').textContent = reachedRedeem
-          ? `🎉 You've reached $${REDEEM_CREDITS} in credit with ${hcgccSignups} sign-up${hcgccSignups === 1 ? '' : 's'} — you're eligible to redeem a gift voucher or e-gift card!`
-          : hcgccSignups > 0
-          ? `Final results are in! You brought in ${hcgccSignups} sign-up${hcgccSignups === 1 ? '' : 's'} for HCGCC 2026 and earned $${hcgccCredits} in credit. Thank you for your amazing effort!`
-          : `HCGCC 2026 individual registrations have closed. Thank you for being part of the programme this round!`;
+      document.getElementById('hcgcc-final-loading').style.display = 'none';
+      if ('hcgccFinal' in data) {
+        renderHcgccFinal(data.hcgccFinal);
       } else {
-        document.getElementById('hcgcc-stats-error').style.display = 'block';
-        document.getElementById('hcgcc-stats-error').textContent = 'Unable to load your HCGCC stats right now — please refresh in a moment.';
+        const err = document.getElementById('hcgcc-final-error');
+        err.style.display = 'block';
+        err.textContent = 'Unable to load your HCGCC results right now — please refresh in a moment.';
       }
 
       const milestone = document.getElementById('alltime-milestone');
@@ -1028,10 +1081,10 @@
       }
 
     } catch(e) {
-      document.getElementById('hcgcc-stats-loading').style.display = 'none';
-      document.getElementById('hcgcc-stats-error').style.display = 'block';
-      document.getElementById('hcgcc-stats-error').textContent =
-        'Could not load your stats right now. Please try refreshing.';
+      document.getElementById('hcgcc-final-loading').style.display = 'none';
+      const err = document.getElementById('hcgcc-final-error');
+      err.style.display = 'block';
+      err.textContent = 'Could not load your results right now. Please try refreshing.';
     }
   }
 

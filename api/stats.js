@@ -22,50 +22,37 @@ const LGIC_TOTAL_CREDITS_COL = 8;
 const LGIC_SARC_ROLLED_COL = 9;
 const LGIC_FINAL_TOTAL_COL = 10;
 
-// Master ambassador sheet: one row per ambassador. Column F is a
-// pre-computed "all time total" that we can trust directly — verified
-// 2026-08-25 across all 2,603 rows that F exactly equals the sum of the
-// three per-year "20XX Total" columns below, with zero mismatches. The
-// per-year columns themselves shift whenever a competition column gets
-// inserted into the sheet (e.g. SARC26/PFF25/PFF24 were added after this
-// was first written, silently shifting every later column over by one) —
-// re-verify these indices against the sheet's header row if totals ever
-// look off again, rather than assuming they're still correct.
+// Master ambassador ("Dashboard") sheet: one row per ambassador. The "All time
+// total" column is pre-computed by the sheet itself and trusted directly. Columns
+// are located by their HEADING, not a fixed position, because this sheet keeps
+// gaining columns (SARC26/PFF25 and later "2027 Total" were each inserted
+// mid-sheet and silently shifted every later column, which twice broke the
+// by-year numbers when positions were hard-coded). If a heading below is ever
+// renamed or removed, all-time is hidden rather than showing wrong numbers.
+// Per-season "YYYY Total" columns are picked up automatically. Note the sheet
+// files the current HCGCC (run Jul–Oct 2026) under "2027 Total".
 const ALLTIME_SHEET_ID = '1x7R7-aQtvXSNE7q_0eBLHaQxUCLgUuPBpbTi1Ojaxds';
 const ALLTIME_GID = '1580466567';
-const ALLTIME_CODE_COL = 3;
-const ALLTIME_TOTAL_COL = 5; // F — "All time total"
-const YEAR_TOTAL_COLS = [
-  { year: 2026, col: 11 }, // L — "2026 Total"
-  { year: 2025, col: 16 }, // Q — "2025 Total"
-  { year: 2024, col: 21 }, // V — "2024 Total"
-];
+const ALLTIME_HEADINGS = { code: 'Ambassador Code', total: 'All time total', hcgcc: 'HCGCC26' };
 
-// HCGCC 2026 tracker (registrations open) — Sheet2 is the raw list of
-// discount codes entered at checkout, one row per registration, with a
-// "Submitted At" timestamp added in column B (M/D/YYYY H:MM:SS, added
-// 2026-10-01 — rows before that only had the code, no date). Credit rate
-// is tiered: $3/sign-up normally, boosted to $5/sign-up for the final
-// stretch before Regular Round registrations close (2026-09-23 through
-// 2026-10-18 — deadline extended from 10-14 on 2026-10-15; per 2026-09-26
-// decision). Boundary is by calendar date only; no end date is applied.
-const HCGCC_SHEET_ID = '1zmFp2FpZ05RkFus5f70nMf2v6Hf4z48RDPLNoVao5DQ';
-const HCGCC_GID = '2123041535';
-const HCGCC_CODE_COL = 0;
-const HCGCC_DATE_COL = 1;
-const HCGCC_BASE_CREDIT_PER_SIGNUP = 3;
-const HCGCC_BOOSTED_CREDIT_PER_SIGNUP = 5;
-const HCGCC_BOOST_START = 20260923; // yyyymmdd, inclusive
+// HCGCC 2026 final results (competition wrapped up 2026-10-20) — one row per
+// ambassador. Columns: A code, B name, C country, D HCGCC26 sign-ups, E credit
+// from sign-ups, F weekly "most sign-ups" credit ($50 per win), G weekly "most
+// improved" credit ($25 per win), H Top 10 prize, I HCGCC total, J rollover from
+// previous competitions, K new total credit. Money cells are text like "$576.00".
+// (Replaces the live raw-registrations tracker and its $3/$5 date-tiered maths.)
+const HCGCC_FINAL_SHEET_ID = '1fuKIUyJ2x6--5HoUOeXwgerSNu1e56cWn7d0HR5UBTE';
+const HCGCC_FINAL_GID = '458172507';
+const HCGCC_FINAL = {
+  code: 0, signups: 3, signupCredit: 4, weeklyTop: 5, improved: 6, top10: 7, hcgccTotal: 8, rollover: 9, total: 10,
+};
+const HCGCC_WEEKLY_TOP_PER_WIN = 50;
+const HCGCC_IMPROVED_PER_WIN = 25;
 
-// Parses "M/D/YYYY H:MM:SS" (or just "M/D/YYYY") into a yyyymmdd integer
-// for simple date-only comparison, sidestepping timezone/Date-parsing
-// quirks entirely. Returns null if the cell isn't in this shape.
-function parseDateOnly(cell) {
-  const datePart = (cell || '').trim().split(' ')[0];
-  const m = datePart.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
-  if (!m) return null;
-  const [, month, day, year] = m;
-  return parseInt(year, 10) * 10000 + parseInt(month, 10) * 100 + parseInt(day, 10);
+// "$1,101.00" -> 1101; blank/garbage -> 0
+function toMoney(cell) {
+  const n = parseFloat(String(cell || '').replace(/[$,\s]/g, ''));
+  return isNaN(n) ? 0 : n;
 }
 
 function toNumber(cell) {
@@ -73,16 +60,72 @@ function toNumber(cell) {
   return isNaN(n) ? 0 : n;
 }
 
-function getAllTime(rows, code) {
-  const match = rows.slice(1).find(row => (row[ALLTIME_CODE_COL] || '').trim().toUpperCase() === code);
+function headingIndex(header, label) {
+  return header.findIndex(h => (h || '').trim().toLowerCase() === label.toLowerCase());
+}
+
+// HCGCC handling: the Dashboard files HCGCC26 under the next season's "2027 Total"
+// column, but ambassadors should see it as 2026 (the year it ran). So the HCGCC26
+// sign-ups are pulled out of that season column and added to the year in the
+// HCGCC26 heading (2026); whatever else sits in the season column (e.g. a future
+// HCGEC 2027) stays under its own year.
+// hcgccFinalSignups: the ambassador's sign-ups from the HCGCC final-results sheet,
+// when available. The Dashboard's HCGCC26 column is fed by a weekly tab that only
+// counts from the week of 10 Aug and doesn't include later manual corrections, so
+// the final sheet's number replaces it. If the Dashboard is later brought up to the
+// final numbers the difference is zero and this changes nothing.
+function getAllTime(rows, code, hcgccFinalSignups) {
+  const header = rows[0] || [];
+  const codeCol = headingIndex(header, ALLTIME_HEADINGS.code);
+  const totalCol = headingIndex(header, ALLTIME_HEADINGS.total);
+  const hcgccCol = headingIndex(header, ALLTIME_HEADINGS.hcgcc);
+  if (codeCol < 0 || totalCol < 0) {
+    console.error('stats: all-time sheet headings not found — layout changed?');
+    return null;
+  }
+
+  const match = rows.slice(1).find(row => (row[codeCol] || '').trim().toUpperCase() === code);
   if (!match) return null;
 
-  const byYear = YEAR_TOTAL_COLS
-    .map(({ year, col }) => ({ year, total: toNumber(match[col]) }))
-    .filter(({ total }) => total > 0);
+  const years = header
+    .map((h, col) => {
+      const m = /^(\d{4}) Total$/.exec((h || '').trim());
+      return m ? { year: parseInt(m[1], 10), col } : null;
+    })
+    .filter(Boolean);
 
-  const total = toNumber(match[ALLTIME_TOTAL_COL]);
-  return { total, byYear };
+  const byYear = years.map(({ year, col }) => ({ year, col, total: toNumber(match[col]) }));
+  let total = toNumber(match[totalCol]);
+
+  if (hcgccCol >= 0) {
+    const dashboardHcgcc = toNumber(match[hcgccCol]);
+    const hcgcc = typeof hcgccFinalSignups === 'number' ? hcgccFinalSignups : dashboardHcgcc;
+    total += hcgcc - dashboardHcgcc;
+
+    const yy = /(\d{2})$/.exec((header[hcgccCol] || '').trim());
+    const hcgccYear = yy ? 2000 + parseInt(yy[1], 10) : null;
+    const season = years.filter(y => y.col > hcgccCol).sort((x, y) => x.col - y.col)[0];
+    const seasonEntry = season && byYear.find(y => y.col === season.col);
+    if (hcgccYear && seasonEntry) {
+      seasonEntry.total = Math.max(0, seasonEntry.total - dashboardHcgcc);
+      let yearEntry = byYear.find(y => y.year === hcgccYear);
+      if (!yearEntry) {
+        yearEntry = { year: hcgccYear, col: -1, total: 0 };
+        byYear.push(yearEntry);
+      }
+      yearEntry.total += hcgcc;
+    } else if (seasonEntry) {
+      seasonEntry.total += hcgcc - dashboardHcgcc;
+    }
+  }
+
+  return {
+    total,
+    byYear: byYear
+      .filter(({ total: t }) => t > 0)
+      .sort((x, y) => y.year - x.year)
+      .map(({ year, total: t }) => ({ year, total: t })),
+  };
 }
 
 module.exports = async (req, res) => {
@@ -106,7 +149,7 @@ module.exports = async (req, res) => {
   const [lgicResult, allTimeResult, hcgccResult] = await Promise.allSettled([
     getSheetRows(LGIC_SHEET_ID, LGIC_GID),
     getSheetRows(ALLTIME_SHEET_ID, ALLTIME_GID),
-    getSheetRows(HCGCC_SHEET_ID, HCGCC_GID),
+    getSheetRows(HCGCC_FINAL_SHEET_ID, HCGCC_FINAL_GID),
   ]);
 
   if (lgicResult.status === 'rejected') {
@@ -129,34 +172,43 @@ module.exports = async (req, res) => {
   const sarcRolled = lgicMatch ? toNumber(lgicMatch[LGIC_SARC_ROLLED_COL]) : 0;
   const finalTotal = lgicMatch ? toNumber(lgicMatch[LGIC_FINAL_TOTAL_COL]) : 0;
 
+  // undefined => the sheet couldn't be read (front end shows an error);
+  // null => read fine but this ambassador isn't listed.
+  let hcgccFinal;
+  if (hcgccResult.status === 'fulfilled') {
+    const row = hcgccResult.value.slice(1).find(r => (r[HCGCC_FINAL.code] || '').trim().toUpperCase() === code);
+    if (row) {
+      const weeklyTopCredit = toMoney(row[HCGCC_FINAL.weeklyTop]);
+      const improvedCredit = toMoney(row[HCGCC_FINAL.improved]);
+      hcgccFinal = {
+        signups: toNumber(row[HCGCC_FINAL.signups]),
+        signupCredit: toMoney(row[HCGCC_FINAL.signupCredit]),
+        weeklyTopCredit,
+        weeklyTopWins: Math.round(weeklyTopCredit / HCGCC_WEEKLY_TOP_PER_WIN),
+        improvedCredit,
+        improvedWins: Math.round(improvedCredit / HCGCC_IMPROVED_PER_WIN),
+        top10Prize: toMoney(row[HCGCC_FINAL.top10]),
+        hcgccTotal: toMoney(row[HCGCC_FINAL.hcgccTotal]),
+        rollover: toMoney(row[HCGCC_FINAL.rollover]),
+        total: toMoney(row[HCGCC_FINAL.total]),
+      };
+    } else {
+      hcgccFinal = null;
+    }
+  } else {
+    console.error('stats: HCGCC final-results sheet fetch failed', hcgccResult.reason.message);
+  }
+
   let allTimeSignups = null;
   let allTimeByYear = null;
   if (allTimeResult.status === 'fulfilled') {
-    const result = getAllTime(allTimeResult.value, code);
+    const result = getAllTime(allTimeResult.value, code, hcgccFinal ? hcgccFinal.signups : undefined);
     if (result) {
       allTimeSignups = result.total;
       allTimeByYear = result.byYear;
     }
   } else {
     console.error('stats: all-time sheet fetch failed', allTimeResult.reason.message);
-  }
-
-  let hcgccSignups = null;
-  let hcgccCredits = null;
-  if (hcgccResult.status === 'fulfilled') {
-    const matches = hcgccResult.value.slice(1).filter(row => (row[HCGCC_CODE_COL] || '').trim().toUpperCase() === code);
-    hcgccSignups = matches.length;
-    hcgccCredits = matches.reduce((sum, row) => {
-      const dateNum = parseDateOnly(row[HCGCC_DATE_COL]);
-      // Undated rows (pre-dates the "Submitted At" column) are treated as
-      // pre-boost — they're all from well before the boost window anyway.
-      const rate = dateNum !== null && dateNum >= HCGCC_BOOST_START
-        ? HCGCC_BOOSTED_CREDIT_PER_SIGNUP
-        : HCGCC_BASE_CREDIT_PER_SIGNUP;
-      return sum + rate;
-    }, 0);
-  } else {
-    console.error('stats: HCGCC sheet fetch failed', hcgccResult.reason.message);
   }
 
   // Cache briefly at the edge: repeat stat checks for the same code+token within
@@ -174,7 +226,6 @@ module.exports = async (req, res) => {
     finalTotal,
     allTimeSignups,
     allTimeByYear,
-    hcgccSignups,
-    hcgccCredits,
+    hcgccFinal,
   });
 };
