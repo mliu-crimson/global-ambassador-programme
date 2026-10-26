@@ -99,6 +99,17 @@
   .hcgec-logo{background:#fff;border-radius:4px;padding:8px 12px;display:inline-flex;align-items:center;}
   .hcgec-kicker{font-family:'Montserrat',sans-serif;font-size:0.74rem;letter-spacing:0.14em;text-transform:uppercase;font-weight:700;color:#fff;opacity:0.85;margin-bottom:6px;}
   .comp-block.hcgec .hcgec-head h3{font-family:'Montserrat',sans-serif;color:#fff;font-size:1.35rem;font-weight:700;margin:0;line-height:1.25;}
+  .hcgec-tracker{display:none;background:#fff;padding:26px 32px 28px;border-bottom:1px solid var(--line);border-left:4px solid #cc143d;font-family:'Montserrat',sans-serif;color:#221d1e;}
+  .hcgec-tracker .tr-kicker{font-size:0.74rem;letter-spacing:0.14em;text-transform:uppercase;font-weight:700;color:#cc143d;margin-bottom:14px;}
+  .hcgec-tracker .tr-stats{display:flex;gap:36px;flex-wrap:wrap;margin-bottom:18px;}
+  .hcgec-tracker .tr-num{font-size:2.4rem;font-weight:700;line-height:1;color:#221d1e;}
+  .hcgec-tracker .tr-lbl{font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;font-weight:600;color:#740a42;margin-top:6px;}
+  .hcgec-tracker .tr-meta{display:flex;justify-content:space-between;gap:12px;font-size:0.78rem;font-weight:600;color:#221d1e;margin-bottom:8px;}
+  .hcgec-tracker .tr-track{background:rgba(34,29,30,0.1);border-radius:20px;height:12px;overflow:hidden;}
+  .hcgec-tracker .tr-fill{background:#cc143d;height:100%;width:0%;border-radius:20px;transition:width .5s ease;}
+  .hcgec-tracker.done .tr-fill{background:#740a42;}
+  .hcgec-tracker .tr-msg{font-size:0.88rem;line-height:1.6;color:#221d1e;margin-top:14px;}
+  .hcgec-tracker .tr-note{font-size:0.76rem;color:#221d1e;opacity:0.6;margin-top:8px;}
   .hcgec-body{padding:30px 32px 34px;}
   .hcgec .link-row strong{min-width:0;}
   .hcgec h4{font-family:'Montserrat',sans-serif;color:#cc143d;font-size:0.8rem;letter-spacing:0.12em;text-transform:uppercase;font-weight:700;margin:28px 0 12px;padding-top:22px;border-top:1px solid var(--line);}
@@ -373,6 +384,17 @@
           <div class="hcgec-kicker">HCGEC is here! 🎉</div>
           <h3>Harvard Crimson Global Essay Competition 2027</h3>
         </div>
+      </div>
+      <div class="hcgec-tracker" id="hcgec-tracker">
+        <div class="tr-kicker">Your HCGEC 2027 progress</div>
+        <div class="tr-stats">
+          <div><div class="tr-num" id="hcgec-tr-signups">0</div><div class="tr-lbl">Sign-ups</div></div>
+          <div><div class="tr-num" id="hcgec-tr-credit">$0</div><div class="tr-lbl">Credit earned</div></div>
+        </div>
+        <div class="tr-meta"><span id="hcgec-tr-label">$0 / $60 in credit</span><span>Redeem at $60</span></div>
+        <div class="tr-track"><div class="tr-fill" id="hcgec-tr-fill"></div></div>
+        <div class="tr-msg" id="hcgec-tr-msg"></div>
+        <div class="tr-note">Counts paid sign-ups that used your code, at $3 USD credit each. Weekly and Top 10 bonuses are added at the end of the competition. Updates every few minutes.</div>
       </div>
       <div class="hcgec-body">
         <p>After absolutely smashing HCGCC out of the park, we're super excited to hit the ground running with HCGEC. Read this whole section for everything you need!</p>
@@ -901,6 +923,25 @@
     return '$' + Number(n).toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
   }
 
+  function renderHcgecTracker(t) {
+    const box = document.getElementById('hcgec-tracker');
+    if (!t || typeof t.signups !== 'number') { box.style.display = 'none'; return; }
+    const target = t.redeemAt || 60;
+    const done = t.credit >= target;
+    box.style.display = 'block';
+    box.classList.toggle('done', done);
+    document.getElementById('hcgec-tr-signups').textContent = t.signups.toLocaleString('en-US');
+    document.getElementById('hcgec-tr-credit').textContent = money(t.credit);
+    document.getElementById('hcgec-tr-label').textContent = `${money(t.credit)} / ${money(target)} in credit${done ? ' ✅' : ''}`;
+    document.getElementById('hcgec-tr-fill').style.width = Math.min(100, (t.credit / target) * 100) + '%';
+    const left = Math.ceil((target - t.credit) / 3);
+    document.getElementById('hcgec-tr-msg').textContent = done
+      ? `🎉 You've reached ${money(target)} in credit — that's enough to redeem a gift voucher or e-voucher. Keep going: every extra sign-up adds more!`
+      : t.signups > 0
+      ? `Great start! Just ${left} more sign-up${left === 1 ? '' : 's'} to reach ${money(target)} in credit.`
+      : `No sign-ups yet — share your code and you'll see your progress here. ${Math.ceil(target / 3)} sign-ups gets you to ${money(target)}.`;
+  }
+
   function renderHcgccFinal(f) {
     const content = document.getElementById('hcgcc-final-content');
     const tilesEl = document.getElementById('hcgcc-final-tiles');
@@ -981,6 +1022,7 @@
       if (!res.ok) throw new Error('fetch failed');
       const data = await res.json();
       document.getElementById('hcgcc-final-loading').style.display = 'none';
+      renderHcgecTracker(data.hcgecTracker);
       if ('hcgccFinal' in data) {
         renderHcgccFinal(data.hcgccFinal);
       } else {

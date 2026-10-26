@@ -136,4 +136,37 @@ async function getSheetRows(spreadsheetId, gid) {
   }
 }
 
-module.exports = { getSheetRows };
+// Like getSheetRows but fetches only an A1 range of one tab (e.g. "U2:X"), so
+// columns holding personal details never need to be pulled into the function.
+// Same cache and stale-fallback behaviour.
+async function getSheetRange(spreadsheetId, gid, a1) {
+  const cacheKey = `${spreadsheetId}:${gid}:${a1}`;
+  const cached = sheetRowsCache.get(cacheKey);
+  if (cached && Date.now() - cached.savedAt < CACHE_TTL_MS) {
+    return cached.rows;
+  }
+
+  try {
+    const token = await getAccessToken();
+    const title = await getSheetTitle(spreadsheetId, gid, token);
+    const range = `'${title.replace(/'/g, "\\'")}'!${a1}`;
+
+    const url = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${encodeURIComponent(range)}`;
+    const res = await fetchWithTimeout(url, { headers: { Authorization: `Bearer ${token}` } });
+    if (!res.ok) {
+      throw new Error(`sheet range fetch failed: ${res.status} ${await res.text()}`);
+    }
+    const data = await res.json();
+    const rows = data.values || [];
+    sheetRowsCache.set(cacheKey, { rows, savedAt: Date.now() });
+    return rows;
+  } catch (e) {
+    if (cached) {
+      console.error(`getSheetRange: fresh fetch failed, serving stale cache for ${cacheKey}:`, e.message);
+      return cached.rows;
+    }
+    throw e;
+  }
+}
+
+module.exports = { getSheetRows, getSheetRange };

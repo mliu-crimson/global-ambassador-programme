@@ -1,4 +1,4 @@
-const { getSheetRows } = require('./_sheets');
+const { getSheetRows, getSheetRange } = require('./_sheets');
 const { verify } = require('./_auth');
 
 // Final LGIC 2026 results sheet (registrations closed) — one row per
@@ -64,6 +64,33 @@ function hcgccTop10Place(rows, signups, prize) {
   const tied = counts.filter(c => c === signups).length > 1;
   const expectedPrize = place === 1 ? 150 : place <= 3 ? 100 : place <= 5 ? 50 : place <= 10 ? 25 : 0;
   return expectedPrize === prize ? { place, tied } : null;
+}
+
+// HCGEC 2027 live tracker. The registration sheet ("Paid Registrations") holds
+// one row per paid sign-up, including students' personal details, so only the
+// columns needed to count a code's sign-ups are read: U and V (the discount-code
+// answer from the two versions of the form), W (Submitted At) and X (the form
+// submission token, used to ignore accidental duplicate rows).
+const HCGEC_SHEET_ID = '1V3s6GRmYwms3sNPeyO3Be2y6lEgmA1ydWJEVWw8WgeE';
+const HCGEC_GID = '1523009616';
+const HCGEC_RANGE = 'U2:X';
+const HCGEC_CREDIT_PER_SIGNUP = 3;
+const HCGEC_REDEEM_AT = 60;
+
+function hcgecSignups(rows, code) {
+  const seen = new Set();
+  let count = 0;
+  for (const row of rows) {
+    const used = [row[0], row[1]].map(c => (c || '').trim().toUpperCase());
+    if (!used.includes(code)) continue;
+    const token = (row[3] || '').trim();
+    if (token) {
+      if (seen.has(token)) continue;
+      seen.add(token);
+    }
+    count++;
+  }
+  return count;
 }
 
 // "$1,101.00" -> 1101; blank/garbage -> 0
@@ -163,10 +190,11 @@ module.exports = async (req, res) => {
     return;
   }
 
-  const [lgicResult, allTimeResult, hcgccResult] = await Promise.allSettled([
+  const [lgicResult, allTimeResult, hcgccResult, hcgecResult] = await Promise.allSettled([
     getSheetRows(LGIC_SHEET_ID, LGIC_GID),
     getSheetRows(ALLTIME_SHEET_ID, ALLTIME_GID),
     getSheetRows(HCGCC_FINAL_SHEET_ID, HCGCC_FINAL_GID),
+    getSheetRange(HCGEC_SHEET_ID, HCGEC_GID, HCGEC_RANGE),
   ]);
 
   if (lgicResult.status === 'rejected') {
@@ -217,6 +245,19 @@ module.exports = async (req, res) => {
     console.error('stats: HCGCC final-results sheet fetch failed', hcgccResult.reason.message);
   }
 
+  // undefined => the sheet couldn't be read (front end hides the tracker).
+  let hcgecTracker;
+  if (hcgecResult.status === 'fulfilled') {
+    const signupsCount = hcgecSignups(hcgecResult.value, code);
+    hcgecTracker = {
+      signups: signupsCount,
+      credit: signupsCount * HCGEC_CREDIT_PER_SIGNUP,
+      redeemAt: HCGEC_REDEEM_AT,
+    };
+  } else {
+    console.error('stats: HCGEC registration sheet fetch failed', hcgecResult.reason.message);
+  }
+
   let allTimeSignups = null;
   let allTimeByYear = null;
   if (allTimeResult.status === 'fulfilled') {
@@ -245,5 +286,6 @@ module.exports = async (req, res) => {
     allTimeSignups,
     allTimeByYear,
     hcgccFinal,
+    hcgecTracker,
   });
 };
