@@ -955,7 +955,7 @@
       : `No sign-ups yet — share your code and you'll see your progress here. ${Math.ceil(target / 3)} sign-ups gets you to ${money(target)}.`;
   }
 
-  function renderHcgccFinal(f) {
+  function renderHcgccFinal(f, referralCredit) {
     const content = document.getElementById('hcgcc-final-content');
     const tilesEl = document.getElementById('hcgcc-final-tiles');
     const totalRow = document.getElementById('hcgcc-final-totalrow');
@@ -964,8 +964,10 @@
     statusEl.className = 'hcgcc-status';
     statusEl.textContent = '';
 
-    const total = f ? f.total : 0;
-    const hasResults = !!f && (f.signups > 0 || total > 0);
+    // A successful-referral bonus counts toward the total used for the $60 claim threshold.
+    const referral = referralCredit > 0 ? referralCredit : 0;
+    const total = (f ? f.total : 0) + referral;
+    const hasResults = (!!f && (f.signups > 0 || f.total > 0)) || referral > 0;
 
     if (!hasResults) {
       tilesEl.style.display = 'none';
@@ -977,26 +979,30 @@
     const tile = (num, label, sub) =>
       `<div class="hcgcc-tile"><div class="num">${num}</div><div class="lbl">${label}</div>${sub ? `<div class="sub">${sub}</div>` : ''}</div>`;
     const tiles = [];
-    if (f.signups > 0) {
+    if (f && f.signups > 0) {
       tiles.push(tile(f.signups.toLocaleString('en-US'), 'HCGCC sign-ups', ''));
       tiles.push(tile(money(f.signupCredit), 'HCGCC credit (USD)', 'from sign-ups'));
     }
-    if (f.weeklyTopWins > 0) tiles.push(tile(`${f.weeklyTopWins}×`, 'Weekly wins: most sign-ups', `${money(f.weeklyTopCredit)} credit`));
-    if (f.improvedWins > 0) tiles.push(tile(`${f.improvedWins}×`, 'Weekly wins: most improved', `${money(f.improvedCredit)} credit`));
-    if (f.top10Prize > 0) {
+    if (f && f.weeklyTopWins > 0) tiles.push(tile(`${f.weeklyTopWins}×`, 'Weekly wins: most sign-ups', `${money(f.weeklyTopCredit)} credit`));
+    if (f && f.improvedWins > 0) tiles.push(tile(`${f.improvedWins}×`, 'Weekly wins: most improved', `${money(f.improvedCredit)} credit`));
+    if (f && f.top10Prize > 0) {
       const ordinal = n => { const s = ['th', 'st', 'nd', 'rd'], v = n % 100; return n + (s[(v - 20) % 10] || s[v] || s[0]); };
       const tierLabel = p => p >= 150 ? '1st' : p >= 100 ? '2nd–3rd' : p >= 50 ? '4th–5th' : '6th–10th';
       const place = f.top10Place ? ordinal(f.top10Place.place) : tierLabel(f.top10Prize);
       const tied = f.top10Place && f.top10Place.tied ? 'tied · ' : '';
       tiles.push(tile(place, 'Top 10 Ambassadors', `${tied}${money(f.top10Prize)} credit`));
     }
-    if (f.rollover > 0) tiles.push(tile(money(f.rollover), 'Previous competitions', 'rolled over'));
+    if (f && f.rollover > 0) tiles.push(tile(money(f.rollover), 'Previous competitions', 'rolled over'));
+    if (referral > 0) tiles.push(tile(money(referral), 'Referral bonus', 'successful referral'));
     tilesEl.innerHTML = tiles.join('');
     tilesEl.style.display = tiles.length ? 'grid' : 'none';
 
     document.getElementById('hcgcc-final-total').textContent = money(total);
-    document.getElementById('hcgcc-final-total-sub').textContent =
-      f.rollover > 0 ? `HCGCC 2026 ${money(f.hcgccTotal)} + ${money(f.rollover)} from previous competitions` : '';
+    const parts = [];
+    if (f && f.hcgccTotal > 0) parts.push(`HCGCC 2026 ${money(f.hcgccTotal)}`);
+    if (f && f.rollover > 0) parts.push(`${money(f.rollover)} from previous competitions`);
+    if (referral > 0) parts.push(`${money(referral)} referral bonus`);
+    document.getElementById('hcgcc-final-total-sub').textContent = (f && f.rollover > 0) || referral > 0 ? parts.join(' + ') : '';
     totalRow.style.display = 'flex';
 
     if (total >= CLAIM_MINIMUM) {
@@ -1038,7 +1044,7 @@
       renderHcgecTracker(data.hcgecTracker);
       renderReferralBonus(data.referralBonus);
       if ('hcgccFinal' in data) {
-        renderHcgccFinal(data.hcgccFinal);
+        renderHcgccFinal(data.hcgccFinal, data.referralBonus ? data.referralBonus.credit : 0);
       } else {
         const err = document.getElementById('hcgcc-final-error');
         err.style.display = 'block';
