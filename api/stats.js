@@ -93,6 +93,14 @@ function hcgecSignups(rows, code) {
   return count;
 }
 
+// Successful referrals (a referred Ambassador reaching 10 sign-ups, $40 credit
+// each), recorded by hand: Ambassador code -> number of referrals. Shown to that
+// Ambassador in the hub's Referral section. Add a line per new referral winner.
+const REFERRAL_CREDIT = 40;
+const REFERRALS = {
+  AMB5345: 1,
+};
+
 // "$1,101.00" -> 1101; blank/garbage -> 0
 function toMoney(cell) {
   const n = parseFloat(String(cell || '').replace(/[$,\s]/g, ''));
@@ -287,5 +295,6 @@ module.exports = async (req, res) => {
     allTimeByYear,
     hcgccFinal,
     hcgecTracker,
+    referralBonus: REFERRALS[code] ? { count: REFERRALS[code], credit: REFERRALS[code] * REFERRAL_CREDIT } : null,
   });
 };
