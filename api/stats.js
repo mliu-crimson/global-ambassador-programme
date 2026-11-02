@@ -99,6 +99,7 @@ function hcgecSignups(rows, code) {
 const REFERRAL_CREDIT = 40;
 const REFERRALS = {
   AMB4598: 1,
+  AMB4946: 1,
 };
 
 // "$1,101.00" -> 1101; blank/garbage -> 0
