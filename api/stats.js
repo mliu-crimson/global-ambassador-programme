@@ -98,7 +98,7 @@ function hcgecSignups(rows, code) {
 // Ambassador in the hub's Referral section. Add a line per new referral winner.
 const REFERRAL_CREDIT = 40;
 const REFERRALS = {
-  AMB5345: 1,
+  AMB4598: 1,
 };
 
 // "$1,101.00" -> 1101; blank/garbage -> 0
