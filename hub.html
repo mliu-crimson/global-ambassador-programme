@@ -42,7 +42,17 @@
   .hub-hero .hero-rule{width:48px;height:1px;background:rgba(255,255,255,0.25);margin:18px auto 0;}
 
   .welcome-strip{background:var(--panel-tint);border-bottom:1px solid var(--line);padding:52px 28px;}
-  .welcome-inner{max-width:720px;margin:0 auto;}
+  /* Same 1024px content width as .wrap, so the text lines up with the boxes below. */
+  .welcome-inner{max-width:1024px;margin:0 auto;display:flex;align-items:flex-start;gap:48px;}
+  .welcome-text{flex:1;min-width:0;}
+  .welcome-stats{flex:0 0 320px;display:none;background:var(--crimson);border-radius:2px;padding:28px 28px 24px;text-align:center;}
+  .welcome-stats .ws-kicker{font-size:0.72rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--horizon);font-weight:600;margin-bottom:10px;}
+  .welcome-stats .ws-big{font-family:'Fraunces',serif;font-size:3rem;font-weight:700;color:var(--parchment);line-height:1;}
+  .welcome-stats .ws-sub{font-size:0.85rem;color:var(--horizon);margin-top:10px;line-height:1.5;}
+  .welcome-stats .ws-split{display:flex;justify-content:center;gap:28px;margin-top:20px;padding-top:18px;border-top:1px solid rgba(255,255,255,0.25);}
+  .welcome-stats .ws-num{font-family:'Fraunces',serif;font-weight:700;font-size:1.5rem;color:var(--parchment);line-height:1;}
+  .welcome-stats .ws-lbl{font-size:0.68rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--horizon);margin-top:6px;}
+  @media(max-width:760px){.welcome-inner{flex-direction:column;gap:28px;}.welcome-stats{flex-basis:auto;width:100%;}}
   .welcome-inner .eyebrow{font-size:0.72rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--crimson);font-weight:600;margin-bottom:12px;display:block;}
   .welcome-inner h2{font-size:clamp(1.5rem,2.5vw,2rem);margin-bottom:18px;}
   .welcome-inner p{color:var(--graphite);margin-bottom:14px;font-size:0.97rem;}
@@ -242,7 +252,7 @@
 
 <div class="welcome-strip">
   <div class="welcome-inner">
-    
+   <div class="welcome-text">
     <h2 id="welcome-heading">Welcome back!</h2>
     <div class="code-ribbon">
       <span class="code-ribbon-label">Your Ambassador Code</span>
@@ -251,25 +261,23 @@
     <p>You're part of a global community of ambitious students helping peers discover elite competitions. Everything you need is right here.</p>
     <p>Join our WhatsApp community to stay connected, get updates, and engage with fellow Ambassadors in real time.</p>
     <a class="whatsapp-link" href="https://chat.whatsapp.com/Df7XzTFVO1y6zLaH4thNY4" target="_blank" rel="noopener">💬 Join the WhatsApp Community →</a>
+   </div>
+   <!-- All-time total, filled in by fetchStats(); hidden until it loads -->
+   <div class="welcome-stats" id="alltime-milestone">
+    <div class="ws-kicker">🎉 All-Time Total</div>
+    <div class="ws-big" id="alltime-milestone-value">—</div>
+    <div class="ws-sub">Sign-ups across every competition you've promoted</div>
+    <div class="ws-split">
+      <div><div class="ws-num" id="ws-hcgcc">—</div><div class="ws-lbl">HCGCC 2026</div></div>
+      <div><div class="ws-num" id="ws-hcgec">—</div><div class="ws-lbl">HCGEC 2027</div></div>
+    </div>
+   </div>
   </div>
 </div>
 
 <!-- Toolkit -->
 <section id="toolkit">
   <div class="wrap">
-    <div class="section-head">
-      <span class="tag">Quick access</span>
-      <h2>Everything you need, in one place.</h2>
-    </div>
-
-    <!-- All-time milestone -->
-    <div id="alltime-milestone" style="display:none;background:var(--crimson);border-radius:2px;padding:30px 32px;margin-bottom:24px;text-align:center;">
-      <div style="font-size:0.72rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--horizon);font-weight:600;margin-bottom:10px;">🎉 All-Time Total</div>
-      <div id="alltime-milestone-value" style="font-family:'Fraunces',serif;font-size:3rem;font-weight:700;color:var(--parchment);line-height:1;">—</div>
-      <div style="font-size:0.92rem;color:var(--horizon);margin-top:10px;">Total sign-ups across every competition you've promoted</div>
-      <div id="alltime-byyear" style="margin-top:20px;padding-top:18px;border-top:1px solid rgba(255,255,255,0.25);display:flex;justify-content:center;gap:32px;flex-wrap:wrap;"></div>
-    </div>
-
     <!-- HCGCC final results -->
     <div style="background:#751443;border-top:3px solid #ed4b53;border-radius:2px;padding:36px 36px 32px;margin-bottom:28px;" id="hcgcc-final-box">
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px;">
@@ -1052,26 +1060,13 @@
       }
 
       const milestone = document.getElementById('alltime-milestone');
-      const byYearRow = document.getElementById('alltime-byyear');
       if (typeof data.allTimeSignups === 'number') {
         document.getElementById('alltime-milestone-value').textContent = data.allTimeSignups.toLocaleString();
+        document.getElementById('ws-hcgcc').textContent =
+          data.hcgccFinal ? data.hcgccFinal.signups.toLocaleString() : (data.hcgccFinal === null ? '0' : '—');
+        document.getElementById('ws-hcgec').textContent =
+          data.hcgecTracker ? data.hcgecTracker.signups.toLocaleString() : '—';
         milestone.style.display = 'block';
-
-        byYearRow.innerHTML = '';
-        if (Array.isArray(data.allTimeByYear) && data.allTimeByYear.length) {
-          data.allTimeByYear.forEach(({ year, total }) => {
-            const item = document.createElement('div');
-            item.style.textAlign = 'center';
-            item.innerHTML = `
-              <div style="font-family:'Fraunces',serif;font-weight:700;font-size:1.35rem;color:var(--parchment);line-height:1;">${total.toLocaleString()}</div>
-              <div style="font-size:0.68rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--horizon);margin-top:4px;">${year}</div>
-            `;
-            byYearRow.appendChild(item);
-          });
-          byYearRow.style.display = 'flex';
-        } else {
-          byYearRow.style.display = 'none';
-        }
       } else {
         milestone.style.display = 'none';
       }

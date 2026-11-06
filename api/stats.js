@@ -33,7 +33,7 @@ const LGIC_FINAL_TOTAL_COL = 10;
 // files the current HCGCC (run Jul–Oct 2026) under "2027 Total".
 const ALLTIME_SHEET_ID = '1x7R7-aQtvXSNE7q_0eBLHaQxUCLgUuPBpbTi1Ojaxds';
 const ALLTIME_GID = '1580466567';
-const ALLTIME_HEADINGS = { code: 'Ambassador Code', total: 'All time total', hcgcc: 'HCGCC26' };
+const ALLTIME_HEADINGS = { code: 'Ambassador Code', total: 'All time total', hcgcc: 'HCGCC26', hcgec: 'HCGEC27' };
 
 // HCGCC 2026 final results (competition wrapped up 2026-10-20) — one row per
 // ambassador. Columns: A code, B name, C country, D HCGCC26 sign-ups, E credit
@@ -127,11 +127,17 @@ function headingIndex(header, label) {
 // counts from the week of 10 Aug and doesn't include later manual corrections, so
 // the final sheet's number replaces it. If the Dashboard is later brought up to the
 // final numbers the difference is zero and this changes nothing.
-function getAllTime(rows, code, hcgccFinalSignups) {
+// hcgecLiveSignups: the ambassador's HCGEC 2027 sign-ups counted live from the
+// registration sheet (duplicates removed). It replaces the Dashboard's HCGEC27
+// column in the all-time total and in that column's season total ("2027 Total"),
+// so sign-ups count straight away. If the Dashboard column is filled in later,
+// its number is swapped for the live count, never added on top.
+function getAllTime(rows, code, hcgccFinalSignups, hcgecLiveSignups) {
   const header = rows[0] || [];
   const codeCol = headingIndex(header, ALLTIME_HEADINGS.code);
   const totalCol = headingIndex(header, ALLTIME_HEADINGS.total);
   const hcgccCol = headingIndex(header, ALLTIME_HEADINGS.hcgcc);
+  const hcgecCol = headingIndex(header, ALLTIME_HEADINGS.hcgec);
   if (codeCol < 0 || totalCol < 0) {
     console.error('stats: all-time sheet headings not found — layout changed?');
     return null;
@@ -170,6 +176,14 @@ function getAllTime(rows, code, hcgccFinalSignups) {
     } else if (seasonEntry) {
       seasonEntry.total += hcgcc - dashboardHcgcc;
     }
+  }
+
+  if (hcgecCol >= 0 && typeof hcgecLiveSignups === 'number') {
+    const diff = hcgecLiveSignups - toNumber(match[hcgecCol]);
+    total += diff;
+    const season = years.filter(y => y.col > hcgecCol).sort((x, y) => x.col - y.col)[0];
+    const seasonEntry = season && byYear.find(y => y.col === season.col);
+    if (seasonEntry) seasonEntry.total = Math.max(0, seasonEntry.total + diff);
   }
 
   return {
@@ -270,7 +284,7 @@ module.exports = async (req, res) => {
   let allTimeSignups = null;
   let allTimeByYear = null;
   if (allTimeResult.status === 'fulfilled') {
-    const result = getAllTime(allTimeResult.value, code, hcgccFinal ? hcgccFinal.signups : undefined);
+    const result = getAllTime(allTimeResult.value, code, hcgccFinal ? hcgccFinal.signups : undefined, hcgecTracker ? hcgecTracker.signups : undefined);
     if (result) {
       allTimeSignups = result.total;
       allTimeByYear = result.byYear;
