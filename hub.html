@@ -142,21 +142,6 @@
   .hcgec-swatches{display:flex;gap:18px;flex-wrap:wrap;align-items:center;margin-bottom:8px;}
   .hcgec-swatch{display:flex;align-items:center;gap:8px;font-size:0.82rem;color:var(--graphite);}
   .hcgec-swatch i{display:inline-block;width:22px;height:22px;border-radius:50%;border:1px solid var(--line);}
-  /* HCGCC final results box (competition colours: wine + coral) */
-  .hcgcc-thanks{background:rgba(255,255,255,0.08);border:1px solid rgba(219,219,219,0.28);border-radius:2px;padding:14px 18px;margin-bottom:24px;}
-  .hcgcc-thanks .t1{color:#fff;font-weight:600;font-size:0.92rem;margin-bottom:4px;}
-  .hcgcc-thanks .t2{color:#dbdbdb;font-size:0.88rem;line-height:1.6;}
-  .hcgcc-tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:22px 20px;margin-bottom:26px;}
-  .hcgcc-tile .num{font-family:'Fraunces',serif;font-size:2.4rem;font-weight:600;color:#dbdbdb;line-height:1;}
-  .hcgcc-tile .lbl{font-size:0.76rem;text-transform:uppercase;letter-spacing:0.08em;color:#dbdbdb;margin-top:6px;}
-  .hcgcc-tile .sub{font-size:0.82rem;color:#e8c3d4;margin-top:3px;}
-  .hcgcc-total{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;border:1px solid rgba(219,219,219,0.5);border-radius:4px;padding:16px 22px;background:rgba(255,255,255,0.07);margin-bottom:18px;}
-  .hcgcc-total .lbl{font-size:0.8rem;text-transform:uppercase;letter-spacing:0.1em;color:#fff;font-weight:600;}
-  .hcgcc-total .sub{font-size:0.82rem;color:#e8c3d4;margin-top:3px;}
-  .hcgcc-total .big{font-family:'Fraunces',serif;font-size:2.8rem;font-weight:700;color:#fff;line-height:1;}
-  .hcgcc-status{border-radius:2px;padding:14px 18px;font-size:0.9rem;line-height:1.6;color:#dbdbdb;background:rgba(255,255,255,0.08);border:1px solid rgba(219,219,219,0.28);}
-  .hcgcc-status.claim{background:rgba(111,187,124,0.14);border-color:rgba(111,187,124,0.4);color:#bfe6c9;}
-  .hcgcc-status .claim-btn{display:inline-block;margin-top:10px;background:#fff;color:#751443;font-weight:700;font-size:0.82rem;letter-spacing:0.04em;text-transform:uppercase;text-decoration:none;padding:10px 20px;border-radius:2px;}
   .callout-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
   @media (max-width:700px){.callout-grid{grid-template-columns:1fr;}}
   @media (max-width:700px){.hcgec-prices,.hcgec-dates{grid-template-columns:1fr;}.hcgec-dates{grid-template-rows:none;grid-auto-flow:row;}.hcgec-head,.hcgec-body{padding-left:22px;padding-right:22px;}}
@@ -227,7 +212,6 @@
 </header>
 
 <nav class="side-nav" id="side-nav" aria-label="Section navigation">
-  <a href="#toolkit" data-section="toolkit">Toolkit</a>
   <a href="#starter-kit" data-section="starter-kit">Starter Kit</a>
   <a href="#competition" data-section="competition">Competition</a>
   <a href="#webinars" data-section="webinars">Webinars</a>
@@ -275,39 +259,8 @@
   </div>
 </div>
 
-<!-- Toolkit -->
-<section id="toolkit">
-  <div class="wrap">
-    <!-- HCGCC final results -->
-    <div style="background:#751443;border-top:3px solid #ed4b53;border-radius:2px;padding:36px 36px 32px;margin-bottom:28px;" id="hcgcc-final-box">
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px;">
-        <span style="background:#dbdbdb;border-radius:4px;padding:5px 8px;display:inline-flex;align-items:center;"><img src="images/hcgcc-logo.png" alt="HCGCC" style="height:20px;width:auto;"></span>
-        <span style="font-size:0.72rem;letter-spacing:0.14em;text-transform:uppercase;color:#dbdbdb;font-weight:600;">Your final results — HCGCC 2026</span>
-      </div>
-      <div class="hcgcc-thanks">
-        <div class="t1">🎉 That's a wrap on HCGCC 2026!</div>
-        <div class="t2">Thank you so much to every Ambassador for the time and energy you put in. You helped students around the world discover this competition, and it truly made a difference. We appreciate you!</div>
-      </div>
-      <div id="hcgcc-final-loading" style="color:#dbdbdb;font-size:0.92rem;">Loading your results…</div>
-      <div id="hcgcc-final-content" style="display:none;">
-        <div class="hcgcc-tiles" id="hcgcc-final-tiles"></div>
-        <div class="hcgcc-total" id="hcgcc-final-totalrow">
-          <div>
-            <div class="lbl">Your total credit</div>
-            <div class="sub" id="hcgcc-final-total-sub"></div>
-          </div>
-          <div class="big" id="hcgcc-final-total">—</div>
-        </div>
-        <div class="hcgcc-status" id="hcgcc-final-status"></div>
-      </div>
-      <div id="hcgcc-final-error" style="display:none;color:#dbdbdb;font-size:0.88rem;"></div>
-    </div>
-
-  </div>
-</section>
-
 <!-- Starter Kit -->
-<section class="alt" id="starter-kit">
+<section id="starter-kit">
   <div class="wrap">
     <div class="section-head">
       <span class="tag">Starter Kit</span>
@@ -377,7 +330,7 @@
 </section>
 
 <!-- Current Competition -->
-<section id="competition">
+<section class="alt" id="competition">
   <div class="wrap">
     <div class="section-head">
       <span class="tag">Current Competition</span>
@@ -489,7 +442,7 @@
 </section>
 
 <!-- Webinar Bank -->
-<section class="alt" id="webinars">
+<section id="webinars">
   <div class="wrap">
     <div class="section-head">
       <span class="tag">Webinar Bank</span>
@@ -536,7 +489,7 @@
 </section>
 
 <!-- Newsletter -->
-<section id="newsletter">
+<section class="alt" id="newsletter">
   <div class="wrap">
     <div class="section-head">
       <span class="tag">Newsletter</span>
@@ -657,7 +610,7 @@
 </section>
 
 <!-- Referral Programme -->
-<section id="referral">
+<section class="alt" id="referral">
   <div class="wrap">
     <div class="section-head">
       <span class="tag">Referral Programme</span>
@@ -718,7 +671,7 @@
 </section>
 
 <!-- FAQ -->
-<section class="alt" id="faq">
+<section id="faq">
   <div class="wrap">
     <div class="section-head">
       <span class="tag">FAQ</span>
@@ -931,10 +884,6 @@
     window.location.href = 'login.html';
   }
 
-  // HCGCC credit claim form (shown to ambassadors with $60+ in credit).
-  const CLAIM_FORM_URL = 'https://form.typeform.com/to/dXB9LEBu';
-  const CLAIM_MINIMUM = 60;
-
   function money(n) {
     return '$' + Number(n).toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
   }
@@ -967,78 +916,6 @@
       : `No sign-ups yet — share your code and you'll see your progress here. ${Math.ceil(target / 3)} sign-ups gets you to ${money(target)}.`;
   }
 
-  function renderHcgccFinal(f, referralCredit) {
-    const content = document.getElementById('hcgcc-final-content');
-    const tilesEl = document.getElementById('hcgcc-final-tiles');
-    const totalRow = document.getElementById('hcgcc-final-totalrow');
-    const statusEl = document.getElementById('hcgcc-final-status');
-    content.style.display = 'block';
-    statusEl.className = 'hcgcc-status';
-    statusEl.textContent = '';
-
-    // A successful-referral bonus counts toward the total used for the $60 claim threshold.
-    const referral = referralCredit > 0 ? referralCredit : 0;
-    const total = (f ? f.total : 0) + referral;
-    const hasResults = (!!f && (f.signups > 0 || f.total > 0)) || referral > 0;
-
-    if (!hasResults) {
-      tilesEl.style.display = 'none';
-      totalRow.style.display = 'none';
-      statusEl.textContent = 'Thank you for being part of HCGCC 2026 this round — your code carries over to the next competition!';
-      return;
-    }
-
-    const tile = (num, label, sub) =>
-      `<div class="hcgcc-tile"><div class="num">${num}</div><div class="lbl">${label}</div>${sub ? `<div class="sub">${sub}</div>` : ''}</div>`;
-    const tiles = [];
-    if (f && f.signups > 0) {
-      tiles.push(tile(f.signups.toLocaleString('en-US'), 'HCGCC sign-ups', ''));
-      tiles.push(tile(money(f.signupCredit), 'HCGCC credit (USD)', 'from sign-ups'));
-    }
-    if (f && f.weeklyTopWins > 0) tiles.push(tile(`${f.weeklyTopWins}×`, 'Weekly wins: most sign-ups', `${money(f.weeklyTopCredit)} credit`));
-    if (f && f.improvedWins > 0) tiles.push(tile(`${f.improvedWins}×`, 'Weekly wins: most improved', `${money(f.improvedCredit)} credit`));
-    if (f && f.top10Prize > 0) {
-      const ordinal = n => { const s = ['th', 'st', 'nd', 'rd'], v = n % 100; return n + (s[(v - 20) % 10] || s[v] || s[0]); };
-      const tierLabel = p => p >= 150 ? '1st' : p >= 100 ? '2nd–3rd' : p >= 50 ? '4th–5th' : '6th–10th';
-      const place = f.top10Place ? ordinal(f.top10Place.place) : tierLabel(f.top10Prize);
-      const tied = f.top10Place && f.top10Place.tied ? 'tied · ' : '';
-      tiles.push(tile(place, 'Top 10 Ambassadors', `${tied}${money(f.top10Prize)} credit`));
-    }
-    if (f && f.rollover > 0) tiles.push(tile(money(f.rollover), 'Previous competitions', 'rolled over'));
-    if (referral > 0) tiles.push(tile(money(referral), 'Referral bonus', 'successful referral'));
-    tilesEl.innerHTML = tiles.join('');
-    tilesEl.style.display = tiles.length ? 'grid' : 'none';
-
-    document.getElementById('hcgcc-final-total').textContent = money(total);
-    const parts = [];
-    if (f && f.hcgccTotal > 0) parts.push(`HCGCC 2026 ${money(f.hcgccTotal)}`);
-    if (f && f.rollover > 0) parts.push(`${money(f.rollover)} from previous competitions`);
-    if (referral > 0) parts.push(`${money(referral)} referral bonus`);
-    document.getElementById('hcgcc-final-total-sub').textContent = (f && f.rollover > 0) || referral > 0 ? parts.join(' + ') : '';
-    totalRow.style.display = 'flex';
-
-    if (total >= CLAIM_MINIMUM) {
-      statusEl.classList.add('claim');
-      statusEl.appendChild(document.createTextNode(`✅ You have ${money(total)} in credit — you're eligible to claim!`));
-      if (CLAIM_FORM_URL) {
-        const a = document.createElement('a');
-        a.className = 'claim-btn';
-        a.href = CLAIM_FORM_URL;
-        a.target = '_blank';
-        a.rel = 'noopener';
-        a.textContent = 'Claim your credit →';
-        statusEl.appendChild(document.createElement('br'));
-        statusEl.appendChild(a);
-      } else {
-        statusEl.appendChild(document.createElement('br'));
-        statusEl.appendChild(document.createTextNode('Claim form coming shortly.'));
-      }
-    } else {
-      statusEl.textContent =
-        `Your total credit (${money(total)}) is under the $${CLAIM_MINIMUM} needed to claim, so it rolls over to the next competition. Thank you for your amazing effort!`;
-    }
-  }
-
   async function fetchStats(code, token) {
     try {
       const res = await fetch(`/api/stats?code=${encodeURIComponent(code)}`, {
@@ -1052,16 +929,8 @@
       }
       if (!res.ok) throw new Error('fetch failed');
       const data = await res.json();
-      document.getElementById('hcgcc-final-loading').style.display = 'none';
       renderHcgecTracker(data.hcgecTracker);
       renderReferralBonus(data.referralBonus);
-      if ('hcgccFinal' in data) {
-        renderHcgccFinal(data.hcgccFinal, data.referralBonus ? data.referralBonus.credit : 0);
-      } else {
-        const err = document.getElementById('hcgcc-final-error');
-        err.style.display = 'block';
-        err.textContent = 'Unable to load your HCGCC results right now — please refresh in a moment.';
-      }
 
       const milestone = document.getElementById('alltime-milestone');
       if (typeof data.allTimeSignups === 'number') {
@@ -1076,10 +945,7 @@
       }
 
     } catch(e) {
-      document.getElementById('hcgcc-final-loading').style.display = 'none';
-      const err = document.getElementById('hcgcc-final-error');
-      err.style.display = 'block';
-      err.textContent = 'Could not load your results right now. Please try refreshing.';
+      // Stats unavailable: the all-time card and HCGEC tracker stay hidden.
     }
   }
 
